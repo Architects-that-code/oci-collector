@@ -1,19 +1,19 @@
 package main
 
 import (
+	"check-limits/configs"
 	"context"
 	"fmt"
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"github.com/oracle/oci-go-sdk/v65/limits"
+	"gopkg.in/yaml.v2"
 	"log/slog"
 	"os"
-
-	"gopkg.in/yaml.v2"
 )
 
-// refactor to create CLI using OCI SDK for Go to interact with the OCI API. Use local auth config but let user specify
+// refactor to create CLI using OCI SDK for Go to interact with the OCI API. Use local auth configs but let user specify
 // profile to use. The CLI should list the subscribed regions available to the specified profile and identify all the compartments and then loop thru each compartment in each region to query for
 // the limits for each service. The CLI should output the limits to a file in the limits directory in the current working directory. The file should be named
 func main() {
@@ -27,7 +27,7 @@ func main() {
 	// Parse command line arguments
 	args := os.Args[1:]
 	if len(args) < 1 {
-		fmt.Println("Usage: 'check-oci-limits  something' (if you do not pass in any extra arg it only prints your config info")
+		fmt.Println("Usage: 'check-oci-limits  something' (if you do not pass in any extra arg it only prints your configs info")
 		fmt.Println("Using profile:", config.ProfileName)
 		fmt.Printf("Config: %v\n", config.ConfigPath)
 		return
@@ -226,18 +226,13 @@ func getRegions(c) {
 }
 */
 
-type Config struct {
-	ConfigPath  string `yaml:"configpath"`
-	ProfileName string `yaml:"profileName"`
-}
-
-func getConfig() (error, Config) {
+func getConfig() (error, configs.Config) {
 	data, err := os.ReadFile("slurper.yaml")
 	if err != nil {
 		// handle error
 	}
 
-	var config Config
+	var config configs.Config
 	err = yaml.Unmarshal(data, &config)
 	if err != nil {
 		// handle error
@@ -246,10 +241,10 @@ func getConfig() (error, Config) {
 }
 
 /*
-func getRegions(profileName string, config Config) ([]string, error) {
+func getRegions(profileName string, configs Config) ([]string, error) {
 	// Create the identity client
 
-	identityClient := common.CustomProfileConfigProvider(config.ConfigPath, profileName)
+	identityClient := common.CustomProfileConfigProvider(configs.ConfigPath, profileName)
 
 	// Get the tenancy ID
 	tenancyID, err := identityClient.GetTenancy(context.Background(), nil)
