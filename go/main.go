@@ -37,19 +37,19 @@ func main() {
 	fmt.Printf("Config: %v\n", config.ConfigPath)
 	printSpace()
 	provider := common.CustomProfileConfigProvider(config.ConfigPath, config.ProfileName)
-	fmt.Printf("provider: %v\n", provider)
+	slog.Debug("provider: %v\n", provider)
 
 	client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
 	printSpace()
 	helpers.FatalIfError(err)
-	fmt.Printf("client %v\n", client)
+	slog.Debug("client %v\n", client)
 
 	tenancyID, err := provider.TenancyOCID()
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
-	fmt.Printf("TenancyOCID: %v\n", tenancyID)
+	slog.Debug("TenancyOCID: %v\n", tenancyID)
 
 	ads := getADs(tenancyID, err, client)
 	printSpace()
@@ -74,37 +74,72 @@ func main() {
 	helpers.FatalIfError(err)
 	printSpace()
 	slog.Debug("limitsClient: %v\n", limitsClient)
+	//for _, region := range []string{"us-ashburn-1"} {
+	//	reg := region
 
 	for _, region := range regions {
 		reg := *region.RegionName
+
 		services := getServices(limitsClient, err, tenancyID, reg)
+
 		for _, s := range services.Items {
 			svc := s.Name
-			// getLimitDefs(err, limitsClient, tenancyID, *svc)
+
 			vals := getLimitsForService(err, limitsClient, tenancyID, *svc)
 			for _, v := range vals.Items {
-				fmt.Printf("region: %v valLimitName: %v\n", reg, v)
+				limitName := v.Name
+				ad := v.AvailabilityDomain
+				var avails = limits.GetResourceAvailabilityResponse{}
+				if ad == nil {
+					avails = getLimitsAvailRegionScoped(err, limitsClient, tenancyID, *svc, *v.Name)
+				} else {
+					avails = getLimitAvailADScoped(err, limitsClient, tenancyID, *svc, *v.Name, *ad)
+				}
+				var avail *int64
+				avail = avails.Available
+				if avail == nil {
+					avail = &[]int64{0}[0] //this is gross
+				}
+				var used *int64
+				used = avails.Used
+				if used == nil {
+					used = &[]int64{0}[0]
+				}
+
+				fmt.Printf("region: %v service: %v valLimitName: %v avail: %v used: %v\n", reg, *svc, *limitName, *avail, *used)
 			}
+
 		}
 	}
 
-	/*
-		for _, s := range services.Items {
-			svc := s.Name
-			defs := getLimitDefs(err, limitsClient, tenancyID, *svc)
-			for _, d := range defs.Items {
-				fmt.Printf("defLimit: %v\n", d)
-			}
-		}
-	*/
-
-	/* vanilla - now copy to loop thru services
-	vals := getLimitsForService(err, limitsClient, tenancyID, svc)
-	for _, v := range vals.Items {
-		fmt.Printf("valLimitName: %v\n", v)
+}
+func getLimitsAvailRegionScoped(err error, limitsClient limits.LimitsClient, compartment string, svc string, limitName string) limits.GetResourceAvailabilityResponse {
+	req := limits.GetResourceAvailabilityRequest{
+		ServiceName:     &svc,
+		LimitName:       &limitName,
+		CompartmentId:   &compartment,
+		RequestMetadata: common.RequestMetadata{},
 	}
-	*/
+	avail, err := limitsClient.GetResourceAvailability(
+		context.Background(), req)
+	helpers.FatalIfError(err)
+	return avail
+}
+func getLimitAvailADScoped(err error, limitsClient limits.LimitsClient, compartment string, svc string, limitName string, ad string) limits.GetResourceAvailabilityResponse {
+	var req = limits.GetResourceAvailabilityRequest{}
+	req = limits.GetResourceAvailabilityRequest{
+		ServiceName:        &svc,
+		LimitName:          &limitName,
+		CompartmentId:      &compartment,
+		AvailabilityDomain: &ad,
+		RequestMetadata:    common.RequestMetadata{},
+	}
 
+	avail, err := limitsClient.GetResourceAvailability(
+		context.Background(), req)
+
+	helpers.FatalIfError(err)
+	return avail
 }
 
 func getLimitDefs(err error, limitsClient limits.LimitsClient, tenancyID string, svc string) limits.ListLimitDefinitionsResponse {
