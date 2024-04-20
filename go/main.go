@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/csv"
 	"fmt"
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
@@ -94,6 +95,7 @@ func main() {
 	//localReg := []string{"us-ashburn-1"}
 	fmt.Printf("regions: %v\n", regions)
 	var wg_regional = sync.WaitGroup{}
+	var regionalSlices = make(chan []collector, len(regions))
 
 	counter := 0
 	counterLock := &sync.Mutex{}
@@ -111,6 +113,7 @@ func main() {
 		wg_regional.Add(1)
 		go func(reg string, goroutineID int) {
 			defer wg_regional.Done()
+			var localDatapile []collector
 			services := getServices(limitsClient, err, tenancyID, reg)
 			for _, s := range services.Items {
 				svc := s.Name
@@ -141,18 +144,28 @@ func main() {
 						avail:     *avail,
 						used:      *used,
 					}
-					Datapile = append(Datapile, r)
+
+					localDatapile = append(localDatapile, r)
 					fmt.Printf("goroutineID: %v region: %v service: %v valLimitName: %v avail: %v used: %v\n", goroutineID, reg, *svc, *limitName, *avail, *used)
 				}
 
 			}
+			regionalSlices <- localDatapile
 		}(reg, currentGoroutineID)
 
 	}
 	wg_regional.Wait()
+	close(regionalSlices)
+	for slice := range regionalSlices {
+		Datapile = append(Datapile, slice...)
+	}
 	for _, dp := range Datapile {
 		fmt.Println(dp)
 	}
+	fmt.Println(len(Datapile))
+	// write csv
+	w := csv.NewWriter(os.Stdout)
+	w.WriteAll(Datapile) // calls Flush internally
 }
 func getLimitsAvailRegionScoped(err error, limitsClient limits.LimitsClient, compartment string, svc string, limitName string) limits.GetResourceAvailabilityResponse {
 	req := limits.GetResourceAvailabilityRequest{
