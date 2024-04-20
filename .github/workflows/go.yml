@@ -27,7 +27,7 @@ jobs:
       run: ls -lart
 
     - name: build
-      run: go build -v ./go
+      run: go build -v ./go/
 
     - name: Test
       run: go test -v ./go/
