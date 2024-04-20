@@ -23,8 +23,10 @@ jobs:
     - name: Locate
       run: pwd
 
-    - name: Build
+    - name: files
       run: ls -lart
+
+    - name: build
       run: go build -v ./go
 
     - name: Test
