@@ -27,4 +27,4 @@ jobs:
       run: go build -v ./go
 
     - name: Test
-      run: go test -v ./go
+      run: go test -v ./go/
