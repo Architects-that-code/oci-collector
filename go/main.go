@@ -76,13 +76,25 @@ func main() {
 	//for _, region := range []string{"us-ashburn-1"} {
 	//	reg := region
 
-	for _, region := range regions {
-		reg := *region.RegionName
+	//create datastructures that will hold all results
+	var Datapile []collector
+
+	localReg := []string{"us-ashburn-1"}
+	for _, region := range localReg {
+		reg := region
+		//for _, region := range regions {
+		//	reg := *region.RegionName
 
 		services := getServices(limitsClient, err, tenancyID, reg)
 
 		for _, s := range services.Items {
 			svc := s.Name
+			/*
+				defs := getLimitDefs(err, limitsClient, tenancyID, *svc)
+				for _, d := range defs.Items {
+					fmt.Printf("DEFitem %v\n", d)
+				}
+			*/
 
 			vals := getLimitsForService(err, limitsClient, tenancyID, *svc)
 			for _, v := range vals.Items {
@@ -104,13 +116,22 @@ func main() {
 				if used == nil {
 					used = &[]int64{0}[0]
 				}
-
+				var r = collector{
+					region:    reg,
+					service:   *svc,
+					limitname: *limitName,
+					avail:     *avail,
+					used:      *used,
+				}
+				Datapile = append(Datapile, r)
 				fmt.Printf("region: %v service: %v valLimitName: %v avail: %v used: %v\n", reg, *svc, *limitName, *avail, *used)
 			}
 
 		}
 	}
-
+	for _, dp := range Datapile {
+		fmt.Println(dp)
+	}
 }
 func getLimitsAvailRegionScoped(err error, limitsClient limits.LimitsClient, compartment string, svc string, limitName string) limits.GetResourceAvailabilityResponse {
 	req := limits.GetResourceAvailabilityRequest{
@@ -230,4 +251,12 @@ func getConfig() (error, Config) {
 type Config struct {
 	ConfigPath  string `yaml:"configPath"`
 	ProfileName string `yaml:"profileName"`
+}
+
+type collector struct {
+	region    string
+	service   string
+	limitname string
+	avail     int64
+	used      int64
 }
