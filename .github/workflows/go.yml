@@ -31,9 +31,8 @@ jobs:
 
     - name: Build
       run: |
-        cd go
-        go get .
-        go build -v .
+        make all
+        
 
     - name: Test
       run: go test -v .
