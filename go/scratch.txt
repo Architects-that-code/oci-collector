@@ -26,3 +26,7 @@ what is time
 what is number of results
 28147
 go run main.go run  106.83s user 20.36s system 52% cpu 4:03.06 total
+
+back to staging and fixing
+28418
+./check-limits run  87.01s user 17.74s system 40% cpu 4:18.53 total

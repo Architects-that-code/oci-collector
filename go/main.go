@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/csv"
 	"fmt"
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
@@ -163,9 +162,7 @@ func main() {
 		fmt.Println(dp)
 	}
 	fmt.Println(len(Datapile))
-	// write csv
-	w := csv.NewWriter(os.Stdout)
-	w.WriteAll(Datapile) // calls Flush internally
+
 }
 func getLimitsAvailRegionScoped(err error, limitsClient limits.LimitsClient, compartment string, svc string, limitName string) limits.GetResourceAvailabilityResponse {
 	req := limits.GetResourceAvailabilityRequest{
