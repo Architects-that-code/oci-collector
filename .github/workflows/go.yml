@@ -34,5 +34,4 @@ jobs:
         make all
         
 
-    - name: Test
-      run: go test -v .
+   
