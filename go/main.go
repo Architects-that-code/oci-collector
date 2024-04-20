@@ -58,27 +58,28 @@ func main() {
 
 	// getallregions
 	// getall compartments
-	var wg_prep = sync.WaitGroup{}
+	var wgDataPrep = sync.WaitGroup{}
 
-	wg_prep.Add(2)
+	wgDataPrep.Add(2)
 
 	go func() {
-		defer wg_prep.Done()
+		defer wgDataPrep.Done()
 		compartments := getCompartments(err, client, tenancyID)
 		for _, comp := range compartments {
 			fmt.Printf("Compartment Name: %v CompartmentID: %v\n", *comp.Name, *comp.CompartmentId)
 		}
 	}()
+	var regions []identity.RegionSubscription
 	go func() {
-		defer wg_prep.Done()
-		regions := getRegions(err, client, tenancyID)
+		defer wgDataPrep.Done()
+		regions = getRegions(err, client, tenancyID)
 		for _, region := range regions {
 			fmt.Printf("Region: %v\n", *region.RegionName)
 		}
 		printSpace()
 		slog.Debug("List of regions:", regions)
 	}()
-	wg_prep.Wait()
+	wgDataPrep.Wait()
 
 	limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
@@ -90,56 +91,65 @@ func main() {
 	//create datastructures that will hold all results
 	var Datapile []collector
 
-	localReg := []string{"us-ashburn-1"}
-	for _, region := range localReg {
-		reg := region
-		//for _, region := range regions {
-		//	reg := *region.RegionName
+	//localReg := []string{"us-ashburn-1"}
+	fmt.Printf("regions: %v\n", regions)
+	var wg_regional = sync.WaitGroup{}
 
-		services := getServices(limitsClient, err, tenancyID, reg)
+	counter := 0
+	counterLock := &sync.Mutex{}
 
-		for _, s := range services.Items {
-			svc := s.Name
-			/*
-				defs := getLimitDefs(err, limitsClient, tenancyID, *svc)
-				for _, d := range defs.Items {
-					fmt.Printf("DEFitem %v\n", d)
-				}
-			*/
+	//for _, region := range localReg {
+	//reg := region
+	for _, region := range regions {
+		reg := *region.RegionName
 
-			vals := getLimitsForService(err, limitsClient, tenancyID, *svc)
-			for _, v := range vals.Items {
-				limitName := v.Name
-				ad := v.AvailabilityDomain
-				var avails = limits.GetResourceAvailabilityResponse{}
-				if ad == nil {
-					avails = getLimitsAvailRegionScoped(err, limitsClient, tenancyID, *svc, *v.Name)
-				} else {
-					avails = getLimitAvailADScoped(err, limitsClient, tenancyID, *svc, *v.Name, *ad)
+		counterLock.Lock()
+		counter++
+		currentGoroutineID := counter
+		counterLock.Unlock()
+
+		wg_regional.Add(1)
+		go func(reg string, goroutineID int) {
+			defer wg_regional.Done()
+			services := getServices(limitsClient, err, tenancyID, reg)
+			for _, s := range services.Items {
+				svc := s.Name
+				vals := getLimitsForService(err, limitsClient, tenancyID, *svc)
+				for _, v := range vals.Items {
+					limitName := v.Name
+					ad := v.AvailabilityDomain
+					var avails = limits.GetResourceAvailabilityResponse{}
+					if ad == nil {
+						avails = getLimitsAvailRegionScoped(err, limitsClient, tenancyID, *svc, *v.Name)
+					} else {
+						avails = getLimitAvailADScoped(err, limitsClient, tenancyID, *svc, *v.Name, *ad)
+					}
+					var avail *int64
+					avail = avails.Available
+					if avail == nil {
+						avail = &[]int64{0}[0] //this is gross
+					}
+					var used *int64
+					used = avails.Used
+					if used == nil {
+						used = &[]int64{0}[0]
+					}
+					var r = collector{
+						region:    reg,
+						service:   *svc,
+						limitname: *limitName,
+						avail:     *avail,
+						used:      *used,
+					}
+					Datapile = append(Datapile, r)
+					fmt.Printf("goroutineID: %v region: %v service: %v valLimitName: %v avail: %v used: %v\n", goroutineID, reg, *svc, *limitName, *avail, *used)
 				}
-				var avail *int64
-				avail = avails.Available
-				if avail == nil {
-					avail = &[]int64{0}[0] //this is gross
-				}
-				var used *int64
-				used = avails.Used
-				if used == nil {
-					used = &[]int64{0}[0]
-				}
-				var r = collector{
-					region:    reg,
-					service:   *svc,
-					limitname: *limitName,
-					avail:     *avail,
-					used:      *used,
-				}
-				Datapile = append(Datapile, r)
-				fmt.Printf("region: %v service: %v valLimitName: %v avail: %v used: %v\n", reg, *svc, *limitName, *avail, *used)
+
 			}
+		}(reg, currentGoroutineID)
 
-		}
 	}
+	wg_regional.Wait()
 	for _, dp := range Datapile {
 		fmt.Println(dp)
 	}
