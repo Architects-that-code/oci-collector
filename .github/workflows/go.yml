@@ -22,8 +22,8 @@ jobs:
         go-version: '1.21'
     - name: Locate
       run: pwd
-    - name: CD_ME
-      run: cd go
+
+
 
     - name: ListMe
       run: ls -lart
