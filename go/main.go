@@ -1,7 +1,6 @@
 package main
 
 import (
-	"check-limits/configs"
 	"context"
 	"fmt"
 	"github.com/oracle/oci-go-sdk/v65/common"
@@ -37,7 +36,7 @@ func main() {
 	fmt.Printf("Config: %v\n", config.ConfigPath)
 	printSpace()
 	provider := common.CustomProfileConfigProvider(config.ConfigPath, config.ProfileName)
-	slog.Debug("provider: %v\n", provider)
+	slog.Info("provider: %v\n", provider)
 
 	client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
 	printSpace()
@@ -216,23 +215,11 @@ func getRegions(err error, client identity.IdentityClient, tenancyID string) []i
 	return reqReg.Items
 }
 
-/*
-func processLimits(c) {
-	panic("unimplemented")
-}
-
-func getRegions(c) {
-	panic("unimplemented")
-}
-*/
-
-func getConfig() (error, configs.Config) {
+func getConfig() (error, Config) {
 	data, err := os.ReadFile("slurper.yaml")
-	if err != nil {
-		// handle error
-	}
+	helpers.FatalIfError(err)
 
-	var config configs.Config
+	var config Config
 	err = yaml.Unmarshal(data, &config)
 	if err != nil {
 		// handle error
@@ -240,82 +227,7 @@ func getConfig() (error, configs.Config) {
 	return err, config
 }
 
-/*
-func getRegions(profileName string, configs Config) ([]string, error) {
-	// Create the identity client
-
-	identityClient := common.CustomProfileConfigProvider(configs.ConfigPath, profileName)
-
-	// Get the tenancy ID
-	tenancyID, err := identityClient.GetTenancy(context.Background(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	// Get the list of subscribed regions
-	regionSubscriptions, err := identityClient.ListRegionSubscriptions(context.Background(), tenancyID)
-	if err != nil {
-		return nil, err
-	}
-
-	regionNames := make([]string, len(regionSubscriptions))
-
-	for i, regionSubscription := range regionSubscriptions {
-		regionNames[i] = regionSubscription.RegionName
-	}
-
-	// Return the list of RegionName values
-	return regionNames, nil
+type Config struct {
+	ConfigPath  string `yaml:"configPath"`
+	ProfileName string `yaml:"profileName"`
 }
-*/
-/*
-
-func processLimits(profileName string, region string) {
-	// Create the limits client
-	limitsClient, err := limits.NewLimitsClientWithConfiguration(
-		context.Background(),
-		common.DefaultConfig(profileName),
-	)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// Set the region
-	limitsClient.BaseClient.SetRegion(region)
-
-	// Get the list of services
-	services, err := limitsClient.ListServices(context.Background(), tenancyID)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// Create the output directory
-	outputDir := filepath.Join("limits", region)
-	if err := os.MkdirAll(outputDir, 0755); err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// Process each service
-	for _, service := range services {
-		serviceName := service.Name
-		fmt.Println("Processing service:", serviceName)
-
-		// Get the list of limit definitions
-		limitDefinitions, err := limitsClient.ListLimitDefinitions(context.Background(), tenancyID, serviceName)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		// Get the list of limit values
-		limitValues, err := limitsClient.ListLimitValues(context.Background(), tenancyID, serviceName)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-	}
-}
-*/
