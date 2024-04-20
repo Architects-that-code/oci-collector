@@ -36,7 +36,7 @@ func main() {
 	fmt.Printf("Config: %v\n", config.ConfigPath)
 	printSpace()
 	provider := common.CustomProfileConfigProvider(config.ConfigPath, config.ProfileName)
-	slog.Info("provider: %v\n", provider)
+	slog.Debug("provider: %v\n", provider)
 
 	client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
 	printSpace()
