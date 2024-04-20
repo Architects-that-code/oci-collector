@@ -10,6 +10,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"log/slog"
 	"os"
+	"sync"
 )
 
 // refactor to create CLI using OCI SDK for Go to interact with the OCI API. Use local auth configs but let user specify
@@ -57,17 +58,27 @@ func main() {
 
 	// getallregions
 	// getall compartments
+	var wg_prep = sync.WaitGroup{}
 
-	compartments := getCompartments(err, client, tenancyID)
-	for _, comp := range compartments {
-		fmt.Printf("Compartment Name: %v CompartmentID: %v\n", *comp.Name, *comp.CompartmentId)
-	}
-	regions := getRegions(err, client, tenancyID)
-	for _, region := range regions {
-		fmt.Printf("Region: %v\n", *region.RegionName)
-	}
-	printSpace()
-	slog.Debug("List of regions:", regions)
+	wg_prep.Add(2)
+
+	go func() {
+		defer wg_prep.Done()
+		compartments := getCompartments(err, client, tenancyID)
+		for _, comp := range compartments {
+			fmt.Printf("Compartment Name: %v CompartmentID: %v\n", *comp.Name, *comp.CompartmentId)
+		}
+	}()
+	go func() {
+		defer wg_prep.Done()
+		regions := getRegions(err, client, tenancyID)
+		for _, region := range regions {
+			fmt.Printf("Region: %v\n", *region.RegionName)
+		}
+		printSpace()
+		slog.Debug("List of regions:", regions)
+	}()
+	wg_prep.Wait()
 
 	limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
