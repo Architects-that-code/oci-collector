@@ -1,6 +1,6 @@
 module check-limits
 
-go 1.20
+go 1.21
 
 require (
 	github.com/oracle/oci-go-sdk/v65 v65.63.2
