@@ -30,7 +30,10 @@ jobs:
 
 
     - name: Build
-      run: cd go; go build -v .
+      run: |
+        cd go
+        go get .
+        go build -v .
 
     - name: Test
       run: go test -v .
