@@ -25,6 +25,9 @@ jobs:
     - name: CD_ME
       run: cd go
 
+    - name: ListMe
+      run: ls -lart
+
 
     - name: Build
       run: go build -v .
