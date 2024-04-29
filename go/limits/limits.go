@@ -76,3 +76,11 @@ func GetServices(limitsClient limits.LimitsClient, err error, tenancyID string, 
 	helpers.FatalIfError(err)
 	return services
 }
+
+type LimitsCollector struct {
+	Region    string
+	Service   string
+	Limitname string
+	Avail     int64
+	Used      int64
+}

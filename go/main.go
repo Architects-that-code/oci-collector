@@ -101,12 +101,12 @@ func main() {
 	//	reg := region
 
 	//create datastructures that will hold all results
-	var Datapile []collector
+	var Datapile []flimit.LimitsCollector
 
 	//localReg := []string{"us-ashburn-1"}
 	fmt.Printf("regions: %v\n", regions)
 	var wg_regional = sync.WaitGroup{}
-	var regionalSlices = make(chan []collector, len(regions))
+	var regionalSlices = make(chan []flimit.LimitsCollector, len(regions))
 
 	counter := 0
 	counterLock := &sync.Mutex{}
@@ -124,7 +124,7 @@ func main() {
 		wg_regional.Add(1)
 		go func(reg string, goroutineID int) {
 			defer wg_regional.Done()
-			var localDatapile []collector
+			var localDatapile []flimit.LimitsCollector
 
 			services := flimit.GetServices(limitsClient, err, tenancyID, reg)
 			for _, s := range services.Items {
@@ -149,12 +149,12 @@ func main() {
 					if used == nil {
 						used = &[]int64{0}[0]
 					}
-					var r = collector{
-						region:    reg,
-						service:   *svc,
-						limitname: *limitName,
-						avail:     *avail,
-						used:      *used,
+					var r = flimit.LimitsCollector{
+						Region:    reg,
+						Service:   *svc,
+						Limitname: *limitName,
+						Avail:     *avail,
+						Used:      *used,
 					}
 
 					localDatapile = append(localDatapile, r)
@@ -185,12 +185,4 @@ func getADs(tenancyID string, err error, client identity.IdentityClient) identit
 	r, err := client.ListAvailabilityDomains(context.Background(), request)
 	helpers.FatalIfError(err)
 	return r
-}
-
-type collector struct {
-	region    string
-	service   string
-	limitname string
-	avail     int64
-	used      int64
 }
