@@ -17,4 +17,6 @@ first is get all getting all compartments and subscribed regions
 
 next set of functionality is add ability to get ALL known service limits
 
-other things that should be added
+find all running compute (by compartment and region)
+
+
