@@ -21,3 +21,6 @@
 
 # Go workspace file
 go.work
+
+#makefile output
+./bin/
