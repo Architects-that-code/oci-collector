@@ -72,14 +72,14 @@ type Config struct {
 	ProfileName string `yaml:"profileName"`
 }
 
-func GetProvider(config Config) common.ConfigurationProvider {
+func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient, string, error) {
 	provider := common.CustomProfileConfigProvider(config.ConfigPath, config.ProfileName)
-	return provider
-}
-
-func GetIdentityClient(provider common.ConfigurationProvider) (identity.IdentityClient, error) {
 	client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
-	return client, err
+	helpers.FatalIfError(err)
+	tenancyID, err := provider.TenancyOCID()
+	helpers.FatalIfError(err)
+	return provider, client, tenancyID, err
+
 }
 
 func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fetchADs bool) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain) {

@@ -9,8 +9,6 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
-
-	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 )
 
 // refactor to create CLI using OCI SDK for Go to interact with the OCI API. Use local auth configs but let user specify
@@ -70,53 +68,17 @@ func main() {
 	fmt.Printf("Config: %v\n", config.ConfigPath)
 	util.PrintSpace()
 
-	provider := setup.GetProvider(config)
-	slog.Debug("provider: %v\n", provider)
-
-	client, err := setup.GetIdentityClient(provider)
-	util.PrintSpace()
-	helpers.FatalIfError(err)
-	slog.Debug("client %v\n", client)
-
-	tenancyID, err := provider.TenancyOCID()
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	slog.Debug("TenancyOCID: %v\n", tenancyID)
-
-	// getallregions
-	// getall compartments
-
-	//start common setup get all compartemnts get all regions
-	regions, compartemnts, ads := setup.CommonSetup(err, client, tenancyID, false)
-	if compartemnts == nil {
-		fmt.Println("compartments is nil")
-	} else {
-
-		fmt.Printf("compartments: %v\n", len(compartemnts))
-		//fmt.Printf("compartments: %v\n", compartemnts)
-	}
-	if regions == nil {
-		fmt.Println("regions is nil")
-	} else {
-		fmt.Printf("regions: %v\n", len(regions))
-	}
-	if ads == nil {
-		fmt.Println("ads is nil")
-	} else {
-		fmt.Printf("ads: %v\n", len(ads))
-	}
-
 	switch os.Args[1] {
 	case "limits":
 		fmt.Println("fetching limits")
 		limitCmd.Parse(os.Args[2:])
 		fmt.Printf("limitFetch: %v\n", *limitFetch)
 		if *limitFetch {
+			provider, client, tenancyID, err := setup.Prep(config)
+			regions, _, _ := setup.CommonSetup(err, client, tenancyID, false)
 			limits.RunLimits(provider, regions, tenancyID)
 		} else {
-			fmt.Println("add -enable to run")
+			fmt.Println("add -run to run")
 		}
 
 	case "compute":
@@ -124,15 +86,36 @@ func main() {
 		computeCmd.Parse(os.Args[2:])
 		fmt.Printf("computeFetch: %v\n", *computeFetch)
 		if *computeFetch {
+			provider, client, tenancyID, err := setup.Prep(config)
+			regions, compartemnts, _ := setup.CommonSetup(err, client, tenancyID, false)
 			compute.RunCompute(provider, regions, tenancyID, compartemnts)
 		} else {
-			fmt.Println("add -enable to run")
+			fmt.Println("add -run to run")
 		}
 
 	case "checkconfig":
 		fmt.Println("checking config")
 		checkCmd.Parse(os.Args[2:])
 		fmt.Printf("checkRun: %v\n", *checkFetch)
+		_, client, tenancyID, err := setup.Prep(config)
+		regions, compartemnts, ads := setup.CommonSetup(err, client, tenancyID, false)
+		if compartemnts == nil {
+			fmt.Println("compartments is nil")
+		} else {
+
+			fmt.Printf("compartments: %v\n", len(compartemnts))
+			//fmt.Printf("compartments: %v\n", compartemnts)
+		}
+		if regions == nil {
+			fmt.Println("regions is nil")
+		} else {
+			fmt.Printf("regions: %v\n", len(regions))
+		}
+		if ads == nil {
+			fmt.Println("ads is nil")
+		} else {
+			fmt.Printf("ads: %v\n", len(ads))
+		}
 
 	default:
 		fmt.Printf("Invalid command: %v\n", os.Args[1])
