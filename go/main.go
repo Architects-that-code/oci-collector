@@ -10,9 +10,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
-	"github.com/oracle/oci-go-sdk/v65/identity"
 )
 
 // refactor to create CLI using OCI SDK for Go to interact with the OCI API. Use local auth configs but let user specify
@@ -21,16 +19,31 @@ import (
 func main() {
 
 	var (
-		usage = `specity the action you want to take:
-		pick 1 of the following
-		-limits: fetch limits in all region
-		-compute: fetch compute active instances in all regions
-		-checkconfig: check config file`
+		usage = `usage: #check-limits 'action' 'activate'
+		         example: check-limits limits -run
+
+		specity the action you want to take:
+		expected 'limits' or 'compute' or 'config' as the first argument and -run (to actually run)
+		limits: fetch limits in all region
+		compute: fetch compute active instances in all regions
+		config: check config file
+		`
 	)
 
-	limitsAction := flag.Bool("limits", false, "fetch limits in all regions")
-	computeAction := flag.Bool("compute", false, "fetch compute active instances in all regions")
-	checkConfigAction := flag.Bool("checkconfig", false, "check config file")
+	limitCmd := flag.NewFlagSet("limits", flag.ExitOnError)
+	limitFetch := limitCmd.Bool("run", false, "fetch limits in all regions")
+
+	computeCmd := flag.NewFlagSet("compute", flag.ExitOnError)
+	computeFetch := computeCmd.Bool("run", false, "fetch compute active instances in all regions")
+
+	checkCmd := flag.NewFlagSet("config", flag.ExitOnError)
+	checkFetch := checkCmd.Bool("run", false, "check config file")
+
+	/*
+		limitsAction := flag.Bool("limits", false, "fetch limits in all regions")
+		computeAction := flag.Bool("compute", false, "fetch compute active instances in all regions")
+		checkConfigAction := flag.Bool("checkconfig", false, "check config file")
+	*/
 
 	err, config := setup.Getconfig()
 	if err != nil {
@@ -49,12 +62,7 @@ func main() {
 
 	fmt.Printf("os.Args: %v\n", os.Args)
 
-	fmt.Printf("limit flags: %v\n", *limitsAction)
-	fmt.Printf("compute flags: %v\n", *computeAction)
-	fmt.Printf("check flags: %v\n", *checkConfigAction)
-
 	fmt.Printf("flag.Args: %v\n", flag.Args())
-	command := flag.Args()[0]
 
 	// Parse command line arguments
 
@@ -100,10 +108,34 @@ func main() {
 		fmt.Printf("ads: %v\n", len(ads))
 	}
 
-	grr := runCmd(command, flag.Args()[1:], provider, regions, tenancyID, compartemnts)
-	if grr != nil {
-		fmt.Println(grr)
-		os.Exit(1)
+	switch os.Args[1] {
+	case "limits":
+		fmt.Println("fetching limits")
+		limitCmd.Parse(os.Args[2:])
+		fmt.Printf("limitFetch: %v\n", *limitFetch)
+		if *limitFetch {
+			limits.RunLimits(provider, regions, tenancyID)
+		} else {
+			fmt.Println("add -enable to run")
+		}
+
+	case "compute":
+		fmt.Println("fetching compute")
+		computeCmd.Parse(os.Args[2:])
+		fmt.Printf("computeFetch: %v\n", *computeFetch)
+		if *computeFetch {
+			compute.RunCompute(provider, regions, tenancyID, compartemnts)
+		} else {
+			fmt.Println("add -enable to run")
+		}
+
+	case "checkconfig":
+		fmt.Println("checking config")
+		checkCmd.Parse(os.Args[2:])
+		fmt.Printf("checkRun: %v\n", *checkFetch)
+
+	default:
+		fmt.Printf("Invalid command: %v\n", os.Args[1])
 	}
 
 	//for _, region := range []string{"us-ashburn-1"} {
@@ -114,22 +146,4 @@ func main() {
 	//for _, region := range localReg {
 	//reg := region
 
-}
-
-func runCmd(command string, s []string, provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment) error {
-	fmt.Printf("commandname: %v\n", command)
-
-	switch command {
-	case "limit-fetch":
-		fmt.Println("fetching limits")
-		limits.RunLimits(provider, regions, tenancyID)
-		return nil
-	case "compute-fetch":
-		fmt.Println("fetching compute")
-		compute.RunCompute(provider, regions, tenancyID, compartments)
-		return nil
-	default:
-		return fmt.Errorf("unknown command: %s", command)
-
-	}
 }

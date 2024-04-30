@@ -20,25 +20,18 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 	//		in region loop thru compartments
 
 	for _, compartment := range compartments {
+
 		for _, region := range regions {
 
-			//fmt.Printf("region: %v\n", *reg.RegionName)
-			client.SetRegion(*region.RegionName)
-
 			GetInstances(client, compartment, *region.RegionName)
-			//fmt.Printf("client: %v\n", client)
-			/*
-				for _, compartment := range compartments {
-
-
-				}
-			*/
 
 		}
+
 	}
 }
 
 func GetInstances(client core.ComputeClient, compartment identity.Compartment, region string) []core.Instance {
+	client.SetRegion(region)
 	req := core.ListInstancesRequest{
 		CompartmentId: compartment.Id,
 	}
@@ -48,6 +41,6 @@ func GetInstances(client core.ComputeClient, compartment identity.Compartment, r
 	helpers.FatalIfError(err)
 
 	// Retrieve value from the response.
-	fmt.Printf("results in comp: %v  reg:%v: %v\n", *compartment.Name, region, len(resp.Items))
+	fmt.Printf("results in comp: \t%v  \treg:%v: \t%v\n", *compartment.Name, region, len(resp.Items))
 	return resp.Items
 }
