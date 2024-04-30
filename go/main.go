@@ -1,291 +1,132 @@
 package main
 
 import (
-	"context"
+	compute "check-limits/compute"
+	setup "check-limits/config"
+	"check-limits/limits"
+	"check-limits/util"
+	"flag"
 	"fmt"
-	"github.com/oracle/oci-go-sdk/v65/common"
-	"github.com/oracle/oci-go-sdk/v65/example/helpers"
-	"github.com/oracle/oci-go-sdk/v65/identity"
-	"github.com/oracle/oci-go-sdk/v65/limits"
 	"log/slog"
 	"os"
-
-	"gopkg.in/yaml.v2"
 )
 
-// refactor to create CLI using OCI SDK for Go to interact with the OCI API. Use local auth config but let user specify
+// refactor to create CLI using OCI SDK for Go to interact with the OCI API. Use local auth configs but let user specify
 // profile to use. The CLI should list the subscribed regions available to the specified profile and identify all the compartments and then loop thru each compartment in each region to query for
 // the limits for each service. The CLI should output the limits to a file in the limits directory in the current working directory. The file should be named
 func main() {
-	err, config := getConfig()
+
+	var (
+		usage = `usage: #check-limits 'action' 'activate'
+		         example: check-limits limits -run
+
+		specity the action you want to take:
+		expected 'limits' or 'compute' or 'config' as the first argument and -run (to actually run)
+		limits: fetch limits in all region
+		compute: fetch compute active instances in all regions
+		config: check config file
+		`
+	)
+
+	limitCmd := flag.NewFlagSet("limits", flag.ExitOnError)
+	limitFetch := limitCmd.Bool("run", false, "fetch limits in all regions")
+
+	computeCmd := flag.NewFlagSet("compute", flag.ExitOnError)
+	computeFetch := computeCmd.Bool("run", false, "fetch compute active instances in all regions")
+
+	checkCmd := flag.NewFlagSet("config", flag.ExitOnError)
+	checkFetch := checkCmd.Bool("run", false, "check config file")
+
+	/*
+		limitsAction := flag.Bool("limits", false, "fetch limits in all regions")
+		computeAction := flag.Bool("compute", false, "fetch compute active instances in all regions")
+		checkConfigAction := flag.Bool("checkconfig", false, "check config file")
+	*/
+
+	err, config := setup.Getconfig()
 	if err != nil {
 		//fmt.Printf("%+v\n", err)
 		slog.Info("%+v\n", err)
 		os.Exit(1)
 	}
 
-	// Parse command line arguments
-	args := os.Args[1:]
-	if len(args) < 1 {
-		fmt.Println("Usage: 'check-oci-limits  something' (if you do not pass in any extra arg it only prints your config info")
+	flag.Parse()
+	if len(flag.Args()) < 1 {
+		fmt.Println(usage)
 		fmt.Println("Using profile:", config.ProfileName)
 		fmt.Printf("Config: %v\n", config.ConfigPath)
 		return
 	}
 
+	fmt.Printf("os.Args: %v\n", os.Args)
+
+	fmt.Printf("flag.Args: %v\n", flag.Args())
+
+	// Parse command line arguments
+
 	fmt.Println("Using profile:", config.ProfileName)
 	fmt.Printf("Config: %v\n", config.ConfigPath)
-	printSpace()
-	provider := common.CustomProfileConfigProvider(config.ConfigPath, config.ProfileName)
-	fmt.Printf("provider: %v\n", provider)
+	util.PrintSpace()
 
-	client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
-	printSpace()
-	helpers.FatalIfError(err)
-	fmt.Printf("client %v\n", client)
-
-	tenancyID, err := provider.TenancyOCID()
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	fmt.Printf("TenancyOCID: %v\n", tenancyID)
-
-	ads := getADs(tenancyID, err, client)
-	printSpace()
-	//fmt.Printf("ADs: %v\n", ads)
-	slog.Debug("ads: ", ads)
-
-	// getallregions
-	// getall compartments
-
-	compartments := getCompartments(err, client, tenancyID)
-	for _, comp := range compartments {
-		fmt.Printf("Compartment Name: %v CompartmentID: %v\n", *comp.Name, *comp.CompartmentId)
-	}
-	regions := getRegions(err, client, tenancyID)
-	for _, region := range regions {
-		fmt.Printf("Region: %v\n", *region.RegionName)
-	}
-	printSpace()
-	slog.Debug("List of regions:", regions)
-
-	limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
-	helpers.FatalIfError(err)
-	printSpace()
-	slog.Debug("limitsClient: %v\n", limitsClient)
-
-	for _, region := range regions {
-		reg := *region.RegionName
-		services := getServices(limitsClient, err, tenancyID, reg)
-		for _, s := range services.Items {
-			svc := s.Name
-			// getLimitDefs(err, limitsClient, tenancyID, *svc)
-			vals := getLimitsForService(err, limitsClient, tenancyID, *svc)
-			for _, v := range vals.Items {
-				fmt.Printf("region: %v valLimitName: %v\n", reg, v)
-			}
-		}
-	}
-
-	/*
-		for _, s := range services.Items {
-			svc := s.Name
-			defs := getLimitDefs(err, limitsClient, tenancyID, *svc)
-			for _, d := range defs.Items {
-				fmt.Printf("defLimit: %v\n", d)
-			}
-		}
-	*/
-
-	/* vanilla - now copy to loop thru services
-	vals := getLimitsForService(err, limitsClient, tenancyID, svc)
-	for _, v := range vals.Items {
-		fmt.Printf("valLimitName: %v\n", v)
-	}
-	*/
-
-}
-
-func getLimitDefs(err error, limitsClient limits.LimitsClient, tenancyID string, svc string) limits.ListLimitDefinitionsResponse {
-	defs, err := limitsClient.ListLimitDefinitions(context.Background(), limits.ListLimitDefinitionsRequest{
-		CompartmentId:   &tenancyID,
-		ServiceName:     &svc,
-		RequestMetadata: common.RequestMetadata{},
-	})
-	helpers.FatalIfError(err)
-	return defs
-}
-
-func getLimitsForService(err error, limitsClient limits.LimitsClient, tenancyID string, svc string) limits.ListLimitValuesResponse {
-	vals, err := limitsClient.ListLimitValues(context.Background(), limits.ListLimitValuesRequest{
-		CompartmentId:   &tenancyID,
-		ServiceName:     &svc,
-		RequestMetadata: common.RequestMetadata{},
-	})
-	helpers.FatalIfError(err)
-	return vals
-}
-
-func getServices(limitsClient limits.LimitsClient, err error, tenancyID string, region string) limits.ListServicesResponse {
-	limitsClient.SetRegion(region)
-	printSpace()
-	slog.Debug("limitsClientUPDATED: \n", limitsClient.Endpoint())
-	services, err := limitsClient.ListServices(context.Background(), limits.ListServicesRequest{
-		CompartmentId:   &tenancyID,
-		SortBy:          "",
-		SortOrder:       "",
-		Limit:           nil,
-		Page:            nil,
-		OpcRequestId:    nil,
-		RequestMetadata: common.RequestMetadata{},
-	})
-	helpers.FatalIfError(err)
-	return services
-}
-
-func printSpace() {
-	fmt.Println("")
-}
-
-func getADs(tenancyID string, err error, client identity.IdentityClient) identity.ListAvailabilityDomainsResponse {
-	request := identity.ListAvailabilityDomainsRequest{
-		CompartmentId: &tenancyID,
-	}
-	r, err := client.ListAvailabilityDomains(context.Background(), request)
-	helpers.FatalIfError(err)
-	return r
-}
-
-func getCompartments(err error, client identity.IdentityClient, tenancyID string) []identity.Compartment {
-	resComp, err := client.ListCompartments(context.Background(), identity.ListCompartmentsRequest{
-		AccessLevel:            identity.ListCompartmentsAccessLevelAny,
-		CompartmentId:          &tenancyID,
-		CompartmentIdInSubtree: common.Bool(true),
-		SortBy:                 identity.ListCompartmentsSortByName,
-		SortOrder:              identity.ListCompartmentsSortOrderAsc,
-		LifecycleState:         identity.CompartmentLifecycleStateActive,
-		Limit:                  common.Int(208),
-	})
-	helpers.FatalIfError(err)
-	//fmt.Printf("List of compartments: %v", resComp.Items)
-	return resComp.Items
-}
-
-func getRegions(err error, client identity.IdentityClient, tenancyID string) []identity.RegionSubscription {
-	reqReg, err := client.ListRegionSubscriptions(context.Background(), identity.ListRegionSubscriptionsRequest{
-		TenancyId: &tenancyID,
-	})
-	helpers.FatalIfError(err)
-	//fmt.Printf("List of regions: %v", reqReg.Items)
-	return reqReg.Items
-}
-
-/*
-func processLimits(c) {
-	panic("unimplemented")
-}
-
-func getRegions(c) {
-	panic("unimplemented")
-}
-*/
-
-type Config struct {
-	ConfigPath  string `yaml:"configpath"`
-	ProfileName string `yaml:"profileName"`
-}
-
-func getConfig() (error, Config) {
-	data, err := os.ReadFile("slurper.yaml")
-	if err != nil {
-		// handle error
-	}
-
-	var config Config
-	err = yaml.Unmarshal(data, &config)
-	if err != nil {
-		// handle error
-	}
-	return err, config
-}
-
-/*
-func getRegions(profileName string, config Config) ([]string, error) {
-	// Create the identity client
-
-	identityClient := common.CustomProfileConfigProvider(config.ConfigPath, profileName)
-
-	// Get the tenancy ID
-	tenancyID, err := identityClient.GetTenancy(context.Background(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	// Get the list of subscribed regions
-	regionSubscriptions, err := identityClient.ListRegionSubscriptions(context.Background(), tenancyID)
-	if err != nil {
-		return nil, err
-	}
-
-	regionNames := make([]string, len(regionSubscriptions))
-
-	for i, regionSubscription := range regionSubscriptions {
-		regionNames[i] = regionSubscription.RegionName
-	}
-
-	// Return the list of RegionName values
-	return regionNames, nil
-}
-*/
-/*
-
-func processLimits(profileName string, region string) {
-	// Create the limits client
-	limitsClient, err := limits.NewLimitsClientWithConfiguration(
-		context.Background(),
-		common.DefaultConfig(profileName),
-	)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// Set the region
-	limitsClient.BaseClient.SetRegion(region)
-
-	// Get the list of services
-	services, err := limitsClient.ListServices(context.Background(), tenancyID)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// Create the output directory
-	outputDir := filepath.Join("limits", region)
-	if err := os.MkdirAll(outputDir, 0755); err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// Process each service
-	for _, service := range services {
-		serviceName := service.Name
-		fmt.Println("Processing service:", serviceName)
-
-		// Get the list of limit definitions
-		limitDefinitions, err := limitsClient.ListLimitDefinitions(context.Background(), tenancyID, serviceName)
-		if err != nil {
-			fmt.Println(err)
-			return
+	switch os.Args[1] {
+	case "limits":
+		fmt.Println("fetching limits")
+		limitCmd.Parse(os.Args[2:])
+		fmt.Printf("limitFetch: %v\n", *limitFetch)
+		if *limitFetch {
+			provider, client, tenancyID, err := setup.Prep(config)
+			regions, _, _ := setup.CommonSetup(err, client, tenancyID, false)
+			limits.RunLimits(provider, regions, tenancyID)
+		} else {
+			fmt.Println("add -run to run")
 		}
 
-		// Get the list of limit values
-		limitValues, err := limitsClient.ListLimitValues(context.Background(), tenancyID, serviceName)
-		if err != nil {
-			fmt.Println(err)
-			return
+	case "compute":
+		fmt.Println("fetching compute")
+		computeCmd.Parse(os.Args[2:])
+		fmt.Printf("computeFetch: %v\n", *computeFetch)
+		if *computeFetch {
+			provider, client, tenancyID, err := setup.Prep(config)
+			regions, compartemnts, _ := setup.CommonSetup(err, client, tenancyID, false)
+			compute.RunCompute(provider, regions, tenancyID, compartemnts)
+		} else {
+			fmt.Println("add -run to run")
 		}
+
+	case "checkconfig":
+		fmt.Println("checking config")
+		checkCmd.Parse(os.Args[2:])
+		fmt.Printf("checkRun: %v\n", *checkFetch)
+		_, client, tenancyID, err := setup.Prep(config)
+		regions, compartemnts, ads := setup.CommonSetup(err, client, tenancyID, false)
+		if compartemnts == nil {
+			fmt.Println("compartments is nil")
+		} else {
+
+			fmt.Printf("compartments: %v\n", len(compartemnts))
+			//fmt.Printf("compartments: %v\n", compartemnts)
+		}
+		if regions == nil {
+			fmt.Println("regions is nil")
+		} else {
+			fmt.Printf("regions: %v\n", len(regions))
+		}
+		if ads == nil {
+			fmt.Println("ads is nil")
+		} else {
+			fmt.Printf("ads: %v\n", len(ads))
+		}
+
+	default:
+		fmt.Printf("Invalid command: %v\n", os.Args[1])
 	}
+
+	//for _, region := range []string{"us-ashburn-1"} {
+	//	reg := region
+
+	//create datastructures that will hold all results
+
+	//for _, region := range localReg {
+	//reg := region
+
 }
-*/
