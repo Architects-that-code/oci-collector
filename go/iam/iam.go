@@ -64,8 +64,3 @@ func GetAllPolicies(provider common.ConfigurationProvider, client identity.Ident
 	fmt.Printf("Total policies returned %v\n", len(policies))
 	return policies
 }
-
-func GetPolicyByCompartment(provider common.ConfigurationProvider, client identity.IdentityClient, tenancyID string, showUsers bool) []identity.User {
-
-	return nil
-}

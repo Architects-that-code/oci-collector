@@ -21,14 +21,16 @@ func main() {
 
 	var (
 		usage = `usage: #check-limits 'action' 'activate'
-		         example: check-limits limits -run
+	example: check-limits limits -run
 
-		specity the action you want to take:
-		expected 'limits' or 'compute' or 'config' as the first argument and -run (to actually run)
-		limits: fetch limits in all region
-		compute: fetch compute active instances in all regions
-		config: check config file
-		policies: fetch policies (-run to show users)
+	specity the action you want to take:
+
+		
+	limits: fetch limits in all region
+	compute: fetch compute active instances in all regions
+	config: check config file
+	peeps: fetch user counts (-r to show users)
+	policies: fetch policy counts (-run to show policies -verbose to show statements)
 		`
 	)
 
@@ -64,8 +66,8 @@ func main() {
 	flag.Parse()
 	if len(flag.Args()) < 1 {
 		fmt.Println(usage)
-		fmt.Println("Using profile:", config.ProfileName)
-		fmt.Printf("Config: %v\n", config.ConfigPath)
+		//fmt.Println("Using profile:", config.ProfileName)
+		//fmt.Printf("Config: %v\n", config.ConfigPath)
 		return
 	}
 

@@ -22,4 +22,4 @@ all: windows linux darwin
 
 .PHONY: clean
 clean:
-	rm -rf ./bin
+	rm  -f ./bin/*
