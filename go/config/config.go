@@ -56,7 +56,7 @@ func Getregions(err error, client identity.IdentityClient, tenancyID string) []i
 }
 
 func Getconfig() (error, Config) {
-	data, err := os.ReadFile("slurper.yaml")
+	data, err := os.ReadFile("toolkit-config.yaml")
 	helpers.FatalIfError(err)
 
 	var config Config
