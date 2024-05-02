@@ -53,7 +53,7 @@ func main() {
 	policyVerbose := policyCmd.Bool("verbose", false, "show policies")
 
 	supportCmd := flag.NewFlagSet("support", flag.ExitOnError)
-	supportCSI := supportCmd.String("csi", "", "csi number")
+	//supportCSI := supportCmd.String("csi", "", "csi number")
 	supportTicketList := supportCmd.Bool("list", false, "list tickets")
 
 	/*
@@ -130,7 +130,7 @@ func main() {
 	case "support":
 		fmt.Println("fetching support")
 		supportCmd.Parse(os.Args[2:])
-		fmt.Printf("supportCSI: %v\n", *supportCSI)
+		//fmt.Printf("supportCSI: %v\n", *supportCSI)
 		fmt.Printf("supportTicketList: %v\n", *supportTicketList)
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID, false)
