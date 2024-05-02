@@ -3,6 +3,7 @@ package setup
 import (
 	"check-limits/util"
 	"context"
+	"fmt"
 	"os"
 	"sync"
 
@@ -46,13 +47,24 @@ func GetALLADdata(err error, client identity.IdentityClient, tenancyID string, r
 	return ads
 }
 
-func Getregions(err error, client identity.IdentityClient, tenancyID string) []identity.RegionSubscription {
+func Getregions(err error, client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, string) {
 	reqReg, err := client.ListRegionSubscriptions(context.Background(), identity.ListRegionSubscriptionsRequest{
 		TenancyId: &tenancyID,
 	})
 	helpers.FatalIfError(err)
 	//fmt.Printf("List of regions: %v", reqReg.Items)
-	return reqReg.Items
+
+	return reqReg.Items, getHomeRegion(reqReg.Items)
+}
+
+func getHomeRegion(regions []identity.RegionSubscription) string {
+	for _, region := range regions {
+		if *region.IsHomeRegion {
+			fmt.Printf("Home Region: %v\n", *region.RegionName)
+			return *region.RegionName
+		}
+	}
+	return ""
 }
 
 func Getconfig() (error, Config) {
@@ -70,6 +82,7 @@ func Getconfig() (error, Config) {
 type Config struct {
 	ConfigPath  string `yaml:"configPath"`
 	ProfileName string `yaml:"profileName"`
+	CSI         string `yaml:"SUPPORT_CSI_NUMBER"`
 }
 
 func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient, string, error) {
@@ -82,7 +95,7 @@ func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient,
 
 }
 
-func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fetchADs bool) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain) {
+func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fetchADs bool) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
 	var wgDataPrep = sync.WaitGroup{}
 	wgDataPrep.Add(2)
 	var compartments []identity.Compartment
@@ -96,9 +109,11 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fe
 	}()
 
 	var regions []identity.RegionSubscription
+	var homeregion string
 	go func() {
 		defer wgDataPrep.Done()
-		regions = Getregions(err, client, tenancyID)
+		regions, homeregion = Getregions(err, client, tenancyID)
+
 		/*
 			for _, region := range regions {
 				fmt.Printf("Region: %v\n", *region.RegionName)
@@ -114,5 +129,5 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fe
 		ads = nil
 	}
 
-	return regions, compartments, ads
+	return regions, compartments, ads, homeregion
 }

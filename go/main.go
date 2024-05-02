@@ -5,6 +5,7 @@ import (
 	setup "check-limits/config"
 	peopleresource "check-limits/iam"
 	"check-limits/limits"
+	supportresources "check-limits/support"
 	"check-limits/util"
 	"flag"
 	"fmt"
@@ -31,6 +32,7 @@ func main() {
 	config: check config file
 	peeps: fetch user counts (-r to show users)
 	policies: fetch policy counts (-run to show policies -verbose to show statements)
+	support: fetch support tickets (-list to show tickets)
 		`
 	)
 
@@ -49,6 +51,10 @@ func main() {
 	policyCmd := flag.NewFlagSet("policies", flag.ExitOnError)
 	policyFetch := policyCmd.Bool("run", false, "fetch policy")
 	policyVerbose := policyCmd.Bool("verbose", false, "show policies")
+
+	supportCmd := flag.NewFlagSet("support", flag.ExitOnError)
+	supportCSI := supportCmd.String("csi", "", "csi number")
+	supportTicketList := supportCmd.Bool("list", false, "list tickets")
 
 	/*
 		limitsAction := flag.Bool("limits", false, "fetch limits in all regions")
@@ -88,7 +94,7 @@ func main() {
 		fmt.Printf("limitFetch: %v\n", *limitFetch)
 		if *limitFetch {
 			provider, client, tenancyID, err := setup.Prep(config)
-			regions, _, _ := setup.CommonSetup(err, client, tenancyID, false)
+			regions, _, _, _ := setup.CommonSetup(err, client, tenancyID, false)
 			limits.RunLimits(provider, regions, tenancyID)
 		} else {
 			fmt.Println("add -run to run")
@@ -100,7 +106,7 @@ func main() {
 		fmt.Printf("computeFetch: %v\n", *computeFetch)
 		if *computeFetch {
 			provider, client, tenancyID, err := setup.Prep(config)
-			regions, compartments, _ := setup.CommonSetup(err, client, tenancyID, false)
+			regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID, false)
 			compute.RunCompute(provider, regions, tenancyID, compartments)
 		} else {
 			fmt.Println("add -run to run")
@@ -119,15 +125,29 @@ func main() {
 		fmt.Printf("policies: %v\n", *policyFetch)
 		provider, client, tenancyID, err := setup.Prep(config)
 		helpers.FatalIfError(err)
-		_, compartments, _ := setup.CommonSetup(err, client, tenancyID, false)
+		_, compartments, _, _ := setup.CommonSetup(err, client, tenancyID, false)
 		peopleresource.GetAllPolicies(provider, client, tenancyID, compartments, *policyFetch, *policyVerbose)
+	case "support":
+		fmt.Println("fetching support")
+		supportCmd.Parse(os.Args[2:])
+		fmt.Printf("supportCSI: %v\n", *supportCSI)
+		fmt.Printf("supportTicketList: %v\n", *supportTicketList)
+		provider, client, tenancyID, err := setup.Prep(config)
+		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID, false)
+		//_, compartments, _ := setup.CommonSetup(err, client, tenancyID, false)
+		//supportresources.GetCSI(provider, tenancyID, homeregion)
+
+		supportresources.ListTickets(provider, tenancyID, homeregion, config.CSI)
+		helpers.FatalIfError(err)
+		supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
+		supportresources.ListBillingTickets(provider, tenancyID, homeregion, config.CSI)
 
 	case "config":
 		fmt.Println("checking config")
 		checkCmd.Parse(os.Args[2:])
 		fmt.Printf("checkRun: %v\n", *checkFetch)
 		_, client, tenancyID, err := setup.Prep(config)
-		regions, compartments, ads := setup.CommonSetup(err, client, tenancyID, false)
+		regions, compartments, ads, _ := setup.CommonSetup(err, client, tenancyID, false)
 		if compartments == nil {
 			fmt.Println("compartments is nil")
 		} else {
