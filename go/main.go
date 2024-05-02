@@ -32,6 +32,7 @@ func main() {
 	config: check config file
 	peeps: fetch user counts (-r to show users)
 	policies: fetch policy counts (-run to show policies -verbose to show statements)
+	support: fetch support tickets (-list to show tickets)
 		`
 	)
 
