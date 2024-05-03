@@ -23,14 +23,11 @@ func GetAllPeople(provider common.ConfigurationProvider, client identity.Identit
 		helpers.FatalIfError(err)
 
 		allUsers = append(allUsers, resp.Items...)
-
 		if resp.OpcNextPage != nil {
 			req.Page = resp.OpcNextPage
 		} else {
 			break
-
 		}
-
 		if showUsers {
 			for _, user := range resp.Items {
 				fmt.Printf("User: %s\n", *user.Name)

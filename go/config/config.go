@@ -14,7 +14,8 @@ import (
 )
 
 func Getcompartments(err error, client identity.IdentityClient, tenancyID string) []identity.Compartment {
-	resComp, err := client.ListCompartments(context.Background(), identity.ListCompartmentsRequest{
+	var allCompartments []identity.Compartment
+	req := identity.ListCompartmentsRequest{
 		AccessLevel:            identity.ListCompartmentsAccessLevelAny,
 		CompartmentId:          &tenancyID,
 		CompartmentIdInSubtree: common.Bool(true),
@@ -22,13 +23,23 @@ func Getcompartments(err error, client identity.IdentityClient, tenancyID string
 		SortOrder:              identity.ListCompartmentsSortOrderAsc,
 		LifecycleState:         identity.CompartmentLifecycleStateActive,
 		Limit:                  common.Int(208),
-	})
-	helpers.FatalIfError(err)
+	}
+	for {
+		respComp, err := client.ListCompartments(context.Background(), req)
+		helpers.FatalIfError(err)
+		allCompartments = append(allCompartments, respComp.Items...)
+		if respComp.OpcNextPage != nil {
+			req.Page = respComp.OpcNextPage
+		} else {
+			break
+		}
+
+	}
 	//fmt.Printf("List of compartments: %v", resComp.Items)
-	return resComp.Items
+	return allCompartments
 }
 
-func GetADs(tenancyID string, err error, client identity.IdentityClient) []identity.AvailabilityDomain {
+func GetADs(tenancyID string, client identity.IdentityClient) []identity.AvailabilityDomain {
 	adReq := identity.ListAvailabilityDomainsRequest{
 		CompartmentId: &tenancyID,
 	}
@@ -36,15 +47,16 @@ func GetADs(tenancyID string, err error, client identity.IdentityClient) []ident
 	helpers.FatalIfError(err)
 	return adResp.Items
 }
-func GetALLADdata(err error, client identity.IdentityClient, tenancyID string, regions []identity.RegionSubscription) []identity.AvailabilityDomain {
-	var ads []identity.AvailabilityDomain
+func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []identity.RegionSubscription) []identity.AvailabilityDomain {
+	var adsAll []identity.AvailabilityDomain
 	for _, region := range regions {
-		//fmt.Printf("Region: %v\n", *region.RegionName)
+		fmt.Printf("Region: %v\n", *region.RegionName)
 		client.SetRegion(*region.RegionName)
-		ads = GetADs(tenancyID, err, client)
-		//fmt.Printf("ads: %v\n", ads)
+		ads := GetADs(tenancyID, client)
+		adsAll = append(adsAll, ads...)
+		fmt.Printf("ads: %v\n", ads)
 	}
-	return ads
+	return adsAll
 }
 
 func Getregions(err error, client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, string) {
@@ -124,7 +136,7 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fe
 	wgDataPrep.Wait()
 	var ads []identity.AvailabilityDomain
 	if fetchADs {
-		ads = GetALLADdata(err, client, tenancyID, regions)
+		ads = GetALLADdata(client, tenancyID, regions)
 	} else {
 		ads = nil
 	}
