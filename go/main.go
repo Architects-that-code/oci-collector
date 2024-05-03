@@ -14,16 +14,14 @@ import (
 	"os"
 
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
-
-	"github.com/common-nighthawk/go-figure"
 )
 
 // refactor to create CLI using OCI SDK for Go to interact with the OCI API. Use local auth configs but let user specify
 // profile to use. The CLI should list the subscribed regions available to the specified profile and identify all the compartments and then loop thru each compartment in each region to query for
 // the limits for each service. The CLI should output the limits to a file in the limits directory in the current working directory. The file should be named
 func main() {
-	myFigure := figure.NewFigure("Architects That Code", "", true)
-	myFigure.Print()
+	util.PrintBanner()
+
 	var (
 		usage = `usage: #check-limits 'action' 'activate'
 	example: check-limits limits -run
@@ -65,6 +63,7 @@ func main() {
 	capacityFetch := capacityCmd.Bool("run", false, "fetch capacity")
 	capacityShapeOCPUs := capacityCmd.Int("ocpus", 0, "number of ocpus")
 	capacityShapeMemory := capacityCmd.Int("memory", 0, "amount of memory")
+	capacityShapeType := capacityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
 
 	/*
 		limitsAction := flag.Bool("limits", false, "fetch limits in all regions")
@@ -158,9 +157,15 @@ func main() {
 		fmt.Printf("capacityFetch: %v\n", *capacityFetch)
 		fmt.Printf("capacityShapeOCPUs: %v\n", *capacityShapeOCPUs)
 		fmt.Printf("capacityShapeMemory: %v\n", *capacityShapeMemory)
+		fmt.Printf("capacityShapeType: %v\n", *capacityShapeType)
 		provider, client, tenancyID, err := setup.Prep(config)
 		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID, false)
-		capcheck.Check(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory)
+		if *capacityShapeOCPUs > 0 || *capacityShapeMemory > 0 {
+			capcheck.Check(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory, *capacityShapeType)
+		} else {
+			fmt.Println("add -ocpus and -memory and to run")
+
+		}
 
 	case "config":
 		fmt.Println("checking config")
