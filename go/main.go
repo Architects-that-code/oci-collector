@@ -1,6 +1,7 @@
 package main
 
 import (
+	capcheck "check-limits/capCheck"
 	compute "check-limits/compute"
 	setup "check-limits/config"
 	peopleresource "check-limits/iam"
@@ -19,6 +20,7 @@ import (
 // profile to use. The CLI should list the subscribed regions available to the specified profile and identify all the compartments and then loop thru each compartment in each region to query for
 // the limits for each service. The CLI should output the limits to a file in the limits directory in the current working directory. The file should be named
 func main() {
+	util.PrintBanner()
 
 	var (
 		usage = `usage: #check-limits 'action' 'activate'
@@ -27,12 +29,13 @@ func main() {
 	specity the action you want to take:
 
 		
-	limits: fetch limits in all region
-	compute: fetch compute active instances in all regions
-	config: check config file
+	limits: fetch limits in all YOUR region
+	compute: fetch compute active instances in all YOUR regions
+	config: check config file and print basic info
 	peeps: fetch user counts (-r to show users)
 	policies: fetch policy counts (-run to show policies -verbose to show statements)
 	support: fetch support tickets (-list to show tickets)
+	capacity: check capacity in all YOUR regions (-ocpus to specify ocpus -memory to specify memory)
 		`
 	)
 
@@ -53,8 +56,14 @@ func main() {
 	policyVerbose := policyCmd.Bool("verbose", false, "show policies")
 
 	supportCmd := flag.NewFlagSet("support", flag.ExitOnError)
-	supportCSI := supportCmd.String("csi", "", "csi number")
+	//supportCSI := supportCmd.String("csi", "", "csi number")
 	supportTicketList := supportCmd.Bool("list", false, "list tickets")
+
+	capacityCmd := flag.NewFlagSet("capacity", flag.ExitOnError)
+	capacityFetch := capacityCmd.Bool("run", false, "fetch capacity")
+	capacityShapeOCPUs := capacityCmd.Int("ocpus", 0, "number of ocpus")
+	capacityShapeMemory := capacityCmd.Int("memory", 0, "amount of memory")
+	capacityShapeType := capacityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
 
 	/*
 		limitsAction := flag.Bool("limits", false, "fetch limits in all regions")
@@ -130,7 +139,7 @@ func main() {
 	case "support":
 		fmt.Println("fetching support")
 		supportCmd.Parse(os.Args[2:])
-		fmt.Printf("supportCSI: %v\n", *supportCSI)
+		//fmt.Printf("supportCSI: %v\n", *supportCSI)
 		fmt.Printf("supportTicketList: %v\n", *supportTicketList)
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID, false)
@@ -142,12 +151,28 @@ func main() {
 		supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
 		supportresources.ListBillingTickets(provider, tenancyID, homeregion, config.CSI)
 
+	case "capacity":
+		fmt.Println("checking capacity")
+		capacityCmd.Parse(os.Args[2:])
+		fmt.Printf("capacityFetch: %v\n", *capacityFetch)
+		fmt.Printf("capacityShapeOCPUs: %v\n", *capacityShapeOCPUs)
+		fmt.Printf("capacityShapeMemory: %v\n", *capacityShapeMemory)
+		fmt.Printf("capacityShapeType: %v\n", *capacityShapeType)
+		provider, client, tenancyID, err := setup.Prep(config)
+		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID, false)
+		if *capacityShapeOCPUs > 0 || *capacityShapeMemory > 0 {
+			capcheck.Check(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory, *capacityShapeType)
+		} else {
+			fmt.Println("add -ocpus and -memory and to run")
+
+		}
+
 	case "config":
 		fmt.Println("checking config")
 		checkCmd.Parse(os.Args[2:])
 		fmt.Printf("checkRun: %v\n", *checkFetch)
 		_, client, tenancyID, err := setup.Prep(config)
-		regions, compartments, ads, _ := setup.CommonSetup(err, client, tenancyID, false)
+		regions, compartments, ads, _ := setup.CommonSetup(err, client, tenancyID, true)
 		if compartments == nil {
 			fmt.Println("compartments is nil")
 		} else {
@@ -158,7 +183,7 @@ func main() {
 		if regions == nil {
 			fmt.Println("regions is nil")
 		} else {
-			fmt.Printf("regions: %v\n", len(regions))
+			fmt.Printf("subscribed regions: %v\n", len(regions))
 		}
 		if ads == nil {
 			fmt.Println("ads is nil")
