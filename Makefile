@@ -1,3 +1,5 @@
+
+
 # Current version
 VERSION ?= v1.0.0
 
@@ -13,13 +15,17 @@ APP := oci-collector
 PLATFORMS :=  darwin linux windows
 os = $(word 1, $@)
 
-.PHONY: $(PLATFORMS)
-$(PLATFORMS):
-	GOOS=$(os) GOARCH=amd64 go build -C $(DIR) -ldflags='$(GO_LDFLAGS)' -o ../bin/$(APP)-$(VERSION)-$(os)-amd64 .
+.PHONY: $(PLATFORMS) 
+$(PLATFORMS): copy_file
+	GOOS=$(os) GOARCH=amd64 go build -C $(DIR) -ldflags='$(GO_LDFLAGS)' -o ../bin/$(APP)-$(VERSION)-$(os)-amd64 . 
+	
 
 .PHONY: all
-all: windows linux darwin
+all: windows linux darwin copy_file
 
 .PHONY: clean
 clean:
 	rm  -f ./bin/*
+
+copy_file:
+	cp toolkit-config.yaml bin/toolkit-config.yaml
