@@ -18,13 +18,14 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 	//loop thru regionsconst
 
 	//		in region loop thru compartments
+	//TODO: ADD turbonium to region and compartments
 
-	for _, compartment := range compartments {
-
-		for _, region := range regions {
-
-			GetInstances(client, compartment, *region.RegionName)
-
+	var allInstances []core.Instance
+	for _, region := range regions {
+		for _, compartment := range compartments {
+			instances := GetInstances(client, compartment, *region.RegionName)
+			allInstances = append(allInstances, instances...)
+			fmt.Printf("region: \t%v  \tcomp:%v: \t\t%v\n", *region.RegionName, *compartment.Name, len(instances))
 		}
 
 	}
@@ -41,6 +42,5 @@ func GetInstances(client core.ComputeClient, compartment identity.Compartment, r
 	helpers.FatalIfError(err)
 
 	// Retrieve value from the response.
-	fmt.Printf("results in comp: \t%v  \treg:%v: \t%v\n", *compartment.Name, region, len(resp.Items))
 	return resp.Items
 }

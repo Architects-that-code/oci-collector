@@ -48,14 +48,23 @@ func GetADs(tenancyID string, client identity.IdentityClient) []identity.Availab
 	return adResp.Items
 }
 func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []identity.RegionSubscription) []identity.AvailabilityDomain {
+	//start := time.Now()
+	//fmt.Print("Fetching ADs\n")
 	var adsAll []identity.AvailabilityDomain
+	var wg sync.WaitGroup
+	wg.Add(len(regions))
 	for _, region := range regions {
-		fmt.Printf("Region: %v\n", *region.RegionName)
-		client.SetRegion(*region.RegionName)
-		ads := GetADs(tenancyID, client)
-		adsAll = append(adsAll, ads...)
-		fmt.Printf("ads: %v\n", ads)
+		go func(region identity.RegionSubscription) {
+			defer wg.Done()
+			//fmt.Printf("Region: %v\n", *region.RegionName)
+			client.SetRegion(*region.RegionName)
+			ads := GetADs(tenancyID, client)
+			adsAll = append(adsAll, ads...)
+		}(region)
 	}
+	wg.Wait()
+	//elapsed := time.Since(start)
+	//fmt.Printf("Fetching ADs took %s \n", elapsed)
 	return adsAll
 }
 
@@ -107,7 +116,7 @@ func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient,
 
 }
 
-func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fetchADs bool) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
+func CommonSetup(err error, client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
 	var wgDataPrep = sync.WaitGroup{}
 	wgDataPrep.Add(2)
 	var compartments []identity.Compartment
@@ -135,11 +144,8 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fe
 	}()
 	wgDataPrep.Wait()
 	var ads []identity.AvailabilityDomain
-	if fetchADs {
-		ads = GetALLADdata(client, tenancyID, regions)
-	} else {
-		ads = nil
-	}
+
+	ads = GetALLADdata(client, tenancyID, regions)
 
 	return regions, compartments, ads, homeregion
 }

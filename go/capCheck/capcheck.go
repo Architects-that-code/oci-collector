@@ -93,5 +93,9 @@ func CreateComputeCapacityReport(ctx context.Context, provider common.Configurat
 	fmt.Printf("\t\tmem:  %v\n", *resp.ShapeAvailabilities[0].InstanceShapeConfig.MemoryInGBs)
 
 	fmt.Printf("\t\tavalabile? %v\n", resp.ShapeAvailabilities[0].AvailabilityStatus)
+	if resp.ShapeAvailabilities[0].AvailableCount != nil {
+		fmt.Printf("\t\t\tcapacity: %v\n", *resp.ShapeAvailabilities[0].AvailableCount)
+	}
+
 	return resp, nil
 }
