@@ -3,15 +3,12 @@ package limits
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"sync"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"github.com/oracle/oci-go-sdk/v65/limits"
-
-	util "check-limits/util"
 )
 
 func GetLimitsAvailRegionScoped(err error, limitsClient limits.LimitsClient, compartment string, svc string, limitName string) limits.GetResourceAvailabilityResponse {
@@ -65,8 +62,8 @@ func GetLimitsForService(err error, limitsClient limits.LimitsClient, tenancyID 
 
 func GetServices(limitsClient limits.LimitsClient, err error, tenancyID string, region string) limits.ListServicesResponse {
 	limitsClient.SetRegion(region)
-	util.PrintSpace()
-	slog.Debug("limitsClientUPDATED: \n", limitsClient.Endpoint())
+	//util.PrintSpace()
+	//slog.Debug("limitsClientUPDATED: \n", limitsClient.Endpoint())
 	services, err := limitsClient.ListServices(context.Background(), limits.ListServicesRequest{
 		CompartmentId:   &tenancyID,
 		SortBy:          "",
@@ -91,13 +88,13 @@ type LimitsCollector struct {
 func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string) {
 	limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
-	util.PrintSpace()
-	fmt.Printf("limitsClient: %v\n", limitsClient)
+	//util.PrintSpace()
+	//fmt.Printf("limitsClient: %v\n", limitsClient)
 
 	var Datapile []LimitsCollector
 
 	//localReg := []string{"us-ashburn-1"}
-	fmt.Printf("regions: %v\n", regions)
+	//fmt.Printf("regions: %v\n", regions)
 
 	var wg_regional = sync.WaitGroup{}
 	var regionalSlices = make(chan []LimitsCollector, len(regions))

@@ -1,7 +1,6 @@
 package setup
 
 import (
-	"check-limits/util"
 	"context"
 	"fmt"
 	"os"
@@ -139,7 +138,7 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string) ([
 			for _, region := range regions {
 				fmt.Printf("Region: %v\n", *region.RegionName)
 			}*/
-		util.PrintSpace()
+		//util.PrintSpace()
 		//slog.Debug("List of regions:", regions)
 	}()
 	wgDataPrep.Wait()
