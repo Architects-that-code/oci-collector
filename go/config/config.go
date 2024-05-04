@@ -35,6 +35,8 @@ func Getcompartments(err error, client identity.IdentityClient, tenancyID string
 
 	}
 	//fmt.Printf("List of compartments: %v", resComp.Items)
+	allCompartments = append(allCompartments, identity.Compartment{Id: &tenancyID,
+		Name: common.String("root")})
 	return allCompartments
 }
 

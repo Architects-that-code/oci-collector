@@ -13,9 +13,6 @@ func GetAllPolicies(provider common.ConfigurationProvider, client identity.Ident
 
 	var policies []identity.Policy
 
-	compartments = append(compartments, identity.Compartment{Id: &tenancyID,
-		Name: common.String("root")})
-
 	for _, compartment := range compartments {
 		//fmt.Printf("compartment: %v\n", *compartment.Name)
 		req := identity.ListPoliciesRequest{

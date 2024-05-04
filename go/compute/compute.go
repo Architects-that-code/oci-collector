@@ -29,6 +29,8 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 		}
 
 	}
+	fmt.Printf("Total instances: %v\n", len(allInstances))
+	fmt.Printf("allInstances: %v\n", allInstances)
 }
 
 func GetInstances(client core.ComputeClient, compartment identity.Compartment, region string) []core.Instance {
