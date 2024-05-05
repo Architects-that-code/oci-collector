@@ -30,7 +30,10 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 
 	}
 	fmt.Printf("Total instances: %v\n", len(allInstances))
-	fmt.Printf("allInstances: %v\n", allInstances)
+	//fmt.Printf("allInstances: %v\n", allInstances)
+	for _, instance := range allInstances {
+		fmt.Printf("Region: %v InstanceShape: %v Cpus %v Mem %v \n", *instance.Region, *instance.Shape, *instance.ShapeConfig.Ocpus, *instance.ShapeConfig.MemoryInGBs)
+	}
 }
 
 func GetInstances(client core.ComputeClient, compartment identity.Compartment, region string) []core.Instance {

@@ -202,6 +202,7 @@ func main() {
 			if *checkFetch {
 				for _, comp := range compartments {
 					fmt.Printf("\tCompartment Name: %v \n", *comp.Name)
+
 				}
 			}
 			//fmt.Printf("compartments: %v\n", compartments)
