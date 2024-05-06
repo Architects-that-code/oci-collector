@@ -12,8 +12,16 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// GetCompartmentsHeirarchy returns a list of compartments in a tenancy - including the root compartment and all nested compartments
+func GetCompartmentsHeirarchy(err error, client identity.IdentityClient, tenancyID string) {
+
+}
+
 func Getcompartments(err error, client identity.IdentityClient, tenancyID string) []identity.Compartment {
 	var allCompartments []identity.Compartment
+	allCompartments = append(allCompartments, identity.Compartment{Id: &tenancyID,
+		Name: common.String("root")})
+
 	req := identity.ListCompartmentsRequest{
 		AccessLevel:            identity.ListCompartmentsAccessLevelAny,
 		CompartmentId:          &tenancyID,
@@ -35,8 +43,7 @@ func Getcompartments(err error, client identity.IdentityClient, tenancyID string
 
 	}
 	//fmt.Printf("List of compartments: %v", resComp.Items)
-	allCompartments = append(allCompartments, identity.Compartment{Id: &tenancyID,
-		Name: common.String("root")})
+
 	return allCompartments
 }
 
