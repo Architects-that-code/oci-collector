@@ -61,7 +61,6 @@ func Check(provider common.ConfigurationProvider, regions []identity.RegionSubsc
 
 			}
 		}(region)
-
 	}
 	wg.Wait()
 

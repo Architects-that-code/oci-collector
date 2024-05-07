@@ -16,7 +16,7 @@ PLATFORMS :=  darwin linux windows
 os = $(word 1, $@)
 
 .PHONY: $(PLATFORMS) 
-$(PLATFORMS): copy_file
+$(PLATFORMS): 
 	GOOS=$(os) GOARCH=amd64 go build -C $(DIR) -ldflags='$(GO_LDFLAGS)' -o ../bin/$(APP)-$(VERSION)-$(os)-amd64 . 
 	
 
