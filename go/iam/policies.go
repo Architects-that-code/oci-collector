@@ -28,11 +28,11 @@ func GetAllPolicies(provider common.ConfigurationProvider, client identity.Ident
 		for _, pol := range resp.Items {
 			policies = append(policies, pol)
 			if showPolicies {
-				fmt.Printf("in Comp: %v Policies: %s\n", *compartment.Name, *pol.Name)
+				fmt.Printf("\tComp: %v Policies: %s\n", *compartment.Name, *pol.Name)
 				if verbose {
-					fmt.Printf("statements %v\n", len(pol.Statements))
+					fmt.Printf("\t\tstatements %v\n", len(pol.Statements))
 					for _, statement := range pol.Statements {
-						fmt.Printf("Statement: %s\n", statement)
+						fmt.Printf("\t\t\tStatement: %s\n", statement)
 					}
 				}
 			}

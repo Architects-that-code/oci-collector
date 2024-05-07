@@ -19,3 +19,6 @@ So I am viewing this as a fun 'Batman’s utility belt' type of project. What ar
 - Output data to files
 - Send output as mail
 - Publish as custom metrics
+
+
+SHOULD the 'core' data (in config) be pushing into a library as almost everything else utilizes those data structures
