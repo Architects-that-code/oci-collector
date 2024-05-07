@@ -4,6 +4,7 @@ import (
 	config "check-limits/config"
 	"context"
 	"fmt"
+	"sync"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/core"
@@ -25,37 +26,44 @@ func Check(provider common.ConfigurationProvider, regions []identity.RegionSubsc
 	instanceType := makeInstanceShape(capacityShapeType)
 
 	var adsAll []identity.AvailabilityDomain
+	var wg sync.WaitGroup
+	wg.Add(len(regions))
 	for _, region := range regions {
-		fmt.Printf("Region: %v\n", *region.RegionName)
-		client.SetRegion(*region.RegionName)
-		ads := config.GetADs(tenancyID, client)
-		adsAll = append(adsAll, ads...)
-		//fmt.Printf("ads: %v\n", ads)
-		for _, ad := range ads {
-			fmt.Printf("ad: %v\n", *ad.Name)
-			config := core.CapacityReportInstanceShapeConfig{
-				Ocpus:       common.Float32(float32(capacityShapeOCPUs)),
-				MemoryInGBs: common.Float32(float32(capacityShapeMemory)),
-				//Nvmes:       new(int),
+		go func(region identity.RegionSubscription) {
+			defer wg.Done()
+			//fmt.Printf("Region: %v\n", *region.RegionName)
+			client.SetRegion(*region.RegionName)
+			ads := config.GetADs(tenancyID, client)
+			adsAll = append(adsAll, ads...)
+			//fmt.Printf("ads: %v\n", ads)
+			for _, ad := range ads {
+				//fmt.Printf("ad: %v\n", *ad.Name)
+				config := core.CapacityReportInstanceShapeConfig{
+					Ocpus:       common.Float32(float32(capacityShapeOCPUs)),
+					MemoryInGBs: common.Float32(float32(capacityShapeMemory)),
+					//Nvmes:       new(int),
+				}
+				sadetails := make([]core.CreateCapacityReportShapeAvailabilityDetails, 1)
+
+				sadetails[0] = core.CreateCapacityReportShapeAvailabilityDetails{
+					InstanceShape: common.String(instanceType),
+					//FaultDomain:         new(string),
+					InstanceShapeConfig: &config,
+				}
+
+				ccrd := core.CreateComputeCapacityReportDetails{
+					CompartmentId:       &tenancyID,
+					AvailabilityDomain:  common.String(*ad.Name),
+					ShapeAvailabilities: sadetails,
+				}
+
+				CreateComputeCapacityReport(context.Background(), provider, ccrd, region)
+
 			}
-			sadetails := make([]core.CreateCapacityReportShapeAvailabilityDetails, 1)
+		}(region)
 
-			sadetails[0] = core.CreateCapacityReportShapeAvailabilityDetails{
-				InstanceShape: common.String(instanceType),
-				//FaultDomain:         new(string),
-				InstanceShapeConfig: &config,
-			}
-
-			ccrd := core.CreateComputeCapacityReportDetails{
-				CompartmentId:       &tenancyID,
-				AvailabilityDomain:  common.String(*ad.Name),
-				ShapeAvailabilities: sadetails,
-			}
-
-			CreateComputeCapacityReport(context.Background(), provider, ccrd, region)
-
-		}
 	}
+	wg.Wait()
 
 }
 
@@ -87,7 +95,7 @@ func CreateComputeCapacityReport(ctx context.Context, provider common.Configurat
 
 	resp, err := client.CreateComputeCapacityReport(ctx, req)
 	helpers.FatalIfError(err)
-	//fmt.Printf("Created Compute Capacity Report: %v\n", resp)
+	fmt.Printf(*region.RegionName)
 	fmt.Printf("\tshape: %v\n", *resp.ShapeAvailabilities[0].InstanceShape)
 	fmt.Printf("\t\tocpu: %v\n", *resp.ShapeAvailabilities[0].InstanceShapeConfig.Ocpus)
 	fmt.Printf("\t\tmem:  %v\n", *resp.ShapeAvailabilities[0].InstanceShapeConfig.MemoryInGBs)
