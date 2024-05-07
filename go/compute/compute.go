@@ -3,6 +3,7 @@ package compute
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"github.com/oracle/oci-go-sdk/core"
 	"github.com/oracle/oci-go-sdk/example/helpers"
@@ -21,23 +22,34 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 	//TODO: ADD turbonium to region and compartments
 
 	var allInstances []core.Instance
-	for _, region := range regions {
-		for _, compartment := range compartments {
-			instances := GetInstances(client, compartment, *region.RegionName)
-			allInstances = append(allInstances, instances...)
-			fmt.Printf("region: \t%v  \tcomp:%v: \t\t%v\n", *region.RegionName, *compartment.Name, len(instances))
-		}
+	var wg sync.WaitGroup
+	wg.Add(len(regions))
+	var regionalSlices = make(chan []core.Instance, len(regions))
 
+	for _, region := range regions {
+		go func(region identity.RegionSubscription) {
+			defer wg.Done()
+			for _, compartment := range compartments {
+				instances := GetInstances(client, compartment, *region.RegionName)
+				allInstances = append(allInstances, instances...)
+				//fmt.Printf("region: \t%v  \tcomp:%v: \t\t%v\n", *region.RegionName, *compartment.Name, len(instances))
+			}
+			regionalSlices <- allInstances
+		}(region)
 	}
+	wg.Wait()
+
 	fmt.Printf("Total instances: %v\n", len(allInstances))
 	//fmt.Printf("allInstances: %v\n", allInstances)
 	for _, instance := range allInstances {
 		fmt.Printf("Region: %v InstanceShape: %v Cpus %v Mem %v \n", *instance.Region, *instance.Shape, *instance.ShapeConfig.Ocpus, *instance.ShapeConfig.MemoryInGBs)
 	}
+	//fmt.Printf("all instannces %v\n", allInstances)
 }
 
 func GetInstances(client core.ComputeClient, compartment identity.Compartment, region string) []core.Instance {
 	client.SetRegion(region)
+	fmt.Printf("Checking: Region: %v\t Compartment: %v\n", region, *compartment.Name)
 	req := core.ListInstancesRequest{
 		CompartmentId: compartment.Id,
 	}
