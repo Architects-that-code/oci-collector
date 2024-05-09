@@ -2,6 +2,7 @@ package main
 
 import (
 	capcheck "check-limits/capCheck"
+	"check-limits/capability"
 	compute "check-limits/compute"
 	setup "check-limits/config"
 	peopleresource "check-limits/iam"
@@ -36,6 +37,7 @@ func main() {
 	policies: fetch policy counts (-run to show policies -verbose to show statements)
 	support: fetch support tickets (-list to show tickets)
 	capacity: check capacity in all YOUR regions (-ocpus to specify ocpus -memory to specify memory -type to specify shape type)
+	capability: what types of 'things' are available for a shape type (-type to specify shape type)
 		`
 	)
 
@@ -64,6 +66,10 @@ func main() {
 	capacityShapeOCPUs := capacityCmd.Int("ocpus", 0, "number of ocpus")
 	capacityShapeMemory := capacityCmd.Int("memory", 0, "amount of memory")
 	capacityShapeType := capacityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
+
+	capabilityCmd := flag.NewFlagSet("capability", flag.ExitOnError)
+	capabilityFetch := capabilityCmd.Bool("run", false, "fetch capability")
+	capabilityShapeType := capabilityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
 
 	/*
 		limitsAction := flag.Bool("limits", false, "fetch limits in all regions")
@@ -136,6 +142,7 @@ func main() {
 		helpers.FatalIfError(err)
 		_, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
 		peopleresource.GetAllPolicies(provider, client, tenancyID, compartments, *policyFetch, *policyVerbose)
+
 	case "support":
 		fmt.Println("fetching support")
 		supportCmd.Parse(os.Args[2:])
@@ -144,12 +151,13 @@ func main() {
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 		//_, compartments, _ := setup.CommonSetup(err, client, tenancyID, false)
-		//supportresources.GetCSI(provider, tenancyID, homeregion)
 
 		supportresources.ListTickets(provider, tenancyID, homeregion, config.CSI)
-		helpers.FatalIfError(err)
+		//helpers.FatalIfError(err)
 		supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
 		supportresources.ListBillingTickets(provider, tenancyID, homeregion, config.CSI)
+
+		//supportresources.GetCSI(provider, tenancyID, homeregion)
 
 	case "capacity":
 		fmt.Println("checking capacity")
@@ -166,6 +174,15 @@ func main() {
 			fmt.Println("add -ocpus and -memory and to run")
 
 		}
+
+	case "capability":
+		fmt.Println("checking capabilities")
+		capabilityCmd.Parse(os.Args[2:])
+		fmt.Printf("capabilityFetch: %v\n", *capabilityFetch)
+		fmt.Printf("capabilityShapeType: %v\n", *capabilityShapeType)
+		provider, client, tenancyID, err := setup.Prep(config)
+		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
+		capability.OSSupport(provider, regions, tenancyID, compartments, *capabilityFetch, *capabilityShapeType)
 
 	case "config":
 		fmt.Println("checking config")
