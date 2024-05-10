@@ -71,12 +71,6 @@ func main() {
 	capabilityFetch := capabilityCmd.Bool("run", false, "fetch capability")
 	capabilityShapeType := capabilityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
 
-	/*
-		limitsAction := flag.Bool("limits", false, "fetch limits in all regions")
-		computeAction := flag.Bool("compute", false, "fetch compute active instances in all regions")
-		checkConfigAction := flag.Bool("checkconfig", false, "check config file")
-	*/
-
 	err, config := setup.Getconfig()
 	if err != nil {
 		//fmt.Printf("%+v\n", err)
@@ -92,14 +86,14 @@ func main() {
 		return
 	}
 
-	fmt.Printf("os.Args: %v\n", os.Args)
+	//fmt.Printf("os.Args: %v\n", os.Args)
 
-	fmt.Printf("flag.Args: %v\n", flag.Args())
+	//fmt.Printf("flag.Args: %v\n", flag.Args())
 
 	// Parse command line arguments
 
-	fmt.Println("Using profile:", config.ProfileName)
-	fmt.Printf("Config: %v\n", config.ConfigPath)
+	//fmt.Println("Using profile:", config.ProfileName)
+	//fmt.Printf("Config: %v\n", config.ConfigPath)
 	util.PrintSpace()
 
 	switch os.Args[1] {

@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
+	"github.com/oracle/oci-go-sdk/v65/common/auth"
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"gopkg.in/yaml.v2"
@@ -109,18 +110,30 @@ func Getconfig() (error, Config) {
 }
 
 type Config struct {
-	ConfigPath  string `yaml:"configPath"`
-	ProfileName string `yaml:"profileName"`
-	CSI         string `yaml:"SUPPORT_CSI_NUMBER"`
+	ConfigPath           string `yaml:"configPath"`
+	ProfileName          string `yaml:"profileName"`
+	UseInstancePrincipal bool   `yaml:"useinstanceprincipal"`
+	CSI                  string `yaml:"SUPPORT_CSI_NUMBER"`
 }
 
 func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient, string, error) {
-	provider := common.CustomProfileConfigProvider(config.ConfigPath, config.ProfileName)
-	client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
+	var _provider common.ConfigurationProvider
+
+	if config.UseInstancePrincipal {
+		fmt.Println("Using Instance Principal")
+		_provider, _ = auth.InstancePrincipalConfigurationProvider()
+	} else {
+		fmt.Println("Using Config File")
+		fmt.Println("Using profile:", config.ProfileName)
+		fmt.Printf("Config: %v\n", config.ConfigPath)
+		_provider = common.CustomProfileConfigProvider(config.ConfigPath, config.ProfileName)
+	}
+
+	client, err := identity.NewIdentityClientWithConfigurationProvider(_provider)
 	helpers.FatalIfError(err)
-	tenancyID, err := provider.TenancyOCID()
+	tenancyID, err := _provider.TenancyOCID()
 	helpers.FatalIfError(err)
-	return provider, client, tenancyID, err
+	return _provider, client, tenancyID, err
 
 }
 

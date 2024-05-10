@@ -22,3 +22,5 @@ So I am viewing this as a fun 'Batman’s utility belt' type of project. What ar
 
 
 SHOULD the 'core' data (in config) be pushing into a library as almost everything else utilizes those data structures
+
+## Should we refactor to use something like COBRA so adding additional tools is easier?
