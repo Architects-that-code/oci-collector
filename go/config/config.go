@@ -1,20 +1,28 @@
 package setup
 
 import (
-	"check-limits/util"
 	"context"
 	"fmt"
 	"os"
 	"sync"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
+	"github.com/oracle/oci-go-sdk/v65/common/auth"
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"gopkg.in/yaml.v2"
 )
 
+// GetCompartmentsHeirarchy returns a list of compartments in a tenancy - including the root compartment and all nested compartments
+func GetCompartmentsHeirarchy(err error, client identity.IdentityClient, tenancyID string) {
+
+}
+
 func Getcompartments(err error, client identity.IdentityClient, tenancyID string) []identity.Compartment {
 	var allCompartments []identity.Compartment
+	allCompartments = append(allCompartments, identity.Compartment{Id: &tenancyID,
+		Name: common.String("root")})
+
 	req := identity.ListCompartmentsRequest{
 		AccessLevel:            identity.ListCompartmentsAccessLevelAny,
 		CompartmentId:          &tenancyID,
@@ -36,6 +44,7 @@ func Getcompartments(err error, client identity.IdentityClient, tenancyID string
 
 	}
 	//fmt.Printf("List of compartments: %v", resComp.Items)
+
 	return allCompartments
 }
 
@@ -48,14 +57,23 @@ func GetADs(tenancyID string, client identity.IdentityClient) []identity.Availab
 	return adResp.Items
 }
 func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []identity.RegionSubscription) []identity.AvailabilityDomain {
+	//start := time.Now()
+	//fmt.Print("Fetching ADs\n")
 	var adsAll []identity.AvailabilityDomain
+	var wg sync.WaitGroup
+	wg.Add(len(regions))
 	for _, region := range regions {
-		fmt.Printf("Region: %v\n", *region.RegionName)
-		client.SetRegion(*region.RegionName)
-		ads := GetADs(tenancyID, client)
-		adsAll = append(adsAll, ads...)
-		fmt.Printf("ads: %v\n", ads)
+		go func(region identity.RegionSubscription) {
+			defer wg.Done()
+			//fmt.Printf("Region: %v\n", *region.RegionName)
+			client.SetRegion(*region.RegionName)
+			ads := GetADs(tenancyID, client)
+			adsAll = append(adsAll, ads...)
+		}(region)
 	}
+	wg.Wait()
+	//elapsed := time.Since(start)
+	//fmt.Printf("Fetching ADs took %s \n", elapsed)
 	return adsAll
 }
 
@@ -92,22 +110,34 @@ func Getconfig() (error, Config) {
 }
 
 type Config struct {
-	ConfigPath  string `yaml:"configPath"`
-	ProfileName string `yaml:"profileName"`
-	CSI         string `yaml:"SUPPORT_CSI_NUMBER"`
+	ConfigPath           string `yaml:"configPath"`
+	ProfileName          string `yaml:"profileName"`
+	UseInstancePrincipal bool   `yaml:"useinstanceprincipal"`
+	CSI                  string `yaml:"SUPPORT_CSI_NUMBER"`
 }
 
 func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient, string, error) {
-	provider := common.CustomProfileConfigProvider(config.ConfigPath, config.ProfileName)
-	client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
+	var _provider common.ConfigurationProvider
+
+	if config.UseInstancePrincipal {
+		fmt.Println("Using Instance Principal")
+		_provider, _ = auth.InstancePrincipalConfigurationProvider()
+	} else {
+		fmt.Println("Using Config File")
+		fmt.Println("Using profile:", config.ProfileName)
+		fmt.Printf("Config: %v\n", config.ConfigPath)
+		_provider = common.CustomProfileConfigProvider(config.ConfigPath, config.ProfileName)
+	}
+
+	client, err := identity.NewIdentityClientWithConfigurationProvider(_provider)
 	helpers.FatalIfError(err)
-	tenancyID, err := provider.TenancyOCID()
+	tenancyID, err := _provider.TenancyOCID()
 	helpers.FatalIfError(err)
-	return provider, client, tenancyID, err
+	return _provider, client, tenancyID, err
 
 }
 
-func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fetchADs bool) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
+func CommonSetup(err error, client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
 	var wgDataPrep = sync.WaitGroup{}
 	wgDataPrep.Add(2)
 	var compartments []identity.Compartment
@@ -130,16 +160,13 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string, fe
 			for _, region := range regions {
 				fmt.Printf("Region: %v\n", *region.RegionName)
 			}*/
-		util.PrintSpace()
+		//util.PrintSpace()
 		//slog.Debug("List of regions:", regions)
 	}()
 	wgDataPrep.Wait()
 	var ads []identity.AvailabilityDomain
-	if fetchADs {
-		ads = GetALLADdata(client, tenancyID, regions)
-	} else {
-		ads = nil
-	}
+
+	ads = GetALLADdata(client, tenancyID, regions)
 
 	return regions, compartments, ads, homeregion
 }

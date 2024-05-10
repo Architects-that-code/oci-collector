@@ -2,6 +2,7 @@ package main
 
 import (
 	capcheck "check-limits/capCheck"
+	"check-limits/capability"
 	compute "check-limits/compute"
 	setup "check-limits/config"
 	peopleresource "check-limits/iam"
@@ -35,7 +36,8 @@ func main() {
 	peeps: fetch user counts (-r to show users)
 	policies: fetch policy counts (-run to show policies -verbose to show statements)
 	support: fetch support tickets (-list to show tickets)
-	capacity: check capacity in all YOUR regions (-ocpus to specify ocpus -memory to specify memory)
+	capacity: check capacity in all YOUR regions (-ocpus to specify ocpus -memory to specify memory -type to specify shape type)
+	capability: what types of 'things' are available for a shape type (-type to specify shape type)
 		`
 	)
 
@@ -46,7 +48,7 @@ func main() {
 	computeFetch := computeCmd.Bool("run", false, "fetch compute active instances in all regions")
 
 	checkCmd := flag.NewFlagSet("config", flag.ExitOnError)
-	checkFetch := checkCmd.Bool("run", true, "check config file")
+	checkFetch := checkCmd.Bool("verbose", false, "get more details")
 
 	peopleCmd := flag.NewFlagSet("peeps", flag.ExitOnError)
 	peopleFetch := peopleCmd.Bool("run", false, "fetch users")
@@ -65,11 +67,9 @@ func main() {
 	capacityShapeMemory := capacityCmd.Int("memory", 0, "amount of memory")
 	capacityShapeType := capacityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
 
-	/*
-		limitsAction := flag.Bool("limits", false, "fetch limits in all regions")
-		computeAction := flag.Bool("compute", false, "fetch compute active instances in all regions")
-		checkConfigAction := flag.Bool("checkconfig", false, "check config file")
-	*/
+	capabilityCmd := flag.NewFlagSet("capability", flag.ExitOnError)
+	capabilityFetch := capabilityCmd.Bool("run", false, "fetch capability")
+	capabilityShapeType := capabilityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
 
 	err, config := setup.Getconfig()
 	if err != nil {
@@ -86,14 +86,14 @@ func main() {
 		return
 	}
 
-	fmt.Printf("os.Args: %v\n", os.Args)
+	//fmt.Printf("os.Args: %v\n", os.Args)
 
-	fmt.Printf("flag.Args: %v\n", flag.Args())
+	//fmt.Printf("flag.Args: %v\n", flag.Args())
 
 	// Parse command line arguments
 
-	fmt.Println("Using profile:", config.ProfileName)
-	fmt.Printf("Config: %v\n", config.ConfigPath)
+	//fmt.Println("Using profile:", config.ProfileName)
+	//fmt.Printf("Config: %v\n", config.ConfigPath)
 	util.PrintSpace()
 
 	switch os.Args[1] {
@@ -103,7 +103,7 @@ func main() {
 		fmt.Printf("limitFetch: %v\n", *limitFetch)
 		if *limitFetch {
 			provider, client, tenancyID, err := setup.Prep(config)
-			regions, _, _, _ := setup.CommonSetup(err, client, tenancyID, false)
+			regions, _, _, _ := setup.CommonSetup(err, client, tenancyID)
 			limits.RunLimits(provider, regions, tenancyID)
 		} else {
 			fmt.Println("add -run to run")
@@ -115,7 +115,7 @@ func main() {
 		fmt.Printf("computeFetch: %v\n", *computeFetch)
 		if *computeFetch {
 			provider, client, tenancyID, err := setup.Prep(config)
-			regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID, false)
+			regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
 			compute.RunCompute(provider, regions, tenancyID, compartments)
 		} else {
 			fmt.Println("add -run to run")
@@ -134,22 +134,24 @@ func main() {
 		fmt.Printf("policies: %v\n", *policyFetch)
 		provider, client, tenancyID, err := setup.Prep(config)
 		helpers.FatalIfError(err)
-		_, compartments, _, _ := setup.CommonSetup(err, client, tenancyID, false)
+		_, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
 		peopleresource.GetAllPolicies(provider, client, tenancyID, compartments, *policyFetch, *policyVerbose)
+
 	case "support":
 		fmt.Println("fetching support")
 		supportCmd.Parse(os.Args[2:])
 		//fmt.Printf("supportCSI: %v\n", *supportCSI)
 		fmt.Printf("supportTicketList: %v\n", *supportTicketList)
 		provider, client, tenancyID, err := setup.Prep(config)
-		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID, false)
+		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 		//_, compartments, _ := setup.CommonSetup(err, client, tenancyID, false)
-		//supportresources.GetCSI(provider, tenancyID, homeregion)
 
 		supportresources.ListTickets(provider, tenancyID, homeregion, config.CSI)
-		helpers.FatalIfError(err)
+		//helpers.FatalIfError(err)
 		supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
 		supportresources.ListBillingTickets(provider, tenancyID, homeregion, config.CSI)
+
+		//supportresources.GetCSI(provider, tenancyID, homeregion)
 
 	case "capacity":
 		fmt.Println("checking capacity")
@@ -159,7 +161,7 @@ func main() {
 		fmt.Printf("capacityShapeMemory: %v\n", *capacityShapeMemory)
 		fmt.Printf("capacityShapeType: %v\n", *capacityShapeType)
 		provider, client, tenancyID, err := setup.Prep(config)
-		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID, false)
+		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
 		if *capacityShapeOCPUs > 0 || *capacityShapeMemory > 0 {
 			capcheck.Check(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory, *capacityShapeType)
 		} else {
@@ -167,30 +169,55 @@ func main() {
 
 		}
 
+	case "capability":
+		fmt.Println("checking capabilities")
+		capabilityCmd.Parse(os.Args[2:])
+		fmt.Printf("capabilityFetch: %v\n", *capabilityFetch)
+		fmt.Printf("capabilityShapeType: %v\n", *capabilityShapeType)
+		provider, client, tenancyID, err := setup.Prep(config)
+		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
+		capability.OSSupport(provider, regions, tenancyID, compartments, *capabilityFetch, *capabilityShapeType)
+
 	case "config":
 		fmt.Println("checking config")
 		checkCmd.Parse(os.Args[2:])
 		fmt.Printf("checkRun: %v\n", *checkFetch)
 		_, client, tenancyID, err := setup.Prep(config)
-		regions, compartments, ads, _ := setup.CommonSetup(err, client, tenancyID, true)
-		if compartments == nil {
-			fmt.Println("compartments is nil")
-		} else {
+		regions, compartments, ads, _ := setup.CommonSetup(err, client, tenancyID)
 
-			fmt.Printf("compartments: %v\n", len(compartments))
-			//fmt.Printf("compartments: %v\n", compartments)
-		}
 		if regions == nil {
 			fmt.Println("regions is nil")
 		} else {
 			fmt.Printf("subscribed regions: %v\n", len(regions))
+			if *checkFetch {
+				for _, region := range regions {
+					fmt.Printf("\tRegion: %v\n", *region.RegionName)
+				}
+			}
 		}
 		if ads == nil {
 			fmt.Println("ads is nil")
 		} else {
 			fmt.Printf("ads: %v\n", len(ads))
+			if *checkFetch {
+				for _, ad := range ads {
+					fmt.Printf("\tAD: %v\n", *ad.Name)
+				}
+			}
 		}
+		if compartments == nil {
+			fmt.Println("compartments is nil")
+		} else {
 
+			fmt.Printf("compartments: %v\n", len(compartments))
+			if *checkFetch {
+				for _, comp := range compartments {
+					fmt.Printf("\tCompartment Name: %v \n", *comp.Name)
+
+				}
+			}
+			//fmt.Printf("compartments: %v\n", compartments)
+		}
 	default:
 		fmt.Printf("Invalid command: %v\n", os.Args[1])
 	}

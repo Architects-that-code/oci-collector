@@ -3,9 +3,10 @@ package supportresources
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/oracle/oci-go-sdk/v65/cims"
-	"github.com/oracle/oci-go-sdk/v65/common"
+	common "github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 )
 
@@ -39,7 +40,9 @@ func ListTickets(provider common.ConfigurationProvider, tenancyID string, homeRe
 	//fmt.Println(resp)
 
 	for _, incident := range resp.Items {
-		fmt.Println("Incident: ", *incident.Key, *incident.Ticket.Title, *&incident.Ticket.Severity, *&incident.Ticket.LifecycleDetails)
+		fmt.Println("Incident: ", *incident.Key, *incident.Ticket.Title, *&incident.Ticket.Severity, *&incident.Ticket.LifecycleDetails, time.Unix(int64(*incident.Ticket.TimeUpdated), 0))
+		//fmt.Printf("Incident: %v\n", incident)
+
 	}
 	fmt.Printf("Incidents: %v\n", len(resp.Items))
 	fmt.Println("ListTickets -end")
@@ -65,7 +68,8 @@ func ListLimitsTickets(provider common.ConfigurationProvider, tenancyID string, 
 	//fmt.Println(resp)
 
 	for _, incident := range resp.Items {
-		fmt.Println("LIMITS Incident: ", *incident.Key, *incident.Ticket.TicketNumber, *incident.Ticket.Title)
+		fmt.Println("LIMITS Incident: ", *incident.Key, *incident.Ticket.TicketNumber, *incident.Ticket.Title, time.Unix(int64(*incident.Ticket.TimeUpdated), 0), *&incident.Ticket.LifecycleDetails)
+		//fmt.Printf("Incident: %v\n", incident)
 	}
 
 	fmt.Printf("LIMITS Incidents: %v\n", len(resp.Items))
@@ -98,4 +102,28 @@ func ListBillingTickets(provider common.ConfigurationProvider, tenancyID string,
 }
 func CloseTicket() {
 	// close ticket
+}
+
+func GetCSI(provider common.ConfigurationProvider, tenancyID string, homeRegion string) {
+	fmt.Println("GetCSI")
+	client, err := cims.NewIncidentClientWithConfigurationProvider(provider)
+	helpers.FatalIfError(err)
+
+	// Create a request and dependent object(s).
+
+	req := cims.GetCsiNumberRequest{
+
+		Homeregion: &homeRegion,
+		TenantId:   &tenancyID,
+		Region:     &homeRegion}
+
+	// Send the request using the service client
+	resp, err := client.GetCsiNumber(context.Background(), req)
+	fmt.Printf("response: %v\n", resp)
+	helpers.FatalIfError(err)
+
+	// Retrieve value from the response.
+
+	fmt.Println(resp)
+	fmt.Println("GetCSI -end")
 }

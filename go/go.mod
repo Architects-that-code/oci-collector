@@ -7,7 +7,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
-require github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be // indirect
+require github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be
 
 require (
 	github.com/gofrs/flock v0.8.1 // indirect
