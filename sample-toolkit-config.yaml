@@ -1,0 +1,4 @@
+configPath: <<path to config>>/.oci/config
+profileName: DEFAULT
+useinstanceprincipal: false
+SUPPORT_CSI_NUMBER: <<CSI number>> // until api call works

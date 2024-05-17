@@ -40,10 +40,12 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 	wg.Wait()
 
 	fmt.Printf("Total instances: %v\n", len(allInstances))
+
 	//fmt.Printf("allInstances: %v\n", allInstances)
 	for _, instance := range allInstances {
-		fmt.Printf("Region: %v InstanceShape: %v Cpus %v Mem %v \n", *instance.Region, *instance.Shape, *instance.ShapeConfig.Ocpus, *instance.ShapeConfig.MemoryInGBs)
+		fmt.Printf("allInstances: Region: %v InstanceShape: %v Cpus %v Mem %v \n", *instance.Region, *instance.Shape, *instance.ShapeConfig.Ocpus, *instance.ShapeConfig.MemoryInGBs)
 	}
+
 	//fmt.Printf("all instannces %v\n", allInstances)
 }
 
