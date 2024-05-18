@@ -7,7 +7,7 @@ VERSION ?= v1.0.0
 GO_LDFLAGS := -X=main.version=$(VERSION) -w -s
 
 # Project Directory
-DIR := go
+DIR := src
 
 # Name of the application
 APP := oci-collector
@@ -17,7 +17,7 @@ os = $(word 1, $@)
 
 .PHONY: $(PLATFORMS) 
 $(PLATFORMS): 
-	GOOS=$(os) GOARCH=amd64 go build -C $(DIR) -ldflags='$(GO_LDFLAGS)' -o ../bin/$(APP)-$(VERSION)-$(os)-amd64 . 
+	GOOS=$(os) GOARCH=amd64 go build -C $(DIR) -ldflags='$(GO_LDFLAGS)' -o ../dist/$(APP)-$(VERSION)-$(os)-amd64 . 
 	
 
 .PHONY: all
@@ -25,7 +25,7 @@ all: windows linux darwin copy_file
 
 .PHONY: clean
 clean:
-	rm  -f ./bin/*
+	rm  -f ./dist/*
 
 copy_file:
-	cp toolkit-config.yaml bin/toolkit-config.yaml
+	cp toolkit-config.yaml dist/toolkit-config.yaml
