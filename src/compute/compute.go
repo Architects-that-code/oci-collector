@@ -53,7 +53,8 @@ func GetInstances(client core.ComputeClient, compartment identity.Compartment, r
 	client.SetRegion(region)
 	fmt.Printf("Checking: Region: %v\t Compartment: %v\n", region, *compartment.Name)
 	req := core.ListInstancesRequest{
-		CompartmentId: compartment.Id,
+		CompartmentId:  compartment.Id,
+		LifecycleState: core.InstanceLifecycleStateRunning,
 	}
 
 	// Send the request using the service client
