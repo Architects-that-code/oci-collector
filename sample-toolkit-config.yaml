@@ -2,3 +2,5 @@ configPath: <<path to config>>/.oci/config
 profileName: DEFAULT
 useinstanceprincipal: false
 SUPPORT_CSI_NUMBER: <<CSI number>> // until api call works
+ORG_ID: <<your ORG ID if you are scanning parent - this may be removed>>
+SUBSCRIPTION_ID: <<your Subscription ID if you are scanning parent - this may be removed>>
