@@ -7,8 +7,11 @@ import (
 	setup "check-limits/config"
 	peopleresource "check-limits/iam"
 	"check-limits/limits"
+	oos "check-limits/objectstorage"
 	supportresources "check-limits/support"
-	"check-limits/util"
+
+	children "check-limits/childtenancies"
+	utils "check-limits/util"
 	"flag"
 	"fmt"
 	"log/slog"
@@ -21,7 +24,7 @@ import (
 // profile to use. The CLI should list the subscribed regions available to the specified profile and identify all the compartments and then loop thru each compartment in each region to query for
 // the limits for each service. The CLI should output the limits to a file in the limits directory in the current working directory. The file should be named
 func main() {
-	util.PrintBanner()
+	utils.PrintBanner()
 
 	var (
 		usage = `usage: #check-limits 'action' 'activate'
@@ -38,6 +41,8 @@ func main() {
 	support: fetch support tickets (-list to show tickets)
 	capacity: check capacity in all YOUR regions (-ocpus to specify ocpus -memory to specify memory -type to specify shape type)
 	capability: what types of 'things' are available for a shape type (-type to specify shape type)
+	children: dealing with child tenancies
+	object: fetch object storage info
 		`
 	)
 
@@ -71,6 +76,12 @@ func main() {
 	capabilityFetch := capabilityCmd.Bool("run", false, "fetch capability")
 	capabilityShapeType := capabilityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
 
+	childCmd := flag.NewFlagSet("children", flag.ExitOnError)
+	childFetch := childCmd.Bool("run", false, "fetch child tenancies")
+
+	objectCmd := flag.NewFlagSet("object", flag.ExitOnError)
+	objectFetch := objectCmd.Bool("run", false, "fetch object storage")
+
 	err, config := setup.Getconfig()
 	if err != nil {
 		//fmt.Printf("%+v\n", err)
@@ -94,7 +105,7 @@ func main() {
 
 	//fmt.Println("Using profile:", config.ProfileName)
 	//fmt.Printf("Config: %v\n", config.ConfigPath)
-	util.PrintSpace()
+	utils.PrintSpace()
 
 	switch os.Args[1] {
 	case "limits":
@@ -177,6 +188,22 @@ func main() {
 		provider, client, tenancyID, err := setup.Prep(config)
 		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
 		capability.OSSupport(provider, regions, tenancyID, compartments, *capabilityFetch, *capabilityShapeType)
+
+	case "children":
+		fmt.Println("checking child tenancies")
+		childCmd.Parse(os.Args[2:])
+		fmt.Printf("childFetch: %v\n", *childFetch)
+		provider, client, tenancyID, err := setup.Prep(config)
+		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
+		children.Children(provider, tenancyID, *childFetch, homeregion)
+
+	case "object":
+		fmt.Println("checking object storage")
+		objectCmd.Parse(os.Args[2:])
+		fmt.Printf("objectFetch: %v\n", *objectFetch)
+		provider, client, tenancyID, err := setup.Prep(config)
+		regions, compartments, _, homeregion := setup.CommonSetup(err, client, tenancyID)
+		oos.GetObjectStorageInfo(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
 
 	case "config":
 		fmt.Println("checking config")
