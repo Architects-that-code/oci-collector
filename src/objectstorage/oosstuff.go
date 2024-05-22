@@ -59,7 +59,8 @@ func BucketInfo(provider common.ConfigurationProvider, regions []identity.Region
 	fmt.Printf("all buckets: %v\n", len(allBuckets))
 	for _, bucket := range allBuckets {
 		util.PrintSpace()
-		fmt.Printf("bucket: %v freeformTags: %v  defined tags: %v \n", *bucket.Name, &bucket.FreeformTags, &bucket.DefinedTags)
+
+		fmt.Printf("bucket: %v freeformTags: %v  defined tags: %v \n", *bucket.Name, bucket.FreeformTags, bucket.DefinedTags)
 		//fmt.Printf("bucket: %v\n", bucket)
 	}
 
@@ -68,14 +69,19 @@ func BucketInfo(provider common.ConfigurationProvider, regions []identity.Region
 func Buckets(client objectstorage.ObjectStorageClient, namespace string, region string, compartment identity.Compartment, tenancyId string) objectstorage.ListBucketsResponse {
 	client.SetRegion(region)
 
+	//fields := "tags"
+
 	request := objectstorage.ListBucketsRequest{
 		NamespaceName: common.String(namespace),
 		CompartmentId: common.String(*compartment.Id),
+		Fields:        []objectstorage.ListBucketsFieldsEnum{objectstorage.ListBucketsFieldsTags},
 	}
 	r, err := client.ListBuckets(context.Background(), request)
+
 	helpers.FatalIfError(err)
 	for _, bucket := range r.Items {
-		fmt.Printf("bucket: %v\n", *bucket.Name)
+
+		fmt.Printf("bucket: %v \n", *bucket.Name)
 	}
 	return r
 }

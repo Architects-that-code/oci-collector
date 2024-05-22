@@ -44,6 +44,7 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 	//fmt.Printf("allInstances: %v\n", allInstances)
 	for _, instance := range allInstances {
 		fmt.Printf("allInstances: Region: %v InstanceShape: %v Cpus %v Mem %v \n", *instance.Region, *instance.Shape, *instance.ShapeConfig.Ocpus, *instance.ShapeConfig.MemoryInGBs)
+		fmt.Printf("tags: freeform: %v   defined: %v \n", instance.FreeformTags, instance.DefinedTags)
 	}
 
 	//fmt.Printf("all instannces %v\n", allInstances)
@@ -62,5 +63,6 @@ func GetInstances(client core.ComputeClient, compartment identity.Compartment, r
 	helpers.FatalIfError(err)
 
 	// Retrieve value from the response.
+
 	return resp.Items
 }
