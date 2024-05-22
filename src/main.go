@@ -27,8 +27,10 @@ func main() {
 	utils.PrintBanner()
 
 	var (
-		usage = `usage: #check-limits 'action' 'activate'
-	example: check-limits limits -run
+		usage = `This is designed to be a loose collection of tools to help manage and monitor your OCI tenancy.		
+		
+	usage: #check-limits 'action' 'activate'
+		example: check-limits limits -run
 
 	specity the action you want to take:
 
