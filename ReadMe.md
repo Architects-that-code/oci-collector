@@ -1,4 +1,14 @@
 So I am viewing this as a fun 'Batman’s utility belt' type of project. What are the common things that we keep sending to our accounts.
+
+# GLOBAL view of my OCI estate (tenancy) is key
+
+Common patterns of finding and reporting on data in OCI.
+run as 'user' using config file OR on instance as instance principal
+publish as source code or as a binary so that you can take and make your own
+
+This is NOT to replace the CLI or SDK's that are available but has been put together to answer common questions that arise from in our customer and architect community
+
+
 # Core blocking and tackling
 - what are my limits
 - Where am I running compute
@@ -8,16 +18,16 @@ So I am viewing this as a fun 'Batman’s utility belt' type of project. What ar
 - What compartments do i have
 - where CAN I launch compute shape x
 - what OS is supported by shape
+- where do I have ObjectStorage buckets
 
 # Support
 - My open support tickets
 - My open CAM tickets
 - My open 'account' tickets
+
 # What else do?
 - Create support ticket?
-
 - what if we add ability to CREATE CAM ticket for limits that are too 'low'?
-- Run as instance principal
 - Output data to files
 - Send output as mail
 - Publish as custom metrics
