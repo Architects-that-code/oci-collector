@@ -3,7 +3,7 @@ module check-limits
 go 1.21
 
 require (
-	github.com/oracle/oci-go-sdk/v65 v65.64.0
+	github.com/oracle/oci-go-sdk/v65 v65.65.3
 	gopkg.in/yaml.v2 v2.4.0
 )
 

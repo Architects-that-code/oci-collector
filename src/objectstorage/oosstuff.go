@@ -23,6 +23,16 @@ func GetObjectStorageInfo(provider common.ConfigurationProvider, regions []ident
 
 }
 
+func ObjectStorageSize(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartment []identity.Compartment, capacityFetch bool, capacityShapeType string) {
+	fmt.Println("Getting object storage info")
+	ctx := context.Background()
+	client, err := objectstorage.NewObjectStorageClientWithConfigurationProvider(provider)
+	helpers.FatalIfError(err)
+	fmt.Printf("namespace: %v\n", namespace(ctx, client))
+
+	BucketInfo(provider, regions, namespace(ctx, client), tenancyID, compartment)
+}
+
 func namespace(ctx context.Context, c objectstorage.ObjectStorageClient) string {
 	request := objectstorage.GetNamespaceRequest{}
 	r, err := c.GetNamespace(ctx, request)
@@ -69,19 +79,21 @@ func BucketInfo(provider common.ConfigurationProvider, regions []identity.Region
 func Buckets(client objectstorage.ObjectStorageClient, namespace string, region string, compartment identity.Compartment, tenancyId string) objectstorage.ListBucketsResponse {
 	client.SetRegion(region)
 
-	//fields := "tags"
+	fields := []objectstorage.ListBucketsFieldsEnum{
+		objectstorage.ListBucketsFieldsTags,
+	}
 
 	request := objectstorage.ListBucketsRequest{
 		NamespaceName: common.String(namespace),
 		CompartmentId: common.String(*compartment.Id),
-		Fields:        []objectstorage.ListBucketsFieldsEnum{objectstorage.ListBucketsFieldsTags},
+		Fields:        fields,
 	}
 	r, err := client.ListBuckets(context.Background(), request)
 
 	helpers.FatalIfError(err)
 	for _, bucket := range r.Items {
 
-		fmt.Printf("bucket: %v \n", *bucket.Name)
+		fmt.Printf("bucket: %v \n", bucket)
 	}
 	return r
 }

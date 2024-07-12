@@ -33,6 +33,8 @@ func ListTickets(provider common.ConfigurationProvider, tenancyID string, homeRe
 		ProblemType:    common.String("TECH"),
 	}
 
+	fmt.Printf("Tech req: %v\n", req)
+
 	resp, err := client.ListIncidents(context.Background(), req)
 	helpers.FatalIfError(err)
 
@@ -53,15 +55,15 @@ func ListLimitsTickets(provider common.ConfigurationProvider, tenancyID string, 
 	client, err := cims.NewIncidentClientWithConfigurationProvider(provider)
 	var user_ocid, _ = provider.UserOCID()
 	req := cims.ListIncidentsRequest{
-		CompartmentId: &tenancyID,
-		//Limit:          common.Int(100),
-		Ocid: common.String(user_ocid),
-		Csi:  &CSI,
-		//LifecycleState: cims.ListIncidentsLifecycleStateActive,
-		ProblemType: common.String("LIMIT"),
-		Homeregion:  &homeRegion,
+		CompartmentId:  &tenancyID,
+		Limit:          common.Int(100),
+		Ocid:           common.String(user_ocid),
+		Csi:            &CSI,
+		LifecycleState: cims.ListIncidentsLifecycleStateActive,
+		ProblemType:    common.String("LIMIT"),
+		Homeregion:     &homeRegion,
 	}
-	fmt.Printf("req: %v\n", req)
+	fmt.Printf("Limit req: %v\n", req)
 
 	resp, err := client.ListIncidents(context.Background(), req)
 	helpers.FatalIfError(err)
@@ -77,6 +79,7 @@ func ListLimitsTickets(provider common.ConfigurationProvider, tenancyID string, 
 	fmt.Printf("LIMITS Incidents: %v\n", len(resp.Items))
 	fmt.Println("ListLimitsTickets -end")
 }
+
 func ListBillingTickets(provider common.ConfigurationProvider, tenancyID string, homeRegion string, CSI string) {
 	fmt.Println("ListBILLINGTickets")
 	client, err := cims.NewIncidentClientWithConfigurationProvider(provider)
