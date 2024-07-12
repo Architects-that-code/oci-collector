@@ -37,6 +37,7 @@ func Check(provider common.ConfigurationProvider, regions []identity.RegionSubsc
 			adsAll = append(adsAll, ads...)
 			//fmt.Printf("ads: %v\n", ads)
 			for _, ad := range ads {
+
 				//fmt.Printf("ad: %v\n", *ad.Name)
 				config := core.CapacityReportInstanceShapeConfig{
 					Ocpus:       common.Float32(float32(capacityShapeOCPUs)),

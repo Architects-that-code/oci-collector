@@ -7,8 +7,13 @@ import (
 	setup "check-limits/config"
 	peopleresource "check-limits/iam"
 	"check-limits/limits"
+	network "check-limits/networks"
+	oos "check-limits/objectstorage"
+	scheduler "check-limits/schedule"
 	supportresources "check-limits/support"
-	"check-limits/util"
+
+	children "check-limits/childtenancies"
+	utils "check-limits/util"
 	"flag"
 	"fmt"
 	"log/slog"
@@ -21,11 +26,13 @@ import (
 // profile to use. The CLI should list the subscribed regions available to the specified profile and identify all the compartments and then loop thru each compartment in each region to query for
 // the limits for each service. The CLI should output the limits to a file in the limits directory in the current working directory. The file should be named
 func main() {
-	util.PrintBanner()
+	utils.PrintBanner()
 
 	var (
-		usage = `usage: #check-limits 'action' 'activate'
-	example: check-limits limits -run
+		usage = `This is designed to be a loose collection of tools to help manage and monitor your OCI tenancy.		
+		
+	usage: #check-limits 'action' 'activate'
+		example: check-limits limits -run
 
 	specity the action you want to take:
 
@@ -35,9 +42,13 @@ func main() {
 	config: check config file and print basic info
 	peeps: fetch user counts (-r to show users)
 	policies: fetch policy counts (-run to show policies -verbose to show statements)
+	groups: fetch group counts (-run to show groups -verbose to show group members)
 	support: fetch support tickets (-list to show tickets)
 	capacity: check capacity in all YOUR regions (-ocpus to specify ocpus -memory to specify memory -type to specify shape type)
 	capability: what types of 'things' are available for a shape type (-type to specify shape type)
+	children: dealing with child tenancies
+	object: fetch object storage info
+	network: newtwork related info
 		`
 	)
 
@@ -46,6 +57,11 @@ func main() {
 
 	computeCmd := flag.NewFlagSet("compute", flag.ExitOnError)
 	computeFetch := computeCmd.Bool("run", false, "fetch compute active instances in all regions")
+
+	networkCmd := flag.NewFlagSet("vcn", flag.ExitOnError)
+	networkFetch := networkCmd.Bool("run", false, "fetch all vcn in all regions")
+	networkCIDRFetch := networkCmd.Bool("cidr", false, "also fetch CIDR blocks")
+	networkInventoryFetch := networkCmd.Bool("ip", false, "fetch IP inventory")
 
 	checkCmd := flag.NewFlagSet("config", flag.ExitOnError)
 	checkFetch := checkCmd.Bool("verbose", false, "get more details")
@@ -57,6 +73,10 @@ func main() {
 	policyFetch := policyCmd.Bool("run", false, "fetch policy")
 	policyVerbose := policyCmd.Bool("verbose", false, "show policies")
 
+	groupCmd := flag.NewFlagSet("groups", flag.ExitOnError)
+	groupFetch := groupCmd.Bool("run", false, "fetch groups")
+	//groupVerbose := groupCmd.Bool("verbose", false, "show groups")
+
 	supportCmd := flag.NewFlagSet("support", flag.ExitOnError)
 	//supportCSI := supportCmd.String("csi", "", "csi number")
 	supportTicketList := supportCmd.Bool("list", false, "list tickets")
@@ -66,10 +86,21 @@ func main() {
 	capacityShapeOCPUs := capacityCmd.Int("ocpus", 0, "number of ocpus")
 	capacityShapeMemory := capacityCmd.Int("memory", 0, "amount of memory")
 	capacityShapeType := capacityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
+	capacityAD := capacityCmd.String("ad", "", "availability domain")
+	capacityFD := capacityCmd.String("fd", "", "fault domain")
 
 	capabilityCmd := flag.NewFlagSet("capability", flag.ExitOnError)
 	capabilityFetch := capabilityCmd.Bool("run", false, "fetch capability")
 	capabilityShapeType := capabilityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
+
+	childCmd := flag.NewFlagSet("children", flag.ExitOnError)
+	childFetch := childCmd.Bool("run", false, "fetch child tenancies")
+
+	objectCmd := flag.NewFlagSet("object", flag.ExitOnError)
+	objectFetch := objectCmd.Bool("run", false, "fetch object storage")
+
+	scheduleCmd := flag.NewFlagSet("schedule", flag.ExitOnError)
+	scheduleFetch := scheduleCmd.Bool("run", false, "fetch schedule")
 
 	err, config := setup.Getconfig()
 	if err != nil {
@@ -94,7 +125,7 @@ func main() {
 
 	//fmt.Println("Using profile:", config.ProfileName)
 	//fmt.Printf("Config: %v\n", config.ConfigPath)
-	util.PrintSpace()
+	utils.PrintSpace()
 
 	switch os.Args[1] {
 	case "limits":
@@ -137,6 +168,14 @@ func main() {
 		_, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
 		peopleresource.GetAllPolicies(provider, client, tenancyID, compartments, *policyFetch, *policyVerbose)
 
+	case "groups":
+		fmt.Println("fetching groups")
+		groupCmd.Parse(os.Args[2:])
+		fmt.Printf("groups: %v\n", *groupFetch)
+		provider, client, tenancyID, err := setup.Prep(config)
+		helpers.FatalIfError(err)
+		peopleresource.Groups(provider, client, tenancyID, *groupFetch)
+
 	case "support":
 		fmt.Println("fetching support")
 		supportCmd.Parse(os.Args[2:])
@@ -160,14 +199,28 @@ func main() {
 		fmt.Printf("capacityShapeOCPUs: %v\n", *capacityShapeOCPUs)
 		fmt.Printf("capacityShapeMemory: %v\n", *capacityShapeMemory)
 		fmt.Printf("capacityShapeType: %v\n", *capacityShapeType)
+		fmt.Printf("capacityAD: %v\n", *capacityAD)
+		fmt.Printf("capacityFD: %v\n", *capacityFD)
 		provider, client, tenancyID, err := setup.Prep(config)
 		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
 		if *capacityShapeOCPUs > 0 || *capacityShapeMemory > 0 {
 			capcheck.Check(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory, *capacityShapeType)
+
 		} else {
 			fmt.Println("add -ocpus and -memory and to run")
 
 		}
+
+	case "network":
+		fmt.Println("fetching network")
+		networkCmd.Parse(os.Args[2:])
+		fmt.Printf("networkFetch: %v\n", *networkFetch)
+		fmt.Printf("network")
+		fmt.Printf("networkCIDRFetch %v\n", *networkCIDRFetch)
+		fmt.Printf("networkInventoryFetch%v\n", *networkInventoryFetch)
+		provider, client, tenancyID, err := setup.Prep(config)
+		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
+		network.GetAllVcn(provider, regions, tenancyID, compartments, *networkFetch, *networkCIDRFetch, *networkInventoryFetch)
 
 	case "capability":
 		fmt.Println("checking capabilities")
@@ -177,6 +230,31 @@ func main() {
 		provider, client, tenancyID, err := setup.Prep(config)
 		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
 		capability.OSSupport(provider, regions, tenancyID, compartments, *capabilityFetch, *capabilityShapeType)
+
+	case "children":
+		fmt.Println("checking child tenancies")
+		childCmd.Parse(os.Args[2:])
+		fmt.Printf("childFetch: %v\n", *childFetch)
+		provider, client, tenancyID, err := setup.Prep(config)
+		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
+		children.Children(provider, tenancyID, *childFetch, homeregion)
+
+	case "object":
+		fmt.Println("checking object storage")
+		objectCmd.Parse(os.Args[2:])
+		fmt.Printf("objectFetch: %v\n", *objectFetch)
+		provider, client, tenancyID, err := setup.Prep(config)
+		regions, compartments, _, homeregion := setup.CommonSetup(err, client, tenancyID)
+		oos.GetObjectStorageInfo(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
+		oos.ObjectStorageSize(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
+
+	case "schedule":
+		fmt.Println("checking schedule")
+		scheduleCmd.Parse(os.Args[2:])
+		fmt.Printf("scheduleFetch: %v\n", *scheduleFetch)
+		provider, client, tenancyID, err := setup.Prep(config)
+		regions, compartments, _, homeregion := setup.CommonSetup(err, client, tenancyID)
+		scheduler.RunSchedule(provider, regions, tenancyID, compartments, homeregion)
 
 	case "config":
 		fmt.Println("checking config")

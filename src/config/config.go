@@ -56,6 +56,16 @@ func GetADs(tenancyID string, client identity.IdentityClient) []identity.Availab
 	helpers.FatalIfError(err)
 	return adResp.Items
 }
+func FDs(tenancyID string, client identity.IdentityClient, ad identity.AvailabilityDomain) []identity.FaultDomain {
+	fdreq := identity.ListFaultDomainsRequest{
+		CompartmentId:      &tenancyID,
+		AvailabilityDomain: ad.Name,
+	}
+	fdResp, err := client.ListFaultDomains(context.Background(), fdreq)
+	helpers.FatalIfError(err)
+	fmt.Printf("Fault Domains: %v\n", fdResp)
+	return fdResp.Items
+}
 func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []identity.RegionSubscription) []identity.AvailabilityDomain {
 	//start := time.Now()
 	//fmt.Print("Fetching ADs\n")
