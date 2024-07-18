@@ -7,26 +7,26 @@ on:
       types: [published]
   
   
-  jobs:
-    publish-binaries-linux-amd64:
-      name: release linux/amd64
-      runs-on: ubuntu-latest
+jobs:
+  publish-binaries-linux-amd64:
+    name: release linux/amd64
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: CHECKOUT
-          uses: actions/checkout@v4
-          
-        - name: Prep Go
-          uses: ctions/setup-go@v4
-
-        - name: Build Linux amd
-          run: make linux
+    steps:
+      - name: CHECKOUT
+        uses: actions/checkout@v4
         
-        - name: Rename archive
-          run: mv dist/oci-collector-v1.0.0-linux-amd64 bin/oci-collector-v1.0.0-linux-amd64
+      - name: Prep Go
+        uses: ctions/setup-go@v4
 
-        - name: Upload linux bin
-          uses: djn24/add-asset-to-release@v1
-        with:
-          token: ${{secrets.GITHUB_TOKEN}}
-          path: 'bin/oci-collector-v1.0.0-linux-amd64'
+      - name: Build Linux amd
+        run: make linux
+      
+      - name: Rename archive
+        run: mv dist/oci-collector-v1.0.0-linux-amd64 bin/oci-collector-v1.0.0-linux-amd64
+
+      - name: Upload linux bin
+        uses: djn24/add-asset-to-release@v1
+      with:
+        token: ${{secrets.GITHUB_TOKEN}}
+        path: 'bin/oci-collector-v1.0.0-linux-amd64'
