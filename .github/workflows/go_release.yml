@@ -1,15 +1,14 @@
 name: On Release Published
 
-
-
 on:
     release:
       types: [published]
   
-  
+
 jobs:
   publish-binaries-linux-amd64:
     name: release linux/amd64
+    timeout-minutes: 20
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +26,7 @@ jobs:
 
       - name: Upload linux bin
         uses: djn24/add-asset-to-release@v1
-      with:
-        token: ${{secrets.GITHUB_TOKEN}}
-        path: 'bin/oci-collector-v1.0.0-linux-amd64'
+
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          path: 'bin/oci-collector-v1.0.0-linux-amd64'
