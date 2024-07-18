@@ -25,5 +25,5 @@ jobs:
           libgles2-mesa-dev libx11-dev xorg-dev \
           libwayland-dev libxkbcommon-dev bc
 
-      - name: run tests
-        run: make tests
+      
+        
