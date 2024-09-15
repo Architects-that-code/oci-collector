@@ -46,7 +46,7 @@ func OSSupport(provider common.ConfigurationProvider, regions []identity.RegionS
 
 	for _, image := range listImagesResponse.Items {
 
-		fmt.Printf("Image: Diplay  %v OS: %v  OSVersion: %v \n", *image.DisplayName, *image.OperatingSystem, *image.OperatingSystemVersion)
+		fmt.Printf("Image: Display  %v OS: %v  OSVersion: %v  OCID: %v\n", *image.DisplayName, *image.OperatingSystem, *image.OperatingSystemVersion, *image.Id)
 
 	}
 	//fmt.Printf("Shapes: %v\n", len(listShapesResponse.Items))

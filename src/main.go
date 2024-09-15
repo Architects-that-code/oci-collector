@@ -16,7 +16,6 @@ import (
 	utils "check-limits/util"
 	"flag"
 	"fmt"
-	"log/slog"
 	"os"
 
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
@@ -105,7 +104,7 @@ func main() {
 	err, config := setup.Getconfig()
 	if err != nil {
 		//fmt.Printf("%+v\n", err)
-		slog.Info("%+v\n", err)
+		fmt.Printf("Error: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -154,7 +153,7 @@ func main() {
 	case "peeps":
 		fmt.Println("fetching users")
 		peopleCmd.Parse(os.Args[2:])
-		fmt.Printf("peopleFetch: %v\n", *peopleFetch)
+		fmt.Printf("peopleFetch: %v\n", peopleFetch)
 		provider, client, tenancyID, err := setup.Prep(config)
 		helpers.FatalIfError(err)
 		peopleresource.GetAllPeople(provider, client, tenancyID, *peopleFetch)
@@ -237,7 +236,9 @@ func main() {
 		fmt.Printf("childFetch: %v\n", *childFetch)
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
-		children.Children(provider, tenancyID, *childFetch, homeregion)
+
+		//children.Children(provider, tenancyID, *childFetch, homeregion)
+		children.Deets(provider, tenancyID, homeregion)
 
 	case "object":
 		fmt.Println("checking object storage")
@@ -269,7 +270,7 @@ func main() {
 			fmt.Printf("subscribed regions: %v\n", len(regions))
 			if *checkFetch {
 				for _, region := range regions {
-					fmt.Printf("\tRegion: %v\n", *region.RegionName)
+					fmt.Printf("\tRegion: %v\n", region)
 				}
 			}
 		}

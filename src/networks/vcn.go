@@ -35,14 +35,21 @@ func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionS
 	}
 	wg.Wait()
 
-	fmt.Printf("Total vcn: %v\n", len(allVCN))
+	fmt.Printf("\n\t Total vcn: %v\n", len(allVCN))
 
 	//fmt.Printf("allVCN: %v\n", allVCN)
 	for _, vcn := range allVCN {
 
-		fmt.Printf("DisplayName %v CIDR %v \n", *vcn.DisplayName, *vcn.CidrBlock)
-
+		fmt.Printf("DisplayName: %v CIDR: %v COMP: %v \n", *vcn.DisplayName, *vcn.CidrBlock, *vcn.CompartmentId)
+		//fmt.Printf("VCN: %v\n", vcn)
 	}
+}
+
+func getCompName(compartment []identity.Compartment, compartments []identity.Compartment) {
+	//var retName string
+
+	//fmt.Printf("contains %v\n", slices.Contains(compartment, compartments))
+	//return retName
 }
 
 func GetVCN(client core.VirtualNetworkClient, compartment identity.Compartment, region string) []core.Vcn {

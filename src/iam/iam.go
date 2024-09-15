@@ -10,6 +10,7 @@ import (
 )
 
 func GetAllPeople(provider common.ConfigurationProvider, client identity.IdentityClient, tenancyID string, showUsers bool) []identity.User {
+	fmt.Println(showUsers)
 
 	var allUsers []identity.User
 
@@ -28,12 +29,13 @@ func GetAllPeople(provider common.ConfigurationProvider, client identity.Identit
 		} else {
 			break
 		}
-		if showUsers {
-			for _, user := range resp.Items {
-				fmt.Printf("User: %s\n", *user.Name)
-			}
-		}
+
 	}
 	fmt.Printf("users returned %v\n", len(allUsers))
+	if showUsers {
+		for _, user := range allUsers {
+			fmt.Printf("User: %s\n", *user.Name)
+		}
+	}
 	return allUsers
 }

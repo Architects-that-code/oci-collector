@@ -84,10 +84,13 @@ func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []id
 	wg.Wait()
 	//elapsed := time.Since(start)
 	//fmt.Printf("Fetching ADs took %s \n", elapsed)
+	allReg := getALLRegions(nil, client)
+	fmt.Printf("size of all regions %v ", len(allReg))
+	fmt.Printf(" all regions %v ", allReg)
 	return adsAll
 }
 
-func Getregions(err error, client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, string) {
+func getSubscribedRegions(err error, client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, string) {
 	reqReg, err := client.ListRegionSubscriptions(context.Background(), identity.ListRegionSubscriptionsRequest{
 		TenancyId: &tenancyID,
 	})
@@ -95,6 +98,13 @@ func Getregions(err error, client identity.IdentityClient, tenancyID string) ([]
 	//fmt.Printf("List of regions: %v", reqReg.Items)
 
 	return reqReg.Items, getHomeRegion(reqReg.Items)
+}
+func getALLRegions(err error, client identity.IdentityClient) []identity.Region {
+	allReg, err := client.ListRegions(context.Background())
+	helpers.FatalIfError(err)
+	//fmt.Printf("List of regions: %v", reqReg.Items)
+
+	return allReg.Items
 }
 
 func getHomeRegion(regions []identity.RegionSubscription) string {
@@ -164,7 +174,7 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string) ([
 	var homeregion string
 	go func() {
 		defer wgDataPrep.Done()
-		regions, homeregion = Getregions(err, client, tenancyID)
+		regions, homeregion = getSubscribedRegions(err, client, tenancyID)
 
 		/*
 			for _, region := range regions {
@@ -178,5 +188,18 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string) ([
 
 	ads = GetALLADdata(client, tenancyID, regions)
 
+	//getTenancyObj(client, tenancyID, homeregion)
+
 	return regions, compartments, ads, homeregion
+}
+
+func getTenancyObj(client identity.IdentityClient, tenancyID string, homeregion string) {
+	client.SetRegion(homeregion)
+	req := identity.GetTenancyRequest{
+		TenancyId: common.String(tenancyID),
+	}
+	resp, err := client.GetTenancy(context.Background(), req)
+	helpers.FatalIfError(err)
+	fmt.Printf("Tenancy: %v\n", resp.Tenancy)
+
 }

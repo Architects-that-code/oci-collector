@@ -70,7 +70,7 @@ func Check(provider common.ConfigurationProvider, regions []identity.RegionSubsc
 func makeInstanceShape(capacityShapeType string) string {
 	// if type is either E4, or E3 or E5 or A1 return "VM.Standard.{}.Flex"
 	var shape string
-	if capacityShapeType == "E4" || capacityShapeType == "E3" || capacityShapeType == "E5" || capacityShapeType == "A1" {
+	if capacityShapeType == "E4" || capacityShapeType == "E3" || capacityShapeType == "E5" || capacityShapeType == "A1" || capacityShapeType == "A2" {
 		shape = "VM.Standard." + capacityShapeType + ".Flex"
 	}
 	if capacityShapeType == "X9" {
@@ -95,6 +95,7 @@ func CreateComputeCapacityReport(ctx context.Context, provider common.Configurat
 
 	resp, err := client.CreateComputeCapacityReport(ctx, req)
 	helpers.FatalIfError(err)
+	fmt.Printf("\n")
 	fmt.Printf(*region.RegionName)
 	fmt.Printf("\tshape: %v\n", *resp.ShapeAvailabilities[0].InstanceShape)
 	fmt.Printf("\t\tocpu: %v\n", *resp.ShapeAvailabilities[0].InstanceShapeConfig.Ocpus)

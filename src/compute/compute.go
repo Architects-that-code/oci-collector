@@ -3,6 +3,7 @@ package compute
 import (
 	"context"
 	"fmt"
+	"sort"
 	"sync"
 
 	"github.com/oracle/oci-go-sdk/core"
@@ -10,6 +11,12 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 )
+
+type InstanceGroups struct {
+	Region      string
+	Compartment string
+	Instance    []core.Instance
+}
 
 func RunCompute(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment) {
 	client, err := core.NewComputeClientWithConfigurationProvider(provider)
@@ -21,17 +28,17 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 	//		in region loop thru compartments
 	//TODO: ADD turbonium to region and compartments
 
-	var allInstances []core.Instance
+	var allInstances []InstanceGroups
 	var wg sync.WaitGroup
 	wg.Add(len(regions))
-	var regionalSlices = make(chan []core.Instance, len(regions))
+	var regionalSlices = make(chan []InstanceGroups, len(regions))
 
 	for _, region := range regions {
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()
 			for _, compartment := range compartments {
 				instances := GetInstances(client, compartment, *region.RegionName)
-				allInstances = append(allInstances, instances...)
+				allInstances = append(allInstances, InstanceGroups{Region: *region.RegionName, Compartment: *compartment.Name, Instance: instances})
 				//fmt.Printf("region: \t%v  \tcomp:%v: \t\t%v\n", *region.RegionName, *compartment.Name, len(instances))
 			}
 			regionalSlices <- allInstances
@@ -39,12 +46,22 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 	}
 	wg.Wait()
 
-	fmt.Printf("Total instances: %v\n", len(allInstances))
+	//fmt.Printf("Total instances: %v\n", len(allInstances))
 
 	//fmt.Printf("allInstances: %v\n", allInstances)
-	for _, instance := range allInstances {
-		fmt.Printf("allInstances: Region: %v InstanceShape: %v Cpus %v Mem %v \n", *instance.Region, *instance.Shape, *instance.ShapeConfig.Ocpus, *instance.ShapeConfig.MemoryInGBs)
-		fmt.Printf("tags: freeform: %v   defined: %v \n", instance.FreeformTags, instance.DefinedTags)
+	sort.Slice(allInstances, func(i, j int) bool {
+		return len(allInstances[i].Instance) > len(allInstances[j].Instance)
+	})
+	fmt.Println("ONLY PRINTING for ACTIVE instances per region/compartment")
+	for _, instanceGroup := range allInstances {
+		//fmt.Printf("allInstances: Region: %v InstanceShape: %v Cpus %v Mem %v \n", &instanceGroup.Region, *&instanceGroup.Instance.Shape, *instance.ShapeConfig.Ocpus, *instance.ShapeConfig.MemoryInGBs)
+		//fmt.Printf("tags: freeform: %v   defined: %v \n", instance.FreeformTags, instance.DefinedTags)
+
+		if len(instanceGroup.Instance) > 0 {
+			fmt.Printf("all instances: Region: %v Compartment: %v  NumInstance: %v \n", instanceGroup.Region, instanceGroup.Compartment, len(instanceGroup.Instance))
+		}
+		// can i sort by size
+
 	}
 
 	//fmt.Printf("all instannces %v\n", allInstances)
@@ -52,7 +69,7 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 
 func GetInstances(client core.ComputeClient, compartment identity.Compartment, region string) []core.Instance {
 	client.SetRegion(region)
-	fmt.Printf("Checking: Region: %v\t Compartment: %v\n", region, *compartment.Name)
+	fmt.Printf("Checking: Region: %v\t Compartment: %v\t\n", region, *compartment.Name)
 	req := core.ListInstancesRequest{
 		CompartmentId:  compartment.Id,
 		LifecycleState: core.InstanceLifecycleStateRunning,
