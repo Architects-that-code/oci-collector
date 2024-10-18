@@ -34,7 +34,10 @@ func GetAllPeople(provider common.ConfigurationProvider, client identity.Identit
 	fmt.Printf("users returned %v\n", len(allUsers))
 	if showUsers {
 		for _, user := range allUsers {
-			fmt.Printf("User: %s\n", *user.Name)
+			n := *user.Name
+			tc := *user.TimeCreated
+
+			fmt.Printf("User: %s\t Created: %s \t \n", n, tc)
 		}
 	}
 	return allUsers
