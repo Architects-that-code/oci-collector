@@ -23,6 +23,7 @@ oci support incident create -
 func ListTickets(provider common.ConfigurationProvider, tenancyID string, homeRegion string, CSI string) {
 	fmt.Println("ListTickets")
 	client, err := cims.NewIncidentClientWithConfigurationProvider(provider)
+	helpers.FatalIfError(err)
 	var user_ocid, _ = provider.UserOCID()
 	req := cims.ListIncidentsRequest{
 		CompartmentId:  &tenancyID,
@@ -39,7 +40,7 @@ func ListTickets(provider common.ConfigurationProvider, tenancyID string, homeRe
 	helpers.FatalIfError(err)
 
 	// Retrieve value from the response.
-	//fmt.Println(resp)
+	fmt.Printf("Incidents: %v\n", len(resp.Items))
 
 	for _, incident := range resp.Items {
 		fmt.Println("Incident: ", *incident.Key, *incident.Ticket.Title, *&incident.Ticket.Severity, *&incident.Ticket.LifecycleDetails, time.Unix(int64(*incident.Ticket.TimeUpdated), 0))
@@ -53,6 +54,7 @@ func ListTickets(provider common.ConfigurationProvider, tenancyID string, homeRe
 func ListLimitsTickets(provider common.ConfigurationProvider, tenancyID string, homeRegion string, CSI string) {
 	fmt.Println("ListLimitsTickets")
 	client, err := cims.NewIncidentClientWithConfigurationProvider(provider)
+	helpers.FatalIfError(err)
 	var user_ocid, _ = provider.UserOCID()
 	req := cims.ListIncidentsRequest{
 		CompartmentId:  &tenancyID,
@@ -83,6 +85,7 @@ func ListLimitsTickets(provider common.ConfigurationProvider, tenancyID string, 
 func ListBillingTickets(provider common.ConfigurationProvider, tenancyID string, homeRegion string, CSI string) {
 	fmt.Println("ListBILLINGTickets")
 	client, err := cims.NewIncidentClientWithConfigurationProvider(provider)
+	helpers.FatalIfError(err)
 	var user_ocid, _ = provider.UserOCID()
 	req := cims.ListIncidentsRequest{
 		CompartmentId:  &tenancyID,
