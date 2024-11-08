@@ -10,6 +10,7 @@ import (
 	network "check-limits/networks"
 	oos "check-limits/objectstorage"
 	scheduler "check-limits/schedule"
+	resourcesearch "check-limits/search"
 	supportresources "check-limits/support"
 
 	children "check-limits/childtenancies"
@@ -47,7 +48,8 @@ func main() {
 	capability: what types of 'things' are available for a shape type (-type to specify shape type)
 	children: dealing with child tenancies
 	object: fetch object storage info
-	network: newtwork related info
+	network: network related info
+	search: search for resources created by a user
 		`
 	)
 
@@ -100,6 +102,9 @@ func main() {
 
 	scheduleCmd := flag.NewFlagSet("schedule", flag.ExitOnError)
 	scheduleFetch := scheduleCmd.Bool("run", false, "fetch schedule")
+
+	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
+	searchFetchString := searchCmd.String("searchstring", "", "search string")
 
 	err, config := setup.Getconfig()
 	if err != nil {
@@ -237,8 +242,8 @@ func main() {
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 
-		//children.Children(provider, tenancyID, *childFetch, homeregion)
-		children.Deets(provider, tenancyID, homeregion)
+		children.Children(provider, tenancyID, *childFetch, homeregion, config)
+		children.Deets(provider, tenancyID, homeregion, config)
 
 	case "object":
 		fmt.Println("checking object storage")
@@ -246,7 +251,7 @@ func main() {
 		fmt.Printf("objectFetch: %v\n", *objectFetch)
 		provider, client, tenancyID, err := setup.Prep(config)
 		regions, compartments, _, homeregion := setup.CommonSetup(err, client, tenancyID)
-		oos.GetObjectStorageInfo(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
+		//oos.GetObjectStorageInfo(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
 		oos.ObjectStorageSize(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
 
 	case "schedule":
@@ -256,6 +261,12 @@ func main() {
 		provider, client, tenancyID, err := setup.Prep(config)
 		regions, compartments, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 		scheduler.RunSchedule(provider, regions, tenancyID, compartments, homeregion)
+
+	case "search":
+		fmt.Println("checking search")
+		searchCmd.Parse(os.Args[2:])
+		provider, _, tenancyID, _ := setup.Prep(config)
+		resourcesearch.Search(provider, tenancyID, *searchFetchString)
 
 	case "config":
 		fmt.Println("checking config")

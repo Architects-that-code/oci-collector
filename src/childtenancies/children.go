@@ -1,6 +1,7 @@
 package children
 
 import (
+	config "check-limits/config"
 	"context"
 	"fmt"
 
@@ -10,15 +11,13 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/tenantmanagercontrolplane"
 )
 
-var org_id = "ocid1.organizationsentity.oc1.iad.amaaaaaa7zxxlwiah7tpyjgkemo437g5q5oiwabylaac2pzzj7hstjws66dq"
-
-func Children(provider common.ConfigurationProvider, tenancyID string, childFetch bool, homeregion string) {
-	fmt.Println("checking child tenancies")
+func Children(provider common.ConfigurationProvider, tenancyID string, childFetch bool, homeregion string, config config.Config) {
+	fmt.Println("checking child tenancies Children")
 
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
 	req := tenantmanagercontrolplane.GetOrganizationRequest{
 
-		OrganizationId: common.String(org_id),
+		OrganizationId: common.String(config.ORG_ID),
 	}
 	helpers.FatalIfError(err)
 	// Send the request using the service client
@@ -30,15 +29,16 @@ func Children(provider common.ConfigurationProvider, tenancyID string, childFetc
 	fmt.Printf("Organization: %v\n", Organization)
 
 	// does this tenancy have children
-	GetChildTenancies(provider, tenancyID)
+	GetChildTenancies(provider, tenancyID, config)
 }
 
-func GetChildTenancies(provider common.ConfigurationProvider, tenancyID string) {
+func GetChildTenancies(provider common.ConfigurationProvider, tenancyID string, config config.Config) {
+	fmt.Println("checking child tenancies GetChildTenancies")
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
 	req := tenantmanagercontrolplane.ListOrganizationTenanciesRequest{
 		Limit:          common.Int(1000),
-		OrganizationId: common.String(org_id),
+		OrganizationId: common.String(config.ORG_ID),
 	}
 
 	// Send the request using the service client
@@ -51,11 +51,12 @@ func GetChildTenancies(provider common.ConfigurationProvider, tenancyID string) 
 		fmt.Printf("Tenancy: %v\n", tenancy)
 	}
 }
-func Deets(provider common.ConfigurationProvider, tenancyID string, homeregion string) {
+func Deets(provider common.ConfigurationProvider, tenancyID string, homeregion string, config config.Config) {
+	fmt.Println("checking child tenancies Deets")
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
 	req := tenantmanagercontrolplane.GetOrganizationTenancyRequest{
-		OrganizationId: common.String(org_id),
+		OrganizationId: common.String(config.ORG_ID),
 		TenancyId:      common.String(tenancyID),
 	}
 
