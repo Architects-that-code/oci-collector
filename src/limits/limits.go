@@ -1,6 +1,7 @@
 package limits
 
 import (
+	utils "check-limits/util"
 	"context"
 	"fmt"
 	"sync"
@@ -147,7 +148,7 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 					}
 
 					localDatapile = append(localDatapile, r)
-					fmt.Printf("goroutineID: %v region: %v service: %v valLimitName: %v avail: %v used: %v\n", goroutineID, reg, *svc, *limitName, *avail, *used)
+					//fmt.Printf("region: %v service: %v valLimitName: %v avail: %v used: %v\n", reg, *svc, *limitName, *avail, *used)
 				}
 
 			}
@@ -160,9 +161,10 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 	for slice := range regionalSlices {
 		Datapile = append(Datapile, slice...)
 	}
-	for _, dp := range Datapile {
+	/*for _, dp := range Datapile {
 		fmt.Println(dp)
-	}
+	}*/
+	fmt.Println(utils.ToJSON(Datapile))
 	fmt.Println(len(Datapile))
 
 }
