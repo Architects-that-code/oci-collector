@@ -70,8 +70,19 @@ func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []id
 	//start := time.Now()
 	//fmt.Print("Fetching ADs\n")
 	var adsAll []identity.AvailabilityDomain
+
+	for _, region := range regions {
+		client.SetRegion(*region.RegionName)
+		ads := GetADs(tenancyID, client)
+		adsAll = append(adsAll, ads...)
+	}
+
+	/**     start comment here
 	var wg sync.WaitGroup
 	wg.Add(len(regions))
+
+	var regionalSlices = make(chan []identity.AvailabilityDomain, len(regions))
+
 	for _, region := range regions {
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()
@@ -79,9 +90,12 @@ func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []id
 			client.SetRegion(*region.RegionName)
 			ads := GetADs(tenancyID, client)
 			adsAll = append(adsAll, ads...)
+			regionalSlices <- ads
 		}(region)
 	}
 	wg.Wait()
+	end comment here
+	/*
 	//elapsed := time.Since(start)
 	//fmt.Printf("Fetching ADs took %s \n", elapsed)
 	/*

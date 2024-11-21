@@ -78,14 +78,6 @@ func GetServices(limitsClient limits.LimitsClient, err error, tenancyID string, 
 	return services
 }
 
-type LimitsCollector struct {
-	Region    string
-	Service   string
-	Limitname string
-	Avail     int64
-	Used      int64
-}
-
 func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string) {
 	limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
@@ -164,7 +156,8 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 	/*for _, dp := range Datapile {
 		fmt.Println(dp)
 	}*/
-	fmt.Println(utils.ToJSON(Datapile))
+	jsonData, _ := utils.ToJSON(Datapile)
+	fmt.Println(string(jsonData))
 	fmt.Println(len(Datapile))
 
 }

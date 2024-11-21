@@ -1,6 +1,7 @@
 package main
 
 import (
+	billing "check-limits/billing"
 	capcheck "check-limits/capCheck"
 	"check-limits/capability"
 	compute "check-limits/compute"
@@ -48,6 +49,7 @@ func main() {
 	capability: what types of 'things' are available for a shape type (-type to specify shape type)
 	children: dealing with child tenancies
 	object: fetch object storage info
+	billing: fetch billing info
 	network: network related info
 	search: search for resources created by a user
 		`
@@ -99,6 +101,9 @@ func main() {
 
 	objectCmd := flag.NewFlagSet("object", flag.ExitOnError)
 	objectFetch := objectCmd.Bool("run", false, "fetch object storage")
+
+	billingCMD := flag.NewFlagSet("billing", flag.ExitOnError)
+	billingPath := billingCMD.String("path", "./reports", "path to save billing files - default is ./reports")
 
 	scheduleCmd := flag.NewFlagSet("schedule", flag.ExitOnError)
 	scheduleFetch := scheduleCmd.Bool("run", false, "fetch schedule")
@@ -189,6 +194,8 @@ func main() {
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 		//_, compartments, _ := setup.CommonSetup(err, client, tenancyID, false)
 
+		supportresources.CreateTicket(provider, tenancyID, homeregion, config.CSI)
+
 		supportresources.ListTickets(provider, tenancyID, homeregion, config.CSI)
 		//helpers.FatalIfError(err)
 		supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
@@ -253,6 +260,14 @@ func main() {
 		regions, compartments, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 		//oos.GetObjectStorageInfo(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
 		oos.ObjectStorageSize(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
+
+	case "billing":
+		fmt.Println("checking billing")
+		billingCMD.Parse(os.Args[2:])
+		fmt.Printf("billingFetch: %v\n", &billingPath)
+		provider, client, tenancyID, err := setup.Prep(config)
+		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
+		billing.Getfiles(provider, tenancyID, homeregion, config, *billingPath)
 
 	case "schedule":
 		fmt.Println("checking schedule")

@@ -22,7 +22,7 @@ func GetObjectStorageInfo(provider common.ConfigurationProvider, regions []ident
 
 }
 
-func ObjectStorageSize(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartment []identity.Compartment, capacityFetch bool, capacityShapeType string) {
+func ObjectStorageSize(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartment []identity.Compartment, capacityFetch bool, homeRegion string) {
 	fmt.Println("Getting object storage info ObjectStorageSize")
 	ctx := context.Background()
 	client, err := objectstorage.NewObjectStorageClientWithConfigurationProvider(provider)

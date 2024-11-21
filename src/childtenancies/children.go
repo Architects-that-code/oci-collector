@@ -13,6 +13,7 @@ import (
 
 func Children(provider common.ConfigurationProvider, tenancyID string, childFetch bool, homeregion string, config config.Config) {
 	fmt.Println("checking child tenancies Children")
+	fmt.Println("OrgId: ", config.ORG_ID)
 
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
 	req := tenantmanagercontrolplane.GetOrganizationRequest{
@@ -46,7 +47,7 @@ func GetChildTenancies(provider common.ConfigurationProvider, tenancyID string, 
 	helpers.FatalIfError(err)
 
 	// Retrieve value from the response.
-	fmt.Printf("count tenancies: %v\n", len(resp.Items))
+	fmt.Printf("count child OrganizationTenancies: %v\n", len(resp.Items))
 	for _, tenancy := range resp.Items {
 		fmt.Printf("Tenancy: %v\n", tenancy)
 	}
