@@ -70,14 +70,15 @@ func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []id
 	//start := time.Now()
 	//fmt.Print("Fetching ADs\n")
 	var adsAll []identity.AvailabilityDomain
-
-	for _, region := range regions {
-		client.SetRegion(*region.RegionName)
-		ads := GetADs(tenancyID, client)
-		adsAll = append(adsAll, ads...)
-	}
-
-	/**     start comment here
+	/*
+		for _, region := range regions {
+			client.SetRegion(*region.RegionName)
+			ads := GetADs(tenancyID, client)
+			adsAll = append(adsAll, ads...)
+			mu.Unlock()
+		}
+	*/
+	/**     start comment here */
 	var wg sync.WaitGroup
 	wg.Add(len(regions))
 
@@ -94,8 +95,8 @@ func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []id
 		}(region)
 	}
 	wg.Wait()
-	end comment here
-	/*
+
+	/*  end comment here  */
 	//elapsed := time.Since(start)
 	//fmt.Printf("Fetching ADs took %s \n", elapsed)
 	/*
@@ -133,7 +134,7 @@ func getHomeRegion(regions []identity.RegionSubscription) string {
 	return ""
 }
 
-func Getconfig() (error, Config) {
+func Getconfig() (Config, error) {
 	data, err := os.ReadFile("toolkit-config.yaml")
 	helpers.FatalIfError(err)
 
@@ -142,7 +143,7 @@ func Getconfig() (error, Config) {
 	if err != nil {
 		// handle error
 	}
-	return err, config
+	return config, err
 }
 
 type Config struct {
