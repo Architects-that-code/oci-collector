@@ -43,7 +43,7 @@ func main() {
 	config: check config file and print basic info
 	peeps: fetch user counts (-r to show users)
 	policies: fetch policy counts (-run to show policies -verbose to show statements)
-	groups: fetch group counts (-run to show groups -verbose to show group members)
+	groups: fetch group counts (-run to show groups )
 	support: fetch support tickets (-list to show tickets)
 	capacity: check capacity in all YOUR regions (-ocpus to specify ocpus -memory to specify memory -type to specify shape type)
 	capability: what types of 'things' are available for a shape type (-type to specify shape type)
@@ -111,7 +111,7 @@ func main() {
 	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
 	searchFetchString := searchCmd.String("searchstring", "", "search string")
 
-	err, config := setup.Getconfig()
+	config, err := setup.Getconfig()
 	if err != nil {
 		//fmt.Printf("%+v\n", err)
 		fmt.Printf("Error: %v\n", err)
@@ -218,7 +218,7 @@ func main() {
 			capcheck.Check(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory, *capacityShapeType)
 
 		} else {
-			fmt.Println("add -ocpus and -memory and to run")
+			fmt.Println("add -type -ocpus and -memory and to run")
 
 		}
 
@@ -249,7 +249,7 @@ func main() {
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 
-		children.Children(provider, tenancyID, *childFetch, homeregion, config)
+		children.Children(provider, client, tenancyID, *childFetch, homeregion, config)
 		children.Deets(provider, tenancyID, homeregion, config)
 
 	case "object":

@@ -1,0 +1,10 @@
+
+
+export report=$(oci --profile NATIONAL02 os object list -ns bling -bn $TN |jq  -r '.data[].name')
+echo $report > list.txt
+cat list.txt
+
+
+for report in read list.txt; do oci --profile NATIONAL02 os object get -bn $TN -ns bling --name $report --file - ; done
+
+ while read -r report; do oci --profile NATIONAL02 os object get -bn bling -ns $TN  $report; done < list.txt

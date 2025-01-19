@@ -79,6 +79,7 @@ func GetServices(limitsClient limits.LimitsClient, err error, tenancyID string, 
 }
 
 func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string) {
+	fmt.Printf("Running limits for tenancy: %v\n", tenancyID)
 	limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
 	//util.PrintSpace()

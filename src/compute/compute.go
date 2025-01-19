@@ -61,7 +61,7 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 			fmt.Printf("all instances: Region: %v Compartment: %v  NumInstance: %v \n", instanceGroup.Region, instanceGroup.Compartment, len(instanceGroup.Instance))
 			for _, instance := range instanceGroup.Instance {
 				//fmt.Printf("\tInstance: %v\tShape: %v\tCpus: %v\tMem: %v\tTags: %v\n", *instance.DisplayName, *instance.Shape, *instance.ShapeConfig.Ocpus, *instance.ShapeConfig.MemoryInGBs, *instance.DefinedTags)
-				fmt.Printf("DisplayName: %v\t tags: freeform: %v   defined: %v \n", *instance.DisplayName, instance.FreeformTags, instance.DefinedTags)
+				fmt.Printf("DisplayName: %v\t Shape: %v \t tags: freeform: %v\t   defined: %v \t\n", *instance.DisplayName, *instance.Shape, instance.FreeformTags, instance.DefinedTags)
 			}
 		}
 		// can i sort by size
