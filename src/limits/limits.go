@@ -1,6 +1,7 @@
 package limits
 
 import (
+	utils "check-limits/util"
 	"context"
 	"fmt"
 	"sync"
@@ -77,15 +78,8 @@ func GetServices(limitsClient limits.LimitsClient, err error, tenancyID string, 
 	return services
 }
 
-type LimitsCollector struct {
-	Region    string
-	Service   string
-	Limitname string
-	Avail     int64
-	Used      int64
-}
-
 func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string) {
+	fmt.Printf("Running limits for tenancy: %v\n", tenancyID)
 	limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
 	//util.PrintSpace()
@@ -147,7 +141,7 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 					}
 
 					localDatapile = append(localDatapile, r)
-					fmt.Printf("goroutineID: %v region: %v service: %v valLimitName: %v avail: %v used: %v\n", goroutineID, reg, *svc, *limitName, *avail, *used)
+					//fmt.Printf("region: %v service: %v valLimitName: %v avail: %v used: %v\n", reg, *svc, *limitName, *avail, *used)
 				}
 
 			}
@@ -160,9 +154,11 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 	for slice := range regionalSlices {
 		Datapile = append(Datapile, slice...)
 	}
-	for _, dp := range Datapile {
+	/*for _, dp := range Datapile {
 		fmt.Println(dp)
-	}
+	}*/
+	jsonData, _ := utils.ToJSON(Datapile)
+	fmt.Println(string(jsonData))
 	fmt.Println(len(Datapile))
 
 }

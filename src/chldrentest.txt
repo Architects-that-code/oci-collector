@@ -1,0 +1,873 @@
+     _                    _       _   _                   _             _____   _               _        ____               _
+    / \     _ __    ___  | |__   (_) | |_    ___    ___  | |_   ___    |_   _| | |__     __ _  | |_     / ___|   ___     __| |   ___
+   / _ \   | '__|  / __| | '_ \  | | | __|  / _ \  / __| | __| / __|     | |   | '_ \   / _` | | __|   | |      / _ \   / _` |  / _ \
+  / ___ \  | |    | (__  | | | | | | | |_  |  __/ | (__  | |_  \__ \     | |   | | | | | (_| | | |_    | |___  | (_) | | (_| | |  __/
+ /_/   \_\ |_|     \___| |_| |_| |_|  \__|  \___|  \___|  \__| |___/     |_|   |_| |_|  \__,_|  \__|    \____|  \___/   \__,_|  \___|
+
+
+checking child tenancies
+childFetch: false
+Using Config File
+Using profile: NATIONAL02
+Config: /Users/jscanlon/.oci/config
+Home Region: us-ashburn-1
+checking child tenancies Children
+OrgId:  ocid1.organizationsentity.oc1.iad.amaaaaaa7zxxlwiah7tpyjgkemo437g5q5oiwabylaac2pzzj7hstjws66dq
+Organization: { Id=ocid1.organizationsentity.oc1.iad.amaaaaaa7zxxlwiah7tpyjgkemo437g5q5oiwabylaac2pzzj7hstjws66dq CompartmentId=ocid1.tenancy.oc1..aaaaaaaapf32iocmevidwi4ujtrnfvq456dp4elubzvw564v6lh2sby24uua DefaultUcmSubscriptionId=ocid1.organizationssubscription.oc1.iad.amaaaaaa7zxxlwiaqad53a45xwfptb4jqtaejhacxsbj3rkw5vh6fk3xg3sa LifecycleState=ACTIVE TimeCreated=2021-07-18 00:23:49.956 +0000 UTC DisplayName=Organization for ocid1.tenancy.oc1..aaaaaaaapf32iocmevidwi4ujtrnfvq456dp4elubzvw564v6lh2sby24uua ParentName=<nil> TimeUpdated=2024-08-03 15:37:21.042 +0000 UTC }
+checking child tenancies GetChildTenancies
+count child OrganizationTenancies: 284
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa37wjzft2pddgpdpbzhkhllxqfggg65xpeldynuqd5y2ylb3qlb5a GovernanceStatus=OPTED_OUT Name=payswx5z97 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-12-18 14:47:47.936 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa37wjzft2pddgpdpbzhkhllxqfggg65xpeldynuqd5y2ylb3qlb5a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa2ezhszanfofb7izgytjjpxo55j3e7s2u46w6wnweq42bwarx4soa GovernanceStatus=OPTED_OUT Name=karmiugap6 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-12-11 15:18:53.213 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa2ezhszanfofb7izgytjjpxo55j3e7s2u46w6wnweq42bwarx4soa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaadjzuqrz4dks6ahjjocwkb63swjjnstjggmda6wanskgmmo5z5uzq GovernanceStatus=OPTED_OUT Name=kmspg LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-12-06 20:54:49.586 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaadjzuqrz4dks6ahjjocwkb63swjjnstjggmda6wanskgmmo5z5uzq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa6g4qz3fkzu25am4y2la66x6nzwiway4tl3ajqdiapuwky6j3vuea GovernanceStatus=OPTED_OUT Name=gusg741p4f LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-12-06 20:54:10.528 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa6g4qz3fkzu25am4y2la66x6nzwiway4tl3ajqdiapuwky6j3vuea
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa3l7isqqh3am3rohuipremo65kguvsp63lnyig5sy3k7mcoqf7r5a GovernanceStatus=OPTED_OUT Name=kelmkjo0k4 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-12-06 20:52:29.987 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa3l7isqqh3am3rohuipremo65kguvsp63lnyig5sy3k7mcoqf7r5a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaanfmnpe332m2756kdvwscalnmq4vznuu6y4s4imdynm2fxnevyrzq GovernanceStatus=OPTED_OUT Name=sconkgc8g8 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-12-05 21:00:00.203 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaanfmnpe332m2756kdvwscalnmq4vznuu6y4s4imdynm2fxnevyrzq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaac7jjktfxraatl3rodvsgopqrsszjazlenzkswhaqpozs3nrnjvdq GovernanceStatus=OPTED_OUT Name=childtest LifecycleState=DELETING Role=CHILD TimeJoined=2022-12-28 14:01:25.11 +0000 UTC TimeLeft=2022-12-28 14:01:25.11 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaac7jjktfxraatl3rodvsgopqrsszjazlenzkswhaqpozs3nrnjvdq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavfoi6rf7tj6oktbwlqgslem6vz7pll666xi4domj2qqtneu5emka GovernanceStatus=OPTED_OUT Name=srimi3ib7b LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-12-02 17:45:01.785 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavfoi6rf7tj6oktbwlqgslem6vz7pll666xi4domj2qqtneu5emka
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaayioz7h7hkg7np2t75ufwaofwgqeq65sirwqhys2n4xmaifkxszmq GovernanceStatus=OPTED_OUT Name=ship068yu0 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-20 22:40:47.066 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaayioz7h7hkg7np2t75ufwaofwgqeq65sirwqhys2n4xmaifkxszmq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa2ijqpfsgp5po457bwz2veyxyc6b7ipuftl54yq55ej34gfoha72a GovernanceStatus=OPTED_OUT Name=visz3l9aqk LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-20 10:13:24.29 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa2ijqpfsgp5po457bwz2veyxyc6b7ipuftl54yq55ej34gfoha72a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaakfdzc37xw57vrsdeeprldkcxnojjqfghzjvubl65z6gkxwgjnt4a GovernanceStatus=OPTED_OUT Name=chaky4c052 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-20 10:12:28.165 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaakfdzc37xw57vrsdeeprldkcxnojjqfghzjvubl65z6gkxwgjnt4a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxw7wrhxss2imupelcynwqazozqrzhqd2vwqk4mpaciose5tze4lq GovernanceStatus=OPTED_OUT Name=steei6anfv LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-19 19:28:41.579 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxw7wrhxss2imupelcynwqazozqrzhqd2vwqk4mpaciose5tze4lq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa3ocohl2rfeixo3ikcbfeq4iveaysj5dfv2uo3kgnidowlifw6aiq GovernanceStatus=OPTED_OUT Name=anuaafgav0 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-19 19:28:14.35 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa3ocohl2rfeixo3ikcbfeq4iveaysj5dfv2uo3kgnidowlifw6aiq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaf6rzo7nfkn7uadymwbzmhlrgiw4h7lgz3yinj3jpbeem63z2y2la GovernanceStatus=OPTED_OUT Name=summj2j6jh LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-15 19:04:08.052 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaf6rzo7nfkn7uadymwbzmhlrgiw4h7lgz3yinj3jpbeem63z2y2la
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaagq2haa57x5en47omeqafrqgi6zv66e3jf2witl6xz662sl6fpama GovernanceStatus=OPTED_OUT Name=viszf0wjt4 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-15 10:20:14.951 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaagq2haa57x5en47omeqafrqgi6zv66e3jf2witl6xz662sl6fpama
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaasxuqvrfh7uehlwqmoxs4nazud47htidym6og4fenqvqzhj4cgeza GovernanceStatus=OPTED_OUT Name=antvm4smw6 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-08 20:12:21.701 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaasxuqvrfh7uehlwqmoxs4nazud47htidym6og4fenqvqzhj4cgeza
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaq42jbj24aaqxe2yrdegerp55svd5s4o5eytjy4t2po4hdvb2fkda GovernanceStatus=OPTED_OUT Name=maumfcfgg9 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-07 15:02:36.584 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaq42jbj24aaqxe2yrdegerp55svd5s4o5eytjy4t2po4hdvb2fkda
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaamo2kau5lugozhif5ubkhy5uo3roqj5zdo7qesgjr6debmx5xe3hq GovernanceStatus=OPTED_IN Name=sonsv93wjr LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 18:33:16.531 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaamo2kau5lugozhif5ubkhy5uo3roqj5zdo7qesgjr6debmx5xe3hq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaqc7ehotzzmpmv73c5n3o4dzf2pfsp57bcx7kaiqd6yp7aaqkngla GovernanceStatus=OPTED_OUT Name=dive8c3znv LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-04 19:09:58.354 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaqc7ehotzzmpmv73c5n3o4dzf2pfsp57bcx7kaiqd6yp7aaqkngla
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaamtbxweq6skejdjltzge7m4kvvjtnne3y5qdg55wfown2hqpvyp5a GovernanceStatus=OPTED_OUT Name=vids5zchoe LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-31 13:54:36.914 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaamtbxweq6skejdjltzge7m4kvvjtnne3y5qdg55wfown2hqpvyp5a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaafhgdu5wws4ehtaquq2kzwtey5q5olhev4ylvk4jvvw6xjhj2vzla GovernanceStatus=OPTED_OUT Name=<nil> LifecycleState=FAILED Role=CHILD TimeJoined=2024-11-04 12:02:03.868 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaafhgdu5wws4ehtaquq2kzwtey5q5olhev4ylvk4jvvw6xjhj2vzla
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaz3zvzfb4afndqhyljo75yoat5azx6yw5hppwxqv3felvg3flex4q GovernanceStatus=OPTED_OUT Name=ionsfa9e57 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-11-04 12:01:58.296 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaz3zvzfb4afndqhyljo75yoat5azx6yw5hppwxqv3felvg3flex4q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavfuvffktmvrnoxt7b6twygfv5n3xbgny4il35bxxrzwfirrirj4q GovernanceStatus=OPTED_OUT Name=jonbn18yyg LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-29 17:44:09.451 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavfuvffktmvrnoxt7b6twygfv5n3xbgny4il35bxxrzwfirrirj4q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaapfwzamxvofdql4fuk3ydbnp3krtaibrbros3zcbttdei6gfy5k3q GovernanceStatus=OPTED_OUT Name=seexb0k09g LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-29 17:45:02.351 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaapfwzamxvofdql4fuk3ydbnp3krtaibrbros3zcbttdei6gfy5k3q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaua24xt6vh43ajptlqyxajese5ryuptn7k7effjfn64wkzl62uk4q GovernanceStatus=OPTED_OUT Name=prapigc6e8 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-25 19:26:13.997 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaua24xt6vh43ajptlqyxajese5ryuptn7k7effjfn64wkzl62uk4q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaadjouuxcaosctoisgfo5ukdt64vnedrzhb5m7iq5og67cc7p2sxva GovernanceStatus=OPTED_OUT Name=ryahvqufg5 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-29 17:18:11.048 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaadjouuxcaosctoisgfo5ukdt64vnedrzhb5m7iq5og67cc7p2sxva
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaahvli5uhjrleigqorotnyzzwbgv4eheevuldlg4j2nzhmdsst2d3q GovernanceStatus=OPTED_OUT Name=farnojxp86 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-29 17:43:32.803 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaahvli5uhjrleigqorotnyzzwbgv4eheevuldlg4j2nzhmdsst2d3q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaafnznbcbeodjhma5ieeomb32dyuhjzj7txvnf5hgfwtw4wr2wnt3q GovernanceStatus=OPTED_OUT Name=peddsshm9b LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-25 21:28:13.733 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaafnznbcbeodjhma5ieeomb32dyuhjzj7txvnf5hgfwtw4wr2wnt3q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaacqjl7rm4qspxwkkvfelwypfq5bcbvsjkziupnluvjvxzwjjp4dxa GovernanceStatus=OPTED_OUT Name=shawft4lvu LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-25 19:26:03.646 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaacqjl7rm4qspxwkkvfelwypfq5bcbvsjkziupnluvjvxzwjjp4dxa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaihbmw6hm33juxeybnzgfg3co3hhdqeciep54rvofiqdsqalgvuuq GovernanceStatus=OPTED_OUT Name=kars4i6fg1 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-29 17:44:53.561 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaihbmw6hm33juxeybnzgfg3co3hhdqeciep54rvofiqdsqalgvuuq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaagrayjsg6kezpyzib37gqcsgc7pyz4h65jit4h46z3hmnrlkzhua GovernanceStatus=OPTED_OUT Name=alejtmjdtz LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-08 18:56:33.189 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaagrayjsg6kezpyzib37gqcsgc7pyz4h65jit4h46z3hmnrlkzhua
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaatpkpmguuutkyp6cvjcxhzfj5la5l2wlv3ntivuz3bdx75dswirrq GovernanceStatus=OPTED_OUT Name=jossf3u9d5 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-08 20:04:22.583 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaatpkpmguuutkyp6cvjcxhzfj5la5l2wlv3ntivuz3bdx75dswirrq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalsiuhuy5wwupzuozqaf2xuvsbwbbcipe74oviiz7hwyt3wt352dq GovernanceStatus=OPTED_OUT Name=praps4pxx5 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-10 15:57:53.98 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalsiuhuy5wwupzuozqaf2xuvsbwbbcipe74oviiz7hwyt3wt352dq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaleckdhezwbjhakeotscwxxoryd4nbuldngaakmfw2ryz3wn2gojq GovernanceStatus=OPTED_OUT Name=vigvr34zrz LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-08 18:56:47.604 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaleckdhezwbjhakeotscwxxoryd4nbuldngaakmfw2ryz3wn2gojq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaao54xo75huyahyfnzn62cjrlnxitzl63ozvhqjtkktqa3q56hdr6q GovernanceStatus=OPTED_OUT Name=donsfy205p LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-08 18:57:00.874 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaao54xo75huyahyfnzn62cjrlnxitzl63ozvhqjtkktqa3q56hdr6q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa5ziybrku7dfzz62pbt6g4lr4cam4orokig7qtiersgemj3t2dgrq GovernanceStatus=OPTED_OUT Name=searj1op4q LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-04 16:54:09.327 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa5ziybrku7dfzz62pbt6g4lr4cam4orokig7qtiersgemj3t2dgrq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaabsz2zx2gbhevqrikzsg3cefulze7rupwz6jawworea6jrasc7vva GovernanceStatus=OPTED_OUT Name=nict2rdema LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-01 12:39:15.816 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaabsz2zx2gbhevqrikzsg3cefulze7rupwz6jawworea6jrasc7vva
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaroqh3qoxnznurdkulidnsuw4zkonvwhojmnm5pog6hkk446ag6wq GovernanceStatus=OPTED_OUT Name=chaswzqtkh LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-04 16:54:16.468 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaroqh3qoxnznurdkulidnsuw4zkonvwhojmnm5pog6hkk446ag6wq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa6dqzk27hg3jw7g76f4qfmckh2pmmtq5iv2smszsoh6nlawonvq4q GovernanceStatus=OPTED_OUT Name=petccvcdxc LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-25 17:17:58.877 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa6dqzk27hg3jw7g76f4qfmckh2pmmtq5iv2smszsoh6nlawonvq4q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalieelnk2pneke2p3ebifu7pwijwxcagyzhzf2oq3g47wpvkgbuya GovernanceStatus=OPTED_OUT Name=rioih9cb2i LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-23 21:22:51.615 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalieelnk2pneke2p3ebifu7pwijwxcagyzhzf2oq3g47wpvkgbuya
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaawn6gmtrnbn7wtdyqcf6pgospi7lzvbvzwuratnzute5ucdbcyasq GovernanceStatus=OPTED_OUT Name=antvutv8vl LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-23 21:22:34.414 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaawn6gmtrnbn7wtdyqcf6pgospi7lzvbvzwuratnzute5ucdbcyasq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaadc3yx7mkghx63qagm7geatplk2pr52eq5xb4g5uktoyog3ilew4a GovernanceStatus=OPTED_OUT Name=antvvr33pp LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-23 21:22:19.46 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaadc3yx7mkghx63qagm7geatplk2pr52eq5xb4g5uktoyog3ilew4a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaansqlqcougqfdn6jtipk425bssv34g4ysn4hzzfgdi7rhjzzxtya GovernanceStatus=OPTED_OUT Name=chrcjsw3fj LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-19 14:26:10.705 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaansqlqcougqfdn6jtipk425bssv34g4ysn4hzzfgdi7rhjzzxtya
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaabmsjpnzckvwec2xtbitgfyrwmbnwasep2cdva34qsdvetjyv5jxq GovernanceStatus=OPTED_OUT Name=rioi8atw22 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-13 19:55:12.224 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaabmsjpnzckvwec2xtbitgfyrwmbnwasep2cdva34qsdvetjyv5jxq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaarnkcb3y3teqllfoweenyliu53v4xs6aajhxr4okywmtpkuknmsua GovernanceStatus=OPTED_OUT Name=rioirq2w6x LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-13 19:58:46.543 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaarnkcb3y3teqllfoweenyliu53v4xs6aajhxr4okywmtpkuknmsua
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaqxhfhppmshnaq3qaqgyr53g3ndijh7tqtuwkh34rauywbk4svlyq GovernanceStatus=OPTED_OUT Name=tomm1x87sy LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-21 20:39:07.196 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaqxhfhppmshnaq3qaqgyr53g3ndijh7tqtuwkh34rauywbk4svlyq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaasprn66qmdruudrugbu35zqno3or6xdlkl6mpxo7fwjzj76rd3lna GovernanceStatus=OPTED_OUT Name=seabmt1osj LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-07-17 21:02:13.423 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaasprn66qmdruudrugbu35zqno3or6xdlkl6mpxo7fwjzj76rd3lna
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaabhdon7hfgnre7svsvoeghtpqzpmgbwgeuok6hzg26aq5kdpbimfq GovernanceStatus=OPTED_OUT Name=heap296n8c LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-05 16:30:54.964 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaabhdon7hfgnre7svsvoeghtpqzpmgbwgeuok6hzg26aq5kdpbimfq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaax3qtxp7rpzzmua5t3iv7po6ctqr3vxofclp4o53rxet3v42e6oq GovernanceStatus=OPTED_OUT Name=monl4qc52y LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-07-11 15:17:19.918 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaax3qtxp7rpzzmua5t3iv7po6ctqr3vxofclp4o53rxet3v42e6oq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaprpq3w2xhsfewr7pljp5vec47begurjzcbdxw6ou3u4dwzvg6zkq GovernanceStatus=OPTED_OUT Name=joss7orcmx LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-07-17 21:02:44.154 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaprpq3w2xhsfewr7pljp5vec47begurjzcbdxw6ou3u4dwzvg6zkq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa7p3yl5muaf2b3o7dfc5aigpgt2swf6seml3da744t256pk2ocvjq GovernanceStatus=OPTED_OUT Name=ayusifmytz LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-07-11 14:50:11.634 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa7p3yl5muaf2b3o7dfc5aigpgt2swf6seml3da744t256pk2ocvjq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaijdc2do5pmy5wfraeg7563qtrwjftlhdlqho7h6hak6xqd5cel5a GovernanceStatus=OPTED_OUT Name=anisr16ov8 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-10-26 18:09:49.369 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaijdc2do5pmy5wfraeg7563qtrwjftlhdlqho7h6hak6xqd5cel5a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaae6p63mnkqdpzhbpjfutgzfwk3y3ttoiz6qbqrp6dphvmooepayha GovernanceStatus=OPTED_OUT Name=ambxdvlpuf LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-07-11 17:29:47.959 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaae6p63mnkqdpzhbpjfutgzfwk3y3ttoiz6qbqrp6dphvmooepayha
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaayzctczazv6p2ejd7jfh4cres3t5ntvmpsh5l57ntzl4r53qu3f3a GovernanceStatus=OPTED_OUT Name=rebcoolji9 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-11-13 22:21:58.812 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaayzctczazv6p2ejd7jfh4cres3t5ntvmpsh5l57ntzl4r53qu3f3a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaagg7qyeefqlumz3qwjxa3q4tntmtodrk3hrfkqxs7napcsruizp5a GovernanceStatus=OPTED_OUT Name=andl7ndnu2 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 20:13:20.358 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaagg7qyeefqlumz3qwjxa3q4tntmtodrk3hrfkqxs7napcsruizp5a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaqxd2xdry3eclvrpug4yswwpliqrtbh3ulbxpy3wdqaabba2qzn3q GovernanceStatus=OPTED_OUT Name=jhemionoci LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-21 19:13:06.085 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaqxd2xdry3eclvrpug4yswwpliqrtbh3ulbxpy3wdqaabba2qzn3q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaageorhqo3i464j5fb33y7tut3hgnhn232kc3mvrvv7ppxdkoexxvq GovernanceStatus=OPTED_OUT Name=chacgs5yji LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-05-29 17:21:44.014 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaageorhqo3i464j5fb33y7tut3hgnhn232kc3mvrvv7ppxdkoexxvq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaanbk2i725ziwwdcm5kzlbsfyphavyyvschztru2jvcrekpnnfbzma GovernanceStatus=OPTED_OUT Name=junsnrcbku LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-13 21:03:13.373 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaanbk2i725ziwwdcm5kzlbsfyphavyyvschztru2jvcrekpnnfbzma
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaahfj6wrtydctonbz2bs4eyhur6scdurrt35a3dqdpvpdnnh3d2jda GovernanceStatus=OPTED_OUT Name=rogr8obcc8 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-17 18:51:20.701 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaahfj6wrtydctonbz2bs4eyhur6scdurrt35a3dqdpvpdnnh3d2jda
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaab5kfau2q2pifaiaihyqceeq3ttpezr3s2en2d2jdrojgfzzuioza GovernanceStatus=OPTED_OUT Name=joaec88kbe LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-13 21:02:53.395 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaab5kfau2q2pifaiaihyqceeq3ttpezr3s2en2d2jdrojgfzzuioza
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaz62ru446esycbomaye4aohqqjqx2bdamhfuynfegzm2lgbustlna GovernanceStatus=OPTED_OUT Name=jitk72hei9 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-05-29 14:47:56.284 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaz62ru446esycbomaye4aohqqjqx2bdamhfuynfegzm2lgbustlna
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavq23jsea4kcthyysorl4xk53rm336t2bex2ps5osyhiaizrqm6oq GovernanceStatus=OPTED_OUT Name=kevrzqcs6z LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-05-29 17:59:17.311 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavq23jsea4kcthyysorl4xk53rm336t2bex2ps5osyhiaizrqm6oq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaduhked3ukumy7xeipxak7k5n3mg2sczvphw3zmnxi3dqszv7td6q GovernanceStatus=OPTED_OUT Name=dangn84ruv LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-05-29 15:48:12.514 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaduhked3ukumy7xeipxak7k5n3mg2sczvphw3zmnxi3dqszv7td6q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaapunakodq6swxsrjwcwmwyktuhogwtjvyhsfk2h3ekkx5fdtwe4uq GovernanceStatus=OPTED_OUT Name=balpa67mkh LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-05-14 19:57:25.28 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaapunakodq6swxsrjwcwmwyktuhogwtjvyhsfk2h3ekkx5fdtwe4uq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalxipjhyaxuxqyxl7cvyusjq5wnh2wo22zadp5w2pb2z4ikmwaeia GovernanceStatus=OPTED_OUT Name=ryapreqth5 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-04-29 17:12:30.533 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalxipjhyaxuxqyxl7cvyusjq5wnh2wo22zadp5w2pb2z4ikmwaeia
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaawuvzufrxlxyb3m52slxoeebwb42m3tcrp4u2bxsphbke7hvrukeq GovernanceStatus=OPTED_OUT Name=jefg4qd71z LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-04-10 19:55:52.644 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaawuvzufrxlxyb3m52slxoeebwb42m3tcrp4u2bxsphbke7hvrukeq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaagr6dpikcvzwhyrwqrkdzdduovrdwedv7debihvhkc44yrcjhmkla GovernanceStatus=OPTED_OUT Name=dangjmx1ue LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-04-25 18:25:57.646 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaagr6dpikcvzwhyrwqrkdzdduovrdwedv7debihvhkc44yrcjhmkla
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaobuwrpylw3xhz63kcnbodgcsdz2gbltk62zuzw3efmgsf3objg5q GovernanceStatus=OPTED_OUT Name=lanm159gjs LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-03-25 14:19:26.129 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaobuwrpylw3xhz63kcnbodgcsdz2gbltk62zuzw3efmgsf3objg5q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaawkizmrbc2bdca7xb4nv7gzsqb4ysmcozagogean6ozja3mn376ya GovernanceStatus=OPTED_OUT Name=yans8i6a2h LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-04-04 17:38:59.658 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaawkizmrbc2bdca7xb4nv7gzsqb4ysmcozagogean6ozja3mn376ya
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaojrhwqrtqxqtrgxrpojuylafv362q5x6ym7uatimwdzpzv5uucsq GovernanceStatus=OPTED_OUT Name=mahgcpd2mx LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-01-31 16:45:01.359 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaojrhwqrtqxqtrgxrpojuylafv362q5x6ym7uatimwdzpzv5uucsq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaav2upeyvtsan7gz6q3uyy452vb6nshdtq2izrw4ycuxkb7svrs2bq GovernanceStatus=OPTED_OUT Name=chrg8hb7sp LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-02-12 16:00:20.756 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaav2upeyvtsan7gz6q3uyy452vb6nshdtq2izrw4ycuxkb7svrs2bq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaamqnmyudqj2dcpf7hyaqql3v7e3ez45uemau22uf7flplfmzi2n3a GovernanceStatus=OPTED_OUT Name=desjkjyu7k LifecycleState=DELETING Role=CHILD TimeJoined=2023-02-22 22:25:54.065 +0000 UTC TimeLeft=2023-02-22 22:25:54.065 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaamqnmyudqj2dcpf7hyaqql3v7e3ez45uemau22uf7flplfmzi2n3a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaswtblt532ywestqd74yuorqckz5whahhvlcp7a6a2jk2k45tbiqq GovernanceStatus=OPTED_OUT Name=shahbf9bqf LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-12-06 22:44:39.542 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaswtblt532ywestqd74yuorqckz5whahhvlcp7a6a2jk2k45tbiqq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavhgeypcjezxuwalx46zrtynu6jwkozxzyvsugi2aluclw4scdwqa GovernanceStatus=OPTED_OUT Name=erismqpo4p LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-11-03 12:41:27.913 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavhgeypcjezxuwalx46zrtynu6jwkozxzyvsugi2aluclw4scdwqa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa3nnx36b6xknrprde2swhbuzaxr2r4crx4yk4j4szcnkvoa4ljm7a GovernanceStatus=OPTED_OUT Name=xerdc2j4ej LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-10-31 22:13:11.467 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa3nnx36b6xknrprde2swhbuzaxr2r4crx4yk4j4szcnkvoa4ljm7a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa3yyuksiwnhsphsu3ng7s3irkk674fyqaqeootmm4atgiyeyrrrja GovernanceStatus=OPTED_OUT Name=rajhindochaoci LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-10-20 14:41:18.619 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa3yyuksiwnhsphsu3ng7s3irkk674fyqaqeootmm4atgiyeyrrrja
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaee4aid5dkf2yjan3qi7gjhntvmdzsamr4ahhwx42vjpn6fa2fzmq GovernanceStatus=OPTED_OUT Name=ross275zc1 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-10-12 20:49:31.586 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaee4aid5dkf2yjan3qi7gjhntvmdzsamr4ahhwx42vjpn6fa2fzmq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaaqgpohywjxa7lk7rp6v5eeygeelwflj2mqijyiofqvnxwb645zrq GovernanceStatus=OPTED_OUT Name=barfeqsf8n LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-10-12 20:49:09.361 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaaqgpohywjxa7lk7rp6v5eeygeelwflj2mqijyiofqvnxwb645zrq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaau6qivu3yutnhyr63hvxvlekncaa3psxmdsl6rzbwelemti3fdh2q GovernanceStatus=OPTED_OUT Name=maumnor2f9 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 20:11:49.028 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaau6qivu3yutnhyr63hvxvlekncaa3psxmdsl6rzbwelemti3fdh2q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaah2whzc3i3rbolcxjbvvip6b43emzeifyzmab7wfluuc2fk6hew5a GovernanceStatus=OPTED_OUT Name=donljjom5u LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 20:12:43.681 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaah2whzc3i3rbolcxjbvvip6b43emzeifyzmab7wfluuc2fk6hew5a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaueudxkbynh5xyvngty7qh5oy6kkdrqv4vrnxyuzwhl3jzsswj64q GovernanceStatus=OPTED_OUT Name=nasretj1mk LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 19:09:46.51 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaueudxkbynh5xyvngty7qh5oy6kkdrqv4vrnxyuzwhl3jzsswj64q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaqfauix3ki2n6exwhind6kjwf7kb7btel5rhiwzqzn45dicwix6sq GovernanceStatus=OPTED_OUT Name=anik7cq3h8 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 17:49:33.563 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaqfauix3ki2n6exwhind6kjwf7kb7btel5rhiwzqzn45dicwix6sq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaku7ejnfy24wfolntxvg6kaegdb4c5d7taybked74ryucacgikyva GovernanceStatus=OPTED_OUT Name=vicsabs6ms LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-25 14:40:56.82 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaku7ejnfy24wfolntxvg6kaegdb4c5d7taybked74ryucacgikyva
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaafl7olxa7n3mjyewpto5a4o5vfo2wrokbweqs3m46qmrqq374dlja GovernanceStatus=OPTED_OUT Name=jonbngqob2 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 20:13:06.95 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaafl7olxa7n3mjyewpto5a4o5vfo2wrokbweqs3m46qmrqq374dlja
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaarntzwlxjm2yuz2bbhyj7g45mr3dr2z6e7g3nfshspyc6yo3ndtzq GovernanceStatus=OPTED_OUT Name=bribhvib3j LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-07 16:08:04.605 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaarntzwlxjm2yuz2bbhyj7g45mr3dr2z6e7g3nfshspyc6yo3ndtzq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavbvuki47aztff255vdw4qo3lvlmlwcsqvm5xzi43ko6rjlzhzkuq GovernanceStatus=OPTED_OUT Name=morcjfjgh2 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 20:12:24.745 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavbvuki47aztff255vdw4qo3lvlmlwcsqvm5xzi43ko6rjlzhzkuq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaapv5lrapycojddgne5mnvvc7u5my4qxermwpddbfl32jmjqbjc3oq GovernanceStatus=OPTED_OUT Name=manm221kx4 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-13 17:11:39.186 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaapv5lrapycojddgne5mnvvc7u5my4qxermwpddbfl32jmjqbjc3oq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalbrwjvf44xuopgwspk26wm2mdpoerwqdqkp4qq4i4feoumngqmtq GovernanceStatus=OPTED_OUT Name=cratn5kpu6 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 17:50:21.232 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalbrwjvf44xuopgwspk26wm2mdpoerwqdqkp4qq4i4feoumngqmtq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaww3hw64e3kotq6kltr62qeylyho7fd5i6m26jytixkwx5nn6vwnq GovernanceStatus=OPTED_OUT Name=stetgk5rnv LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 20:12:55.615 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaww3hw64e3kotq6kltr62qeylyho7fd5i6m26jytixkwx5nn6vwnq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaahq5s62cosorsd5q7hnymaeq6i5am4q4p2xvb2yqgtbv6jyyath3q GovernanceStatus=OPTED_OUT Name=<nil> LifecycleState=FAILED Role=CHILD TimeJoined=2023-08-30 17:49:31.506 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaahq5s62cosorsd5q7hnymaeq6i5am4q4p2xvb2yqgtbv6jyyath3q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaad7oynbrte6wfiiqt2ck6ouzpxbkejtqvikuiahks5dnas5xh3ara GovernanceStatus=OPTED_OUT Name=jasd00n4lk LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-30 17:49:20.836 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaad7oynbrte6wfiiqt2ck6ouzpxbkejtqvikuiahks5dnas5xh3ara
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaao3hjmfjib4auolonk36ipcvaib4gybhbyjnqwyuwb2mmdimbks5q GovernanceStatus=OPTED_OUT Name=harqo1yml1 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-07-05 19:08:44.251 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaao3hjmfjib4auolonk36ipcvaib4gybhbyjnqwyuwb2mmdimbks5q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxwdftzzz7qyjn2pajmw5y6s2psur7qznvzwqlwiypgrjtjnuiipq GovernanceStatus=OPTED_OUT Name=balp6c6gfb LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-16 18:24:32.98 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxwdftzzz7qyjn2pajmw5y6s2psur7qznvzwqlwiypgrjtjnuiipq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaazidlnrmxxoz5mz257ztuz7mgjtmgyvxhjlh5m7rbicfuptbw32ha GovernanceStatus=OPTED_OUT Name=matjb61g6v LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-08 19:54:32.257 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaazidlnrmxxoz5mz257ztuz7mgjtmgyvxhjlh5m7rbicfuptbw32ha
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxqkf5rq3qixun7th2uli4fmeputcevbi6o6x5howocgcpit4jfka GovernanceStatus=OPTED_OUT Name=malalwwxer LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-16 19:06:55.841 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxqkf5rq3qixun7th2uli4fmeputcevbi6o6x5howocgcpit4jfka
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaajmnvbwdvf46zfgtvevn3m4c3kcu7ubjtyht3hwc43bdt45oz3jgq GovernanceStatus=OPTED_OUT Name=aussoidqzp LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-07-05 19:08:52.133 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaajmnvbwdvf46zfgtvevn3m4c3kcu7ubjtyht3hwc43bdt45oz3jgq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaby5ghfvj3nhdsduhs6qdqoe5ptmecj6oi27lkknygc2ouitdvh2a GovernanceStatus=OPTED_OUT Name=super16teamtenancy LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-07-06 15:24:59.507 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaby5ghfvj3nhdsduhs6qdqoe5ptmecj6oi27lkknygc2ouitdvh2a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaah7bpd3cpxny6wc4woiuyvajfmvyoixzjcef6q652i7bpnbdjxcra GovernanceStatus=OPTED_OUT Name=bilwdt19s3 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-07-06 17:54:01.09 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaah7bpd3cpxny6wc4woiuyvajfmvyoixzjcef6q652i7bpnbdjxcra
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavjfyo2kyvocicrwzghrwemw4umemsot64v34p5qphrh6en7n6zja GovernanceStatus=OPTED_OUT Name=sarlko3jnp LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-14 19:32:39.486 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavjfyo2kyvocicrwzghrwemw4umemsot64v34p5qphrh6en7n6zja
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaaux3ar66y6fi6mairdlseyxsil6sa27bex6yhz4yaagm4nsj4gca GovernanceStatus=OPTED_OUT Name=sambvtzx9r LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-16 18:24:02.275 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaaux3ar66y6fi6mairdlseyxsil6sa27bex6yhz4yaagm4nsj4gca
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaty6uunqia6mntv7qgffv7pbthnhl6pfxq6qf2la2lamx6vzrmqmq GovernanceStatus=OPTED_OUT Name=bhatw92mpb LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-16 18:24:21.895 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaty6uunqia6mntv7qgffv7pbthnhl6pfxq6qf2la2lamx6vzrmqmq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaywcbeyazzg3dfdf6r2hk4drglb36z2qamv7ngv7gtcur3jkkmccq GovernanceStatus=OPTED_OUT Name=anaajd5un4 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-14 19:33:22.631 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaywcbeyazzg3dfdf6r2hk4drglb36z2qamv7ngv7gtcur3jkkmccq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaazokfn3r46pv4snuv6rei5pr3fzfns7tvw67lhlbswzzyclms34da GovernanceStatus=OPTED_OUT Name=jamkq6krcv LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-03-07 22:57:44.03 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaazokfn3r46pv4snuv6rei5pr3fzfns7tvw67lhlbswzzyclms34da
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaasuk2arhknj4yzrgsif4jb2tn6dnrfrym75si24kd3n7su6yrvijq GovernanceStatus=OPTED_OUT Name=grezgu54ks LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-03-07 22:57:33.113 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaasuk2arhknj4yzrgsif4jb2tn6dnrfrym75si24kd3n7su6yrvijq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa52snw4dete6rh62z75ahc6zmzy2jipjr4qzvmgu3rxxspqkpp3bq GovernanceStatus=OPTED_OUT Name=purupatel LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-24 01:28:59.847 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa52snw4dete6rh62z75ahc6zmzy2jipjr4qzvmgu3rxxspqkpp3bq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaacfk25l2yzn7ebafcpmobdukcgdr3frvhp6brtin65ypm7obv35cq GovernanceStatus=OPTED_OUT Name=ahmkxodb0t LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-03 22:33:03.717 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaacfk25l2yzn7ebafcpmobdukcgdr3frvhp6brtin65ypm7obv35cq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaw3oa7la5uznbqwbztlc4qdgylk4q2anbe5i7zokrttaz2w2labpa GovernanceStatus=OPTED_OUT Name=jonkxwcxvb LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-24 22:35:50.535 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaw3oa7la5uznbqwbztlc4qdgylk4q2anbe5i7zokrttaz2w2labpa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaao5kdzklod2dckbn2zrkncvnufq3n7aeqxkn6viusgu5dwrcqnxnq GovernanceStatus=OPTED_OUT Name=sakgqx91iu LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-24 01:28:52.634 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaao5kdzklod2dckbn2zrkncvnufq3n7aeqxkn6viusgu5dwrcqnxnq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaain6jbzivc2gov6wqsmdbimszk5ux2bhbepnqkwthszvi3y7ueftq GovernanceStatus=OPTED_OUT Name=awaisi LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-24 22:35:39.461 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaain6jbzivc2gov6wqsmdbimszk5ux2bhbepnqkwthszvi3y7ueftq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaabnbj6zxqmd2dgswllcyeve3kkiusz3nj3vbomefa5xnwj6zyptwq GovernanceStatus=OPTED_OUT Name=rajr62u45l LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-24 19:35:13.682 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaabnbj6zxqmd2dgswllcyeve3kkiusz3nj3vbomefa5xnwj6zyptwq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaatb2jqcxaznde324iezxqdiozcfh5qpynw6qxwq3yhzqdreaajsqq GovernanceStatus=OPTED_OUT Name=mckhbosakg LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-03 18:21:25.371 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaatb2jqcxaznde324iezxqdiozcfh5qpynw6qxwq3yhzqdreaajsqq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaooskvejxniepgz4rneffv2oeoorybrf4jjb226hia5lurrwqc6da GovernanceStatus=OPTED_OUT Name=samfhbhu3n LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-05 15:41:47.449 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaooskvejxniepgz4rneffv2oeoorybrf4jjb226hia5lurrwqc6da
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavk2dmtsgavxbekt7cgbkplabzm7mfdcanrjtcuw76qyeeqgjp3xq GovernanceStatus=OPTED_OUT Name=nattlt1opp LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-03-07 22:57:24.943 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavk2dmtsgavxbekt7cgbkplabzm7mfdcanrjtcuw76qyeeqgjp3xq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa6llsor5h4mbc6dohmct5gj437bvq6nmefdeobpiqqgk4vfmxdmlq GovernanceStatus=OPTED_OUT Name=natmani LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-24 22:36:01.765 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa6llsor5h4mbc6dohmct5gj437bvq6nmefdeobpiqqgk4vfmxdmlq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaglvmdaov6fd4zvpjmvyb6thjbd52yoiyvwjru6rk4rkyy6sdtykq GovernanceStatus=OPTED_OUT Name=nattqewruk LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-24 18:02:05.164 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaglvmdaov6fd4zvpjmvyb6thjbd52yoiyvwjru6rk4rkyy6sdtykq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaach2q4fnpfi5vi55z4uqhkoyvgihxztlqrym4ms5obv6eaej7by6q GovernanceStatus=OPTED_OUT Name=arim5yy5c1 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-24 20:00:52.903 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaach2q4fnpfi5vi55z4uqhkoyvgihxztlqrym4ms5obv6eaej7by6q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaahwypqv6l4zjy2drh4mpnivfrp4kjswbcjayw7tvopmewizrse4vq GovernanceStatus=OPTED_OUT Name=sanr1wa6pc LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-24 22:35:18.045 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaahwypqv6l4zjy2drh4mpnivfrp4kjswbcjayw7tvopmewizrse4vq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaajebm4hrsrc6za6jyuvnjhuw6vxe72aossu5vrnrhbl2sy2qbr5jq GovernanceStatus=OPTED_OUT Name=josmanualtest LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-28 14:04:37.946 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaajebm4hrsrc6za6jyuvnjhuw6vxe72aossu5vrnrhbl2sy2qbr5jq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaid3de2zpnds7g2xr7jjwlriuqfwhdmt5orzzgohukbnits5hh2xq GovernanceStatus=OPTED_OUT Name=dalagjyy23 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-03 18:42:09.781 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaid3de2zpnds7g2xr7jjwlriuqfwhdmt5orzzgohukbnits5hh2xq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaej5xxchpf3zxkorljvwfc6um7vrsfabzg6m2zzzzdmn2py5efhmq GovernanceStatus=OPTED_OUT Name=bilz3uwepl LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-20 19:51:12.585 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaej5xxchpf3zxkorljvwfc6um7vrsfabzg6m2zzzzdmn2py5efhmq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaedy3f3phcixpcjkczg4cupxe6duxddjgkm7q4jolrbuqcpu7cw7a GovernanceStatus=OPTED_OUT Name=adnu35wjkb LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-09 21:35:27.988 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaedy3f3phcixpcjkczg4cupxe6duxddjgkm7q4jolrbuqcpu7cw7a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaado2rblzamqvck4bqlhu7alyuekmed424emq5vj6gkqyfca7322pq GovernanceStatus=OPTED_OUT Name=andc01dsmr LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-13 16:40:38.123 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaado2rblzamqvck4bqlhu7alyuekmed424emq5vj6gkqyfca7322pq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa23ofsjb6kbcdybn3wd26ztr6n7rxvpu7q37mzrs3dfupazuxlvaa GovernanceStatus=OPTED_OUT Name=rohror82ad LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-28 21:00:45.189 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa23ofsjb6kbcdybn3wd26ztr6n7rxvpu7q37mzrs3dfupazuxlvaa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa5trur7whdyytam4nmh3tinrx2yfqnbss6yzz4q6i7gmm2leagnkq GovernanceStatus=OPTED_OUT Name=grantf LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-03 18:21:14.24 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa5trur7whdyytam4nmh3tinrx2yfqnbss6yzz4q6i7gmm2leagnkq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaafz2c6hugddeatgqgaezh3h337eunnkms4gcbqzxj3a5q7i4bnsrq GovernanceStatus=OPTED_OUT Name=jossifl6fl LifecycleState=DELETING Role=CHILD TimeJoined=2022-12-20 19:28:30.61 +0000 UTC TimeLeft=2022-12-20 19:28:30.61 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaafz2c6hugddeatgqgaezh3h337eunnkms4gcbqzxj3a5q7i4bnsrq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa2idurkuedysbfzxktzjtpnv3k54c7ftnovpmqkpgchdl2vev4rta GovernanceStatus=OPTED_OUT Name=jossur4n01 LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-20 19:28:09.254 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa2idurkuedysbfzxktzjtpnv3k54c7ftnovpmqkpgchdl2vev4rta
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa5fztczssmrqefl473l5t3glob3p6otfxdfte2d6frofewlnzzeya GovernanceStatus=OPTED_OUT Name=mikfm9pn80 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-05 15:42:14.951 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa5fztczssmrqefl473l5t3glob3p6otfxdfte2d6frofewlnzzeya
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaf5xadyuqcsqahuoiauxvvtvm64n4whbpz53gjrdy7acrpeu5akja GovernanceStatus=OPTED_OUT Name=rohr04sxn3 LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-20 20:26:44.318 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaf5xadyuqcsqahuoiauxvvtvm64n4whbpz53gjrdy7acrpeu5akja
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaap7sxbjfypawnwytmtv2vanmzdktldp2oqz3i7h4ae3tj3lkmkivq GovernanceStatus=OPTED_OUT Name=jamhayp2kg LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-03 22:10:18.294 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaap7sxbjfypawnwytmtv2vanmzdktldp2oqz3i7h4ae3tj3lkmkivq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxlnybgqayx7qkt4cuwosfi7cceenugnjgnelqehxgm56hhhmmm2q GovernanceStatus=OPTED_OUT Name=mikfwi63vb LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-22 18:21:09.388 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxlnybgqayx7qkt4cuwosfi7cceenugnjgnelqehxgm56hhhmmm2q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaag4bxhplycp7tjbcbu3ynizd4vq77mfxlfshquu36rziqyasooamq GovernanceStatus=OPTED_OUT Name=joalzd2f97 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-28 13:18:30.822 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaag4bxhplycp7tjbcbu3ynizd4vq77mfxlfshquu36rziqyasooamq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaifplmln563scofwisfcqcqsuqyvqc5is2k7ia35227hpudxmxwgq GovernanceStatus=OPTED_OUT Name=micpfugspm LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-11 21:43:54.895 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaifplmln563scofwisfcqcqsuqyvqc5is2k7ia35227hpudxmxwgq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa6uznwqdmm7squgidxgxbwuxbx7cfd63zz36unp46ugw3num5djoa GovernanceStatus=OPTED_OUT Name=balmtl543n LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-28 13:17:50.254 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa6uznwqdmm7squgidxgxbwuxbx7cfd63zz36unp46ugw3num5djoa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaafm5jwu232a7egb2zjreizaay5xfkklkog7itwp74t5kujw2qsvga GovernanceStatus=OPTED_OUT Name=jefrn00abm LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-23 16:09:59.899 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaafm5jwu232a7egb2zjreizaay5xfkklkog7itwp74t5kujw2qsvga
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaai3fmxq55qpeajit62xlge45i7dp3ehpawo4ttts6lbzozk7wmiwa GovernanceStatus=OPTED_OUT Name=jarrrdvpwi LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-27 19:55:41.126 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaai3fmxq55qpeajit62xlge45i7dp3ehpawo4ttts6lbzozk7wmiwa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaawkmfowzclwrgxkz6juql6363rbwzwhnbbfn5lg4sauy4w3w37mjq GovernanceStatus=OPTED_OUT Name=yansu9jhrt LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-03-07 15:16:23.208 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaawkmfowzclwrgxkz6juql6363rbwzwhnbbfn5lg4sauy4w3w37mjq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaarvh72433yf4ulx25252dmw4qhbpwprrt7vlsr436hdfhooqbpbja GovernanceStatus=OPTED_OUT Name=marcarujcy LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:00:06.229 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaarvh72433yf4ulx25252dmw4qhbpwprrt7vlsr436hdfhooqbpbja
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaajp5x4ntkym2p72mlcr56y3qdpgnnzgawf3l4yupjutmkzdvxhvcq GovernanceStatus=OPTED_OUT Name=rajd6czqi6 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-03-07 15:16:11.979 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaajp5x4ntkym2p72mlcr56y3qdpgnnzgawf3l4yupjutmkzdvxhvcq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaagkj7ciqlsrq2behd3klos6rkfgvlbzi6uiszazzmqgfhpqmhh7vq GovernanceStatus=OPTED_OUT Name=joaei0uvjn LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 21:58:15.506 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaagkj7ciqlsrq2behd3klos6rkfgvlbzi6uiszazzmqgfhpqmhh7vq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaadsj6onnrtewdxfwknmwkl2ndxfeikv7owj473kvkc7l46jqiiama GovernanceStatus=OPTED_OUT Name=grezirubgq LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 21:59:43.76 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaadsj6onnrtewdxfwknmwkl2ndxfeikv7owj473kvkc7l46jqiiama
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaano6nxfbionrmgqasvxmjk5zjqwd6rjh7iyhpibrbeh5rpoghwxrq GovernanceStatus=OPTED_OUT Name=dangszq8s4 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-27 19:55:33.166 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaano6nxfbionrmgqasvxmjk5zjqwd6rjh7iyhpibrbeh5rpoghwxrq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaados6hvdvwonyllg3uvfdapjk7nuspugc2tvrc2phrtykf4vc5wuq GovernanceStatus=OPTED_OUT Name=lizmcamjhd LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:17:21.726 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaados6hvdvwonyllg3uvfdapjk7nuspugc2tvrc2phrtykf4vc5wuq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaajgrkx2kyzxvaonw2xoletbtiff6euh7ucgflmjyjawgrq477edgq GovernanceStatus=OPTED_OUT Name=larsl9f18x LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 21:49:05.347 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaajgrkx2kyzxvaonw2xoletbtiff6euh7ucgflmjyjawgrq477edgq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaarsbfwf7pxvw4756mebkg6rr55tmtcj3rd2w4cdjya72kfndbmvrq GovernanceStatus=OPTED_OUT Name=brad9sd2hu LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-23 14:16:38.889 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaarsbfwf7pxvw4756mebkg6rr55tmtcj3rd2w4cdjya72kfndbmvrq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavbmhu3oeucnkzu6qhw2iwf4gvqvqzclhlcuvbwurzeoc3lnn5geq GovernanceStatus=OPTED_OUT Name=stieferman LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 23:39:43.082 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavbmhu3oeucnkzu6qhw2iwf4gvqvqzclhlcuvbwurzeoc3lnn5geq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa5kp7y2ba6eitvwu4y5v6cc4do6ceajwfku6ktvhbapdeehmdvlca GovernanceStatus=OPTED_OUT Name=lanmkm8ul5 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-31 20:46:59.95 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa5kp7y2ba6eitvwu4y5v6cc4do6ceajwfku6ktvhbapdeehmdvlca
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaat76yynzzef72qcqibten2fkn5ysto6x26yh5jr3kqvlgbt7qtjdq GovernanceStatus=OPTED_OUT Name=elscladvjw LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 21:59:54.388 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaat76yynzzef72qcqibten2fkn5ysto6x26yh5jr3kqvlgbt7qtjdq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaiko6mgcfdp43tk2nxn6tw5dvk22cdegryjvb22xenkurmey3sa3a GovernanceStatus=OPTED_OUT Name=jamk80r6p1 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 21:59:33.2 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaiko6mgcfdp43tk2nxn6tw5dvk22cdegryjvb22xenkurmey3sa3a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaakv6drijdfuqihm2pixtwswzim6sx3wo36u4ahvzdzylvykvmgbxq GovernanceStatus=OPTED_OUT Name=matjnf0nmb LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 21:59:57.64 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaakv6drijdfuqihm2pixtwswzim6sx3wo36u4ahvzdzylvykvmgbxq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaabus4ymw5g52fn4waqqkrlvxqtwqbfyxzmvbjunvrupneqksgnhza GovernanceStatus=OPTED_OUT Name=ashbli1nn2 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:11:42.312 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaabus4ymw5g52fn4waqqkrlvxqtwqbfyxzmvbjunvrupneqksgnhza
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaftkb7zrofqb5wajekaptrpvbpmwgv3nc5rvqjughmtoqdzn6bqsa GovernanceStatus=OPTED_OUT Name=frajx0nivr LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-27 18:59:47.368 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaftkb7zrofqb5wajekaptrpvbpmwgv3nc5rvqjughmtoqdzn6bqsa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalzhnx6qvceej4nhmazg6uaqenasxw5v2gnz4dzmmanmj4xkcmkdq GovernanceStatus=OPTED_OUT Name=rohnt3fmnr LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 18:38:14.988 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalzhnx6qvceej4nhmazg6uaqenasxw5v2gnz4dzmmanmj4xkcmkdq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaafkclzqe5jxf6xmsxyqc4bgi4ffcbuj6s2gic6brrabyuzltnme5a GovernanceStatus=OPTED_OUT Name=jamh20qoae LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-03 13:10:39.664 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaafkclzqe5jxf6xmsxyqc4bgi4ffcbuj6s2gic6brrabyuzltnme5a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaanya3r6qaihcycarjjvl4r2uo3zpjsgsc655ck3dysrhbqywfxcsq GovernanceStatus=OPTED_OUT Name=nans4jbunl LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 22:23:13.469 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaanya3r6qaihcycarjjvl4r2uo3zpjsgsc655ck3dysrhbqywfxcsq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaapmvujbxgrubvd32hqh6ezyiuvo4etiucbe4kojgpnbmqlsb4wkna GovernanceStatus=OPTED_OUT Name=babsr5coet LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-31 20:47:06.016 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaapmvujbxgrubvd32hqh6ezyiuvo4etiucbe4kojgpnbmqlsb4wkna
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaadyifrkh6oykn5v6izcwa36axss5z44rf53nifmdcudgiydi2kjzq GovernanceStatus=OPTED_OUT Name=parkd5wnyf LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 18:22:04.014 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaadyifrkh6oykn5v6izcwa36axss5z44rf53nifmdcudgiydi2kjzq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa2ecl7bk2bsowuwvomdgvpdz5oe74y62cuqjupdg2fh3yfyp6tira GovernanceStatus=OPTED_OUT Name=lanmxqr3di LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-23 20:21:18.035 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa2ecl7bk2bsowuwvomdgvpdz5oe74y62cuqjupdg2fh3yfyp6tira
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxqx2hnqkmhs7xfyauoldstr667mxnxtok7ahsma74e67n6sqew2a GovernanceStatus=OPTED_OUT Name=jtsjtsjtsjtsjts LifecycleState=DELETING Role=CHILD TimeJoined=2022-10-05 17:13:05.722 +0000 UTC TimeLeft=2022-10-05 17:13:05.722 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxqx2hnqkmhs7xfyauoldstr667mxnxtok7ahsma74e67n6sqew2a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxnd3idwbyptgnfs2uewai7is6fqjfk2gc7k6jbzwhwrsquzhmffq GovernanceStatus=OPTED_OUT Name=lanm1qryr5 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-31 20:46:49.346 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxnd3idwbyptgnfs2uewai7is6fqjfk2gc7k6jbzwhwrsquzhmffq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaamagwlwijzdqiawqh5xx26klxwxgpevrt6gddzivksbbndekqhcva GovernanceStatus=OPTED_OUT Name=balkpeu5i0 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-29 21:09:48.836 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaamagwlwijzdqiawqh5xx26klxwxgpevrt6gddzivksbbndekqhcva
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaipddnmv3yksb427k2yws6d2pddcr57pie4u4lzpxy6a2tca4tksa GovernanceStatus=OPTED_OUT Name=ster2m9cze LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-18 19:16:36.044 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaipddnmv3yksb427k2yws6d2pddcr57pie4u4lzpxy6a2tca4tksa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaajc62vqgjvkcezym3pmlpzdi7lvprfhsjjudp6nwhggs4bixj3lmq GovernanceStatus=OPTED_OUT Name=joeydominski1996 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 18:32:58.707 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaajc62vqgjvkcezym3pmlpzdi7lvprfhsjjudp6nwhggs4bixj3lmq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa2hc5psixzlmagwh4y34gmxokzovtwggi5rzvr2opcroc4etpjyjq GovernanceStatus=OPTED_OUT Name=susp5uoble LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 18:21:46.824 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa2hc5psixzlmagwh4y34gmxokzovtwggi5rzvr2opcroc4etpjyjq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaamx2ednwpi6klk4lqno6nb4dalnpomzc5imco7zj7cby73fopouqq GovernanceStatus=OPTED_OUT Name=allr2fnfx6 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 18:21:35.828 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaamx2ednwpi6klk4lqno6nb4dalnpomzc5imco7zj7cby73fopouqq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaayosscmqfqouxlzearfweuapxzwrwmf5aeaviac2n3he3kpls5lwa GovernanceStatus=OPTED_OUT Name=mahazq16l9 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 20:18:18.162 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaayosscmqfqouxlzearfweuapxzwrwmf5aeaviac2n3he3kpls5lwa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa6voi4xcz3z3prerlvgnnuo2tasrp2mxzcsjycetokolxi5wbylma GovernanceStatus=OPTED_OUT Name=fawe37lrx0 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:25:44.788 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa6voi4xcz3z3prerlvgnnuo2tasrp2mxzcsjycetokolxi5wbylma
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaanglxy5otqq2d2xcdysqlzq25p5o5nke2sf4gcawizbhffgafdl7a GovernanceStatus=OPTED_OUT Name=rkalrachildtenant1 LifecycleState=DELETING Role=CHILD TimeJoined=2022-08-17 16:09:48.432 +0000 UTC TimeLeft=2022-08-17 16:09:48.432 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaanglxy5otqq2d2xcdysqlzq25p5o5nke2sf4gcawizbhffgafdl7a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaabad5rpljtbfeoqnmk3jaw6rg4xc45yjv4i37q3so67mg3csd7ifq GovernanceStatus=OPTED_OUT Name=tcatest02 LifecycleState=DELETING Role=CHILD TimeJoined=2022-09-27 21:56:11.362 +0000 UTC TimeLeft=2022-09-27 21:56:11.362 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaabad5rpljtbfeoqnmk3jaw6rg4xc45yjv4i37q3so67mg3csd7ifq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa23zzi6dje4if72cmnsw4qg6csqjw7bdqsqgnokt6rztomc2mh2fq GovernanceStatus=OPTED_OUT Name=rohrhur0do LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-20 18:11:14.128 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa23zzi6dje4if72cmnsw4qg6csqjw7bdqsqgnokt6rztomc2mh2fq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaretnkm3vfwn6qqdx5xl6az6jphzk2hjkotw2urlru3ve564a3ppq GovernanceStatus=OPTED_OUT Name=pracfv208k LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-17 21:39:04.691 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaretnkm3vfwn6qqdx5xl6az6jphzk2hjkotw2urlru3ve564a3ppq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaapa2nc25dtusl45nyxazkytywppaocyq7tbom2kbqnzp6uhv2nsfq GovernanceStatus=OPTED_OUT Name=matgz6wure LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-06 21:57:21.226 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaapa2nc25dtusl45nyxazkytywppaocyq7tbom2kbqnzp6uhv2nsfq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaacaeo7v6n57yultqc4rjweovmjcmsg32bvwrkhz737f7h4gqjcaha GovernanceStatus=OPTED_OUT Name=<nil> LifecycleState=FAILED Role=CHILD TimeJoined=2023-02-02 23:39:48.136 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaacaeo7v6n57yultqc4rjweovmjcmsg32bvwrkhz737f7h4gqjcaha
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa2w7kpatcryftgmby7rktfs4fxpqc6brzc7mnnd5qqz3sa47r4c4q GovernanceStatus=OPTED_OUT Name=danelejay3 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 23:40:00.708 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa2w7kpatcryftgmby7rktfs4fxpqc6brzc7mnnd5qqz3sa47r4c4q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalruzh2zalr4xrolhibsoyocqnkxkl2kcu5gb6zocwilqiisq6gra GovernanceStatus=OPTED_OUT Name=jossme32sd LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-20 16:51:04.983 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalruzh2zalr4xrolhibsoyocqnkxkl2kcu5gb6zocwilqiisq6gra
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaasoe7bkyf2nq5r6hg7ofvmn7fstndyc3iw4qzachhmy6wujbqsvma GovernanceStatus=OPTED_OUT Name=canescup2024 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-02 18:33:22.068 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaasoe7bkyf2nq5r6hg7ofvmn7fstndyc3iw4qzachhmy6wujbqsvma
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa6bqbk23yh4m74dqutp6uqeozxwx6m37cmuwkzwwpo6dvyybulb3a GovernanceStatus=OPTED_OUT Name=jossauplhb LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-31 20:44:35.501 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa6bqbk23yh4m74dqutp6uqeozxwx6m37cmuwkzwwpo6dvyybulb3a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxfmoqrtw53dp6r7hvknnwfv25rp2qs4ldp6ctkfntxci4efziova GovernanceStatus=OPTED_OUT Name=rohrncmm9o LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-20 18:39:35.114 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxfmoqrtw53dp6r7hvknnwfv25rp2qs4ldp6ctkfntxci4efziova
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaag7mwovb555dn6e4zdcsdvjah6tu6p3jm6m7phbhdb2ajidtgnupa GovernanceStatus=OPTED_OUT Name=jphchild11 LifecycleState=DELETING Role=CHILD TimeJoined=2022-09-28 17:48:21.26 +0000 UTC TimeLeft=2022-09-28 17:48:21.26 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaag7mwovb555dn6e4zdcsdvjah6tu6p3jm6m7phbhdb2ajidtgnupa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaasb3bryf77swfrsjmznj3e7bmypm6twy762vykv2erfkdkjxcxo4a GovernanceStatus=OPTED_OUT Name=serg821nfi LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-14 17:10:45.286 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaasb3bryf77swfrsjmznj3e7bmypm6twy762vykv2erfkdkjxcxo4a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaacdxtmf5q2fy7b4okroisf2xgab2qh6keuytui6tu2vyyuznjp4hq GovernanceStatus=OPTED_OUT Name=moefwcz6ca LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-20 17:37:19.959 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaacdxtmf5q2fy7b4okroisf2xgab2qh6keuytui6tu2vyyuznjp4hq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaal7fzd2sfc2v3hcbyll3adwfnpqydqycsehiwcdyrabhjdlawne5q GovernanceStatus=OPTED_OUT Name=mayk9455rj LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-02 14:31:56.503 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaal7fzd2sfc2v3hcbyll3adwfnpqydqycsehiwcdyrabhjdlawne5q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaczfri3y64x2oypi4yalgghakuxnv7tj6tei5k6qeywzxbqgxfiha GovernanceStatus=OPTED_OUT Name=ahnewchild LifecycleState=DELETING Role=CHILD TimeJoined=2022-09-28 17:38:16.836 +0000 UTC TimeLeft=2022-09-28 17:38:16.836 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaczfri3y64x2oypi4yalgghakuxnv7tj6tei5k6qeywzxbqgxfiha
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaauilvosgt2ptver4qwb7v44mvykckno4t35nfeirszxvtkzqbhudq GovernanceStatus=OPTED_OUT Name=sergqfeijo LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-20 18:22:35.534 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaauilvosgt2ptver4qwb7v44mvykckno4t35nfeirszxvtkzqbhudq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaakqoxfoq7y3xwvv6qgqg2dlt46ujjpzq4bflqwx6lnrg4nxpwpnfa GovernanceStatus=OPTED_OUT Name=srimlon9ba LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-10 17:31:35.981 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaakqoxfoq7y3xwvv6qgqg2dlt46ujjpzq4bflqwx6lnrg4nxpwpnfa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa7etbjfk3azu7wwlzrfr672qvffftan5xgrefb6whlzfpmuadinzq GovernanceStatus=OPTED_OUT Name=orasenatdecanat LifecycleState=DELETING Role=CHILD TimeJoined=2022-09-28 16:15:33.654 +0000 UTC TimeLeft=2022-09-28 16:15:33.654 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa7etbjfk3azu7wwlzrfr672qvffftan5xgrefb6whlzfpmuadinzq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaayvjhzp2bwj7xwlcqzty2leooejocx6syrkrziy4m33worzx27k6q GovernanceStatus=OPTED_OUT Name=serg5qbzxg LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-14 17:22:57.644 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaayvjhzp2bwj7xwlcqzty2leooejocx6syrkrziy4m33worzx27k6q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaazy4l3dfska6gm45rz4hfsjnqydpvqbxyiu6m4l4gqduwgo4gvrha GovernanceStatus=OPTED_OUT Name=liocg196re LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-01-18 18:06:32.156 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaazy4l3dfska6gm45rz4hfsjnqydpvqbxyiu6m4l4gqduwgo4gvrha
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaasmmdxo2cf66fpvqw3fr2la65fjy5ghespeh6xt6io4cbz7ol6xma GovernanceStatus=OPTED_OUT Name=myct2 LifecycleState=DELETING Role=CHILD TimeJoined=2022-10-05 17:24:44.062 +0000 UTC TimeLeft=2022-10-05 17:24:44.062 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaasmmdxo2cf66fpvqw3fr2la65fjy5ghespeh6xt6io4cbz7ol6xma
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa23t4vjiuvrs2j4gvcxo7fvhvkzxafptv3gjxzjhvxnpeimuonhcq GovernanceStatus=OPTED_OUT Name=hoyk3215k4 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:26:02.392 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa23t4vjiuvrs2j4gvcxo7fvhvkzxafptv3gjxzjhvxnpeimuonhcq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaadaj3sil3qguslqfv772cjgtlxycj6ch4d6beyxyl6e3j4hueij6a GovernanceStatus=OPTED_OUT Name=yaslsg9yrn LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-12-23 19:43:17.355 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaadaj3sil3qguslqfv772cjgtlxycj6ch4d6beyxyl6e3j4hueij6a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaz456svgmjl6csmpugcs4lmxvwfn3eybuwdwu7cdzlpdazxd5x4aq GovernanceStatus=OPTED_OUT Name=<nil> LifecycleState=FAILED Role=CHILD TimeJoined=2022-10-28 15:39:37.711 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaz456svgmjl6csmpugcs4lmxvwfn3eybuwdwu7cdzlpdazxd5x4aq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaao7erusqr5hcksvod4fwcixyn4gzgax54mmzw23vpppu6eeihrbva GovernanceStatus=OPTED_OUT Name=gervgiyn2m LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:26:41.947 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaao7erusqr5hcksvod4fwcixyn4gzgax54mmzw23vpppu6eeihrbva
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaecbpf2xmwdsipmuljcfypulodxi5bbp6bwfwpfvpahslhzr62eqa GovernanceStatus=OPTED_OUT Name=haysy0i8rr LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:26:22.969 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaecbpf2xmwdsipmuljcfypulodxi5bbp6bwfwpfvpahslhzr62eqa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa75soyp3imew5nrp7dbhqthmvuepf5pvm3iwh4ihxryxlz5svtdua GovernanceStatus=OPTED_OUT Name=anncmo6hxk LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:26:12.341 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa75soyp3imew5nrp7dbhqthmvuepf5pvm3iwh4ihxryxlz5svtdua
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaqc6dxv7xrv3yf42ixvid44pywtkb3vbxqezkmb4krcwc67ospjfq GovernanceStatus=OPTED_OUT Name=tomarkelcc LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-10-28 15:39:25.511 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaqc6dxv7xrv3yf42ixvid44pywtkb3vbxqezkmb4krcwc67ospjfq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaejs73rhuhjxoczi3udki7ejxczu7rpalikas4wd5ucezklhhgafq GovernanceStatus=OPTED_OUT Name=childjph55 LifecycleState=FAILED Role=CHILD TimeJoined=2022-09-26 19:00:43.798 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaejs73rhuhjxoczi3udki7ejxczu7rpalikas4wd5ucezklhhgafq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxl44vhibndngorr73dolopvepqw7y7gd666uhb22b7yexwoa33ra GovernanceStatus=OPTED_OUT Name=davo8nfvrq LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:26:24.986 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxl44vhibndngorr73dolopvepqw7y7gd666uhb22b7yexwoa33ra
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaatohejtepxrgkt34byeod3hx4x2vzqjpduflacny7c3szzvcqgeyq GovernanceStatus=OPTED_OUT Name=ahplayground LifecycleState=FAILED Role=CHILD TimeJoined=2022-09-26 18:50:56.722 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaatohejtepxrgkt34byeod3hx4x2vzqjpduflacny7c3szzvcqgeyq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa7b4bl7npfkqymc4b7jbkcc4aj77nlf76d4psg5c4bjltjq23t3vq GovernanceStatus=OPTED_OUT Name=national02sai LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-09-22 18:30:03.441 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa7b4bl7npfkqymc4b7jbkcc4aj77nlf76d4psg5c4bjltjq23t3vq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaq32rlbywtibg5iegdf6acy7c4ctdfdgvahi3v7clry6wnheg5ewq GovernanceStatus=OPTED_OUT Name=childraj001 LifecycleState=FAILED Role=CHILD TimeJoined=2022-09-26 18:41:55.305 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaq32rlbywtibg5iegdf6acy7c4ctdfdgvahi3v7clry6wnheg5ewq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa5rrvi74uwuowafizfrtnsru4n5u2jmpcrozyv5ovo4nia4hvrleq GovernanceStatus=OPTED_OUT Name=tcatest01 LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-09-14 17:16:34.253 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa5rrvi74uwuowafizfrtnsru4n5u2jmpcrozyv5ovo4nia4hvrleq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaagbkgfez62ceibp5d6ixod46uenjtzs6jhd3urmpmilnvri56mmhq GovernanceStatus=OPTED_OUT Name=nat02testranv0809 LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-09-08 18:38:37.176 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaagbkgfez62ceibp5d6ixod46uenjtzs6jhd3urmpmilnvri56mmhq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa45t6zd6vxizf6k4cywmylxcpg4lzhsnkj6tuhwg4ycjwwr6hsi6a GovernanceStatus=OPTED_OUT Name=sulm9ioe3j LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 23:55:02.41 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa45t6zd6vxizf6k4cywmylxcpg4lzhsnkj6tuhwg4ycjwwr6hsi6a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa6rfl5ex26j4ioxgkbytzfyfspyx4h6ls45mzazwn2abtw7jvfznq GovernanceStatus=OPTED_OUT Name=testranvijay129 LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-09-12 18:13:56.592 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa6rfl5ex26j4ioxgkbytzfyfspyx4h6ls45mzazwn2abtw7jvfznq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaoklncict4trpdusihhiduvkb6ghtfz6gfo5j6oceumqtlhgbedtq GovernanceStatus=OPTED_OUT Name=childtenant1 LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-08-17 14:02:43.14 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaoklncict4trpdusihhiduvkb6ghtfz6gfo5j6oceumqtlhgbedtq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaani237s6kbu5432hcljpuzoidlbnfnyoioi6hocc6yyoyl2czfdfa GovernanceStatus=OPTED_OUT Name=stesmjd0xc LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-11-27 15:20:52.119 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaani237s6kbu5432hcljpuzoidlbnfnyoioi6hocc6yyoyl2czfdfa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaaqxcb4bgiuvxl3aj2fecxbo4whpa4wsvc7svphgkwlecnhfmkama GovernanceStatus=OPTED_OUT Name=ryacc4l9b3 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-04-19 21:01:46.776 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaaqxcb4bgiuvxl3aj2fecxbo4whpa4wsvc7svphgkwlecnhfmkama
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaam7yenklg757ecxi66zyskwmebr55fdsg7byzfdnx4u76hfurepdq GovernanceStatus=OPTED_OUT Name=<nil> LifecycleState=FAILED Role=CHILD TimeJoined=2023-09-15 20:42:12.007 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaam7yenklg757ecxi66zyskwmebr55fdsg7byzfdnx4u76hfurepdq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaasqcnxbte4iyt3etjmnucgabzvh2u7a2frulaat3vep3bt4znqpoa GovernanceStatus=OPTED_OUT Name=mihc1rwlv0 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-15 20:42:08.628 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaasqcnxbte4iyt3etjmnucgabzvh2u7a2frulaat3vep3bt4znqpoa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaawqa3mjpjbuzfnx6k2trwobg6k2uq55zgnpmy5eicl3ywtcire5jq GovernanceStatus=OPTED_OUT Name=jacksinclairisv LifecycleState=ACTIVE Role=CHILD TimeJoined=2022-10-10 19:17:48.458 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaawqa3mjpjbuzfnx6k2trwobg6k2uq55zgnpmy5eicl3ywtcire5jq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaazvwxkafidkrx7cl6o6fmtkhqfnzg2c2vklo77g237wa2xvv75ohq GovernanceStatus=OPTED_IN Name=tomarkelkaltura LifecycleState=DELETING Role=CHILD TimeJoined=2022-10-10 18:58:33.372 +0000 UTC TimeLeft=2022-10-10 18:58:33.372 +0000 UTC IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaazvwxkafidkrx7cl6o6fmtkhqfnzg2c2vklo77g237wa2xvv75ohq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaan4abhk3lvfiaio5suaimgvsrfx3llahodgelqphml75qgoxs6bq GovernanceStatus=OPTED_OUT Name=josst9mm81 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-02 13:16:02.373 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaan4abhk3lvfiaio5suaimgvsrfx3llahodgelqphml75qgoxs6bq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaao5tzcf56h4xmmlmgz4mzlt2fw366v2dcvbonemlkzp5ezessseha GovernanceStatus=OPTED_OUT Name=gaua2kb3mn LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-07-19 14:23:25.165 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaao5tzcf56h4xmmlmgz4mzlt2fw366v2dcvbonemlkzp5ezessseha
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaay43fzncnkz6aasiaab5mawxpebgpz6ht2picrts3pjmpflykhd3q GovernanceStatus=OPTED_OUT Name=kevmipi0rr LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-04 17:12:24.421 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaay43fzncnkz6aasiaab5mawxpebgpz6ht2picrts3pjmpflykhd3q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaag45vdfn4js4vt7xznealw4cc52ga5urrfeea7o4k6xdyklhnlzxq GovernanceStatus=OPTED_OUT Name=vicswx2olw LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-04 17:11:22.802 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaag45vdfn4js4vt7xznealw4cc52ga5urrfeea7o4k6xdyklhnlzxq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaak6tdbfgdyjs2tvlblbfgs622bm5vld2npbwuxvdd7typ6opwfwoa GovernanceStatus=OPTED_OUT Name=moef5y7ed2 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-04 17:49:19.802 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaak6tdbfgdyjs2tvlblbfgs622bm5vld2npbwuxvdd7typ6opwfwoa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaanowiu3n6dcysc22wlzkmhjwbjjlxs67pppx7ooivufinoltnh44q GovernanceStatus=OPTED_OUT Name=robb55got7 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-02 13:15:40.073 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaanowiu3n6dcysc22wlzkmhjwbjjlxs67pppx7ooivufinoltnh44q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaayinnzrzscp3m4okd4bm3fjz74wxpyykah2ldn4e5rpjdgyv4c6ua GovernanceStatus=OPTED_OUT Name=zack32p3s1 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-10-27 20:29:29.997 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaayinnzrzscp3m4okd4bm3fjz74wxpyykah2ldn4e5rpjdgyv4c6ua
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa2op3xozedoxyhgz5afzurfmhhjby5t47gg55nvtpu2hk6wwr7dwa GovernanceStatus=OPTED_OUT Name=seacep13ji LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-09 16:02:37.616 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa2op3xozedoxyhgz5afzurfmhhjby5t47gg55nvtpu2hk6wwr7dwa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa74kuojlihjsrvki42sv2rrmnxsjguxp7aksiojorungtb3klqm7q GovernanceStatus=OPTED_OUT Name=jossx7nkrh LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-02 13:16:24.917 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa74kuojlihjsrvki42sv2rrmnxsjguxp7aksiojorungtb3klqm7q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaj5nq6ee3xe6tl35wcgsrhr3wvjygxcacflnhbv2e7yigrsgv3lbq GovernanceStatus=OPTED_OUT Name=altdhq20y3 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-08 15:41:05.943 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaj5nq6ee3xe6tl35wcgsrhr3wvjygxcacflnhbv2e7yigrsgv3lbq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaab3y4vrbtibdwqhruixqdghktjm75dlgluyo4emf66ixe25cwrjya GovernanceStatus=OPTED_OUT Name=vics4jdnne LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-09 16:02:26.806 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaab3y4vrbtibdwqhruixqdghktjm75dlgluyo4emf66ixe25cwrjya
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaadlhjd46gkxqnthzyzljlktexigigkdzwfs4pkonqbpjshhjpilcq GovernanceStatus=OPTED_OUT Name=johbvuasx5 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-31 17:30:56.682 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaadlhjd46gkxqnthzyzljlktexigigkdzwfs4pkonqbpjshhjpilcq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaadkdk642lwrka4kutuhj2gb3vgpash4agrakpmj3o2uz5bns6rz6a GovernanceStatus=OPTED_OUT Name=morchvyq13 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-09 16:02:49.114 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaadkdk642lwrka4kutuhj2gb3vgpash4agrakpmj3o2uz5bns6rz6a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaonezibypuusilgrv6qbgpgjhs7omizixikw4ce7seg5s6e34hfga GovernanceStatus=OPTED_OUT Name=divg71lnc5 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-20 14:15:39.329 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaonezibypuusilgrv6qbgpgjhs7omizixikw4ce7seg5s6e34hfga
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaatm3krcwmnee4p3uqrmjeeedrhznrv643nmxzvmug23v3ny7vlhza GovernanceStatus=OPTED_OUT Name=kevm70k3gw LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-09 16:02:16.262 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaatm3krcwmnee4p3uqrmjeeedrhznrv643nmxzvmug23v3ny7vlhza
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaae6soeqhyoj5fnfl552tdmjcqnpmafdpxqj3izkjjxvur5pbvvmva GovernanceStatus=OPTED_OUT Name=joeblk4fsl LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-12 13:58:37.213 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaae6soeqhyoj5fnfl552tdmjcqnpmafdpxqj3izkjjxvur5pbvvmva
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaabovmhv2o622boavclkqnikx36f5c5ktodls4vyy7emdd6krqsxvq GovernanceStatus=OPTED_OUT Name=rekbrmjaxy LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-08 15:41:28.147 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaabovmhv2o622boavclkqnikx36f5c5ktodls4vyy7emdd6krqsxvq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaahlssfnce3lge4ubmddrj7ydsnpvwwrg5rnckiv423hdzda4znnfq GovernanceStatus=OPTED_OUT Name=kevm4cj3hq LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-31 15:32:34.433 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaahlssfnce3lge4ubmddrj7ydsnpvwwrg5rnckiv423hdzda4znnfq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaatngcor3g5th4ce7gwsab4ulupmgqiepqd5dofi36vwqdfeldj7dq GovernanceStatus=OPTED_OUT Name=joekgi3593 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-20 14:15:50.237 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaatngcor3g5th4ce7gwsab4ulupmgqiepqd5dofi36vwqdfeldj7dq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaajgrowshtv53mw65xkaazs2yc22lg6a4jcvqn7ogv7on7jwq65x6q GovernanceStatus=OPTED_OUT Name=kuls7xgk6x LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-20 14:14:27.061 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaajgrowshtv53mw65xkaazs2yc22lg6a4jcvqn7ogv7on7jwq65x6q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaawy4hnj2arg5kqhko3mzehd3xsp3rqofdycj7va6bnplzh7a2kfwa GovernanceStatus=OPTED_OUT Name=donll7vqng LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-08-09 16:02:09.497 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaawy4hnj2arg5kqhko3mzehd3xsp3rqofdycj7va6bnplzh7a2kfwa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaagk4hvldx7tjxecwcuq73cz7tqdvlzy7bejmt4ltl5obgufhsqdpa GovernanceStatus=OPTED_OUT Name=nikkfrf5kx LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-28 13:57:03.333 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaagk4hvldx7tjxecwcuq73cz7tqdvlzy7bejmt4ltl5obgufhsqdpa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaat6rhgvqwz5kvivznwmpxn55set7ccby4qgjthpcxv5gs7sfynnpa GovernanceStatus=OPTED_OUT Name=sain5d80bz LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-09-20 14:16:07.237 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaat6rhgvqwz5kvivznwmpxn55set7ccby4qgjthpcxv5gs7sfynnpa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaadlgxlo5izgruyzn2lawyr3zwb4fhblennepltuhjxlhbfo2bnv6a GovernanceStatus=OPTED_OUT Name=grashpcg4l LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-11-17 21:33:25.419 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaadlgxlo5izgruyzn2lawyr3zwb4fhblennepltuhjxlhbfo2bnv6a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaho5fh6gq72h36gjwfj5zqnro3kqpmbrc5w2lo7tyuauzpaojyc7q GovernanceStatus=OPTED_OUT Name=chrr1l215x LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-12-11 16:08:37.078 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaho5fh6gq72h36gjwfj5zqnro3kqpmbrc5w2lo7tyuauzpaojyc7q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaioqolgmwb2nwofflgeef3pj5frddquqvj7gqoaiec5trxi5otsmq GovernanceStatus=OPTED_OUT Name=jeslo173s4 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-11-08 14:28:40.735 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaioqolgmwb2nwofflgeef3pj5frddquqvj7gqoaiec5trxi5otsmq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa3tord2v6rfblrjrvunqw3i6lqh3yuuxzxv4ygkctqjxfcv3kjynq GovernanceStatus=OPTED_OUT Name=xerdzwibtt LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-12-15 17:26:07.951 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa3tord2v6rfblrjrvunqw3i6lqh3yuuxzxv4ygkctqjxfcv3kjynq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaazgpuwgouy3tdzqwxgywtcz6v5ool5ylitotmz7jetoq7bauls4jq GovernanceStatus=OPTED_OUT Name=anamkkjp2r LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-01-22 15:38:51.335 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaazgpuwgouy3tdzqwxgywtcz6v5ool5ylitotmz7jetoq7bauls4jq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaztlu63gmfnwulqz7tsscmozas6d3ahbvejuahoonohjabukmkxuq GovernanceStatus=OPTED_OUT Name=erixhpof6p LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-11-02 13:09:24.885 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaztlu63gmfnwulqz7tsscmozas6d3ahbvejuahoonohjabukmkxuq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa4jfvbe7py7skdcqjuisxckwdlgpcciworiw2or7olv2n6iohr4dq GovernanceStatus=OPTED_OUT Name=gabeggfn85 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-10-27 18:16:17.662 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa4jfvbe7py7skdcqjuisxckwdlgpcciworiw2or7olv2n6iohr4dq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalqpbuxjpnrkxiv5djtwe6a77hj7jkgsfwyf4p7dnwec57jbzhvoa GovernanceStatus=OPTED_OUT Name=vasnim9rib LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-12-15 17:25:50.645 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalqpbuxjpnrkxiv5djtwe6a77hj7jkgsfwyf4p7dnwec57jbzhvoa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaamcpes6wcb3wvpkz3rh6sz6rntpsw76toubgg4c2pz4wiryfi3fq GovernanceStatus=OPTED_OUT Name=darm9xrzmk LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-04-15 18:23:19.865 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaamcpes6wcb3wvpkz3rh6sz6rntpsw76toubgg4c2pz4wiryfi3fq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaarcp2ogrt3igehokdjgc6zknsziq45mmlfe4fg6fbi2obpcqqem7a GovernanceStatus=OPTED_OUT Name=rispia0fze LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-05-06 13:25:04.74 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaarcp2ogrt3igehokdjgc6zknsziq45mmlfe4fg6fbi2obpcqqem7a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaah5dwxmjnm4ep5qjlr4omqx267ogqzknkffbj332syfxeoeqxl5fq GovernanceStatus=OPTED_IN Name=berce32s2h LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-02-22 22:26:34.338 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaah5dwxmjnm4ep5qjlr4omqx267ogqzknkffbj332syfxeoeqxl5fq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavzfejvdtn7rz2lahwltez5gxwy3jfx43ywexr7y3mnxk2h4mvtnq GovernanceStatus=OPTED_OUT Name=marmd3vups LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-04-30 18:43:47.588 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavzfejvdtn7rz2lahwltez5gxwy3jfx43ywexr7y3mnxk2h4mvtnq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaawyj6dqm7hkhpao3hss6lwzcuzononhld4pwpy2fdkxo56z5fxgna GovernanceStatus=OPTED_OUT Name=csripada LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-05-28 19:58:38.704 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaawyj6dqm7hkhpao3hss6lwzcuzononhld4pwpy2fdkxo56z5fxgna
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaab654axo7pqzrmqf2hdt2mq6fugnplcrwe6lnnwzjgkercszfrqgq GovernanceStatus=OPTED_OUT Name=graaimbswt LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-04 18:24:19.554 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaab654axo7pqzrmqf2hdt2mq6fugnplcrwe6lnnwzjgkercszfrqgq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaailo2cnqysm5ngvbxv7c5vdixg4fwlvmlrc3gncpbej3mgnffcvwq GovernanceStatus=OPTED_OUT Name=zacm6w50nu LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-05-28 19:32:32.258 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaailo2cnqysm5ngvbxv7c5vdixg4fwlvmlrc3gncpbej3mgnffcvwq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaimpxzopdrlxcs3dtcyjm2l3ubybs6kbzfseegoe2rmivktp5ifra GovernanceStatus=OPTED_OUT Name=timc7k6eui LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-27 14:39:47.248 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaimpxzopdrlxcs3dtcyjm2l3ubybs6kbzfseegoe2rmivktp5ifra
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaahuy6xe7tg3qvgs23hcl7wwi2xkfmtxpc6zvkyglqrsi77twe6gdq GovernanceStatus=OPTED_OUT Name=amos33bnmt LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-27 14:39:25.584 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaahuy6xe7tg3qvgs23hcl7wwi2xkfmtxpc6zvkyglqrsi77twe6gdq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalmmtajgrkwmvekrlikih2i2rocpvn4jupmevwdyiljtxfwwau7wq GovernanceStatus=OPTED_OUT Name=dieacz3jrt LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-27 18:15:17.24 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalmmtajgrkwmvekrlikih2i2rocpvn4jupmevwdyiljtxfwwau7wq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaavg4lahkxwtuvf55kqrnj5slsia64tfnmssoyutsx3nwiqvvp6t6a GovernanceStatus=OPTED_OUT Name=dilvbahdke LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-18 16:27:00.987 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaavg4lahkxwtuvf55kqrnj5slsia64tfnmssoyutsx3nwiqvvp6t6a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa2cctrfdpq6xsr63rnnyf4tlnf6unehxs3nzvgp46dys7p37tdpqq GovernanceStatus=OPTED_OUT Name=amos6pfnhb LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-27 14:39:14.371 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa2cctrfdpq6xsr63rnnyf4tlnf6unehxs3nzvgp46dys7p37tdpqq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaayxiw27ni7osaarofbw6ngow7vrmy3tnm3o546drfywwbwcoedjoq GovernanceStatus=OPTED_OUT Name=jaqcnhi5pt LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-14 16:09:59.112 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaayxiw27ni7osaarofbw6ngow7vrmy3tnm3o546drfywwbwcoedjoq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaamua2iaxzux55lvaasfnrjebz3m6hjjyltgxvpj46lc5nzaegkcaa GovernanceStatus=OPTED_OUT Name=jefdm1esw4 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-14 14:41:43.133 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaamua2iaxzux55lvaasfnrjebz3m6hjjyltgxvpj46lc5nzaegkcaa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaagto7xf4czl6n57okftfg652skknvzb3fgcb6qewlpvvw4ehd4nbq GovernanceStatus=OPTED_OUT Name=elsctmo2lm LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-27 18:15:49.471 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaagto7xf4czl6n57okftfg652skknvzb3fgcb6qewlpvvw4ehd4nbq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaanc2ykgxrptlu5mgntdvs3btqunr7fta43lyx4wx7i7n2urjzb25a GovernanceStatus=OPTED_OUT Name=timl336518 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-27 14:40:10.37 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaanc2ykgxrptlu5mgntdvs3btqunr7fta43lyx4wx7i7n2urjzb25a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaab5djw2oifexgzzmgwubgpphmm6m5odefdvqupdxp6trdobjzd5a GovernanceStatus=OPTED_OUT Name=mics8un1k7 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-27 14:39:56.141 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaab5djw2oifexgzzmgwubgpphmm6m5odefdvqupdxp6trdobjzd5a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalyahck6khpgpvqjhpud3mskt24didfp475h6uor4vf3owetdomaa GovernanceStatus=OPTED_OUT Name=anag8adtr9 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-06-27 14:36:05.445 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalyahck6khpgpvqjhpud3mskt24didfp475h6uor4vf3owetdomaa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa657tqvoepmpfpwnnamb5dylpviwgj7lhpnki57t6s7yzqh4krgaa GovernanceStatus=OPTED_OUT Name=satyak2025 LifecycleState=ACTIVE Role=CHILD TimeJoined=2023-06-16 18:23:29.837 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa657tqvoepmpfpwnnamb5dylpviwgj7lhpnki57t6s7yzqh4krgaa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaag4ohxehvxnsjonj2ajvhu2j3gqoqr7owps3euizjwpz444bumtla GovernanceStatus=OPTED_OUT Name=ellwqax01z LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-07-12 15:50:12.279 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaag4ohxehvxnsjonj2ajvhu2j3gqoqr7owps3euizjwpz444bumtla
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaagw5ju62n5kuuovpozbg5pwxswl2hoatj5cckr4q74hds7vsnxnna GovernanceStatus=OPTED_OUT Name=tomb95z0bf LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-07-18 16:39:13.325 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaagw5ju62n5kuuovpozbg5pwxswl2hoatj5cckr4q74hds7vsnxnna
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaayl7fhkqd4k2v5snybayndksntr23zjjjttpliogiopytdh7hcw4a GovernanceStatus=OPTED_OUT Name=moefwh2u8l LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-07-27 15:31:14.984 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaayl7fhkqd4k2v5snybayndksntr23zjjjttpliogiopytdh7hcw4a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaap5zqjh5apluojl3muhfzq62jx4kvt2ggkxaxmvhipaelbt4g6gaa GovernanceStatus=OPTED_OUT Name=zactbf16yl LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-06 16:27:53.323 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaap5zqjh5apluojl3muhfzq62jx4kvt2ggkxaxmvhipaelbt4g6gaa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaawqbprsxukinny2h2hnqmbnh45wovxxovkin2engwltd6iz5bpezq GovernanceStatus=OPTED_OUT Name=jerm8e96y8 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-09 19:17:31.046 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaawqbprsxukinny2h2hnqmbnh45wovxxovkin2engwltd6iz5bpezq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxyo7sfglvclbw2gr5dmhb2l2gctzjm4sjujl2kealm4berjak6pq GovernanceStatus=OPTED_OUT Name=shigih6uu6 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-27 18:17:34.057 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxyo7sfglvclbw2gr5dmhb2l2gctzjm4sjujl2kealm4berjak6pq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaalidc66qxhkdsyquoo33pgy4mwf3gaymcphmzhz2ayovsbm36naqa GovernanceStatus=OPTED_OUT Name=shig38q6i4 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-27 18:17:59.338 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaalidc66qxhkdsyquoo33pgy4mwf3gaymcphmzhz2ayovsbm36naqa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaabzvyurxbmgkhbdld2oql2vz6isj6yuwufmztprwsebisbkjsssdq GovernanceStatus=OPTED_OUT Name=jostgmds7n LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-27 18:18:22.548 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaabzvyurxbmgkhbdld2oql2vz6isj6yuwufmztprwsebisbkjsssdq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaiigs2huajcygfxvtudtcuq4wmcca2pzbeqrrkc7udpg7jomveaka GovernanceStatus=OPTED_OUT Name=dilv4xehh8 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-27 18:18:13.492 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaiigs2huajcygfxvtudtcuq4wmcca2pzbeqrrkc7udpg7jomveaka
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa6cx2c4kak4jzebd3ejmsiyakbwff355567g7kaddwedaoxqxmg3a GovernanceStatus=OPTED_OUT Name=malg4260hr LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-29 19:27:30.91 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa6cx2c4kak4jzebd3ejmsiyakbwff355567g7kaddwedaoxqxmg3a
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaa7zmr2medys3nxjqfhuwptbwcjabqtasdaafjaauv5iuawwhtqbna GovernanceStatus=OPTED_OUT Name=andhmcqbyi LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-02 16:15:55.354 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaa7zmr2medys3nxjqfhuwptbwcjabqtasdaafjaauv5iuawwhtqbna
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaapixizhotakqxttmb5afw52wyi7kj4i73fasqfq3yb44ddo5i5foa GovernanceStatus=OPTED_OUT Name=macshq3jrw LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-06 18:07:25.271 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaapixizhotakqxttmb5afw52wyi7kj4i73fasqfq3yb44ddo5i5foa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaakkad54riedjxej23rskvxjnufkgvddv7il3xxwcespjyhcdmt4oa GovernanceStatus=OPTED_OUT Name=geoefpc1ld LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-12 14:56:47.086 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaakkad54riedjxej23rskvxjnufkgvddv7il3xxwcespjyhcdmt4oa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaah6zyw4hj7my32sff5zgxv5upd7ykgmq7z3wtnnrh2johjex5ho4q GovernanceStatus=OPTED_OUT Name=devdjj3khu LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-10 15:14:07.78 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaah6zyw4hj7my32sff5zgxv5upd7ykgmq7z3wtnnrh2johjex5ho4q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaad3rjobhzda2itdxpujfjq6bo4mcltaehmbakfb73ps3lrdzvrwzq GovernanceStatus=OPTED_OUT Name=vijv2ttj2d LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-08-06 16:27:43.237 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaad3rjobhzda2itdxpujfjq6bo4mcltaehmbakfb73ps3lrdzvrwzq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaxwd33bfblhx2gpaxi6xsidogesxptngs4x2ulrfgygtf3vdorhaa GovernanceStatus=OPTED_OUT Name=chrw95rna2 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-02 18:15:59.067 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaxwd33bfblhx2gpaxi6xsidogesxptngs4x2ulrfgygtf3vdorhaa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaal5ecijt55eeaq5xo5vmcz55hpl35flusdubistjx7pg4pe4rvvpq GovernanceStatus=OPTED_OUT Name=johojp69v0 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-30 17:02:10.146 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaal5ecijt55eeaq5xo5vmcz55hpl35flusdubistjx7pg4pe4rvvpq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaouwj3wlwtmas3evydcwnlzzujbqjvnp2lweuf7oiv5i2nqa4vm3q GovernanceStatus=OPTED_OUT Name=marha9rb85 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-30 18:06:58.189 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaouwj3wlwtmas3evydcwnlzzujbqjvnp2lweuf7oiv5i2nqa4vm3q
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaag6m7iofeofzt7jvn3w5o57wavjpzi3ptlug7tiwe6673hjimaldq GovernanceStatus=OPTED_OUT Name=marm263foe LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-09-26 22:20:59.778 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaag6m7iofeofzt7jvn3w5o57wavjpzi3ptlug7tiwe6673hjimaldq
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaacspnddpfuolexb5j34e4b4zq37lnliymemu6vyekapu4ccpje4za GovernanceStatus=OPTED_OUT Name=raseis83tx LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-09 21:07:11.333 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaacspnddpfuolexb5j34e4b4zq37lnliymemu6vyekapu4ccpje4za
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaahldqgxw7lewyyrljkkrjafavf4wfghbostcfjnfcupbedy5ba3la GovernanceStatus=OPTED_OUT Name=marho0awfe LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-15 16:22:42.002 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaahldqgxw7lewyyrljkkrjafavf4wfghbostcfjnfcupbedy5ba3la
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaex2oirfgdfjbnhn6qatq7dixfvgbqxy4effz6oom7pma6ifhv6qa GovernanceStatus=OPTED_OUT Name=deekegl2sl LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-28 14:32:39.629 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaex2oirfgdfjbnhn6qatq7dixfvgbqxy4effz6oom7pma6ifhv6qa
+Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaaq55qqfpplk6gtbyyxhe4owczmn7ogrifaysux7rglunj2psofgya GovernanceStatus=OPTED_OUT Name=pavslogq64 LifecycleState=ACTIVE Role=CHILD TimeJoined=2024-10-28 16:48:17.615 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }
+true
+error ocid1.tenancy.oc1..aaaaaaaaq55qqfpplk6gtbyyxhe4owczmn7ogrifaysux7rglunj2psofgya
+checking child tenancies Deets
+rule: { Id=ocid1.organizationsgovernancerule.oc1.iad.amaaaaaa7zxxlwiacu65hjpzcaqkm2m2ok7xbnalczjkbppod6rxwqz4pkta CompartmentId=ocid1.tenancy.oc1..aaaaaaaapf32iocmevidwi4ujtrnfvq456dp4elubzvw564v6lh2sby24uua DisplayName=CHild_Tenancy_Allowed_Regions Type=ALLOWED_REGIONS CreationOption= TimeCreated=2024-07-03 19:49:03.857 +0000 UTC TimeUpdated=2024-07-03 19:49:03.857 +0000 UTC LifecycleState=ACTIVE FreeformTags=map[] DefinedTags=map[] SystemTags=map[] }
+Organization Tenancy: { TenancyId=ocid1.tenancy.oc1..aaaaaaaapf32iocmevidwi4ujtrnfvq456dp4elubzvw564v6lh2sby24uua GovernanceStatus=OPTED_IN Name=orasenatdecanational02 LifecycleState=ACTIVE Role=PARENT TimeJoined=2021-07-18 00:23:49.956 +0000 UTC TimeLeft=<nil> IsApprovedForTransfer=false }

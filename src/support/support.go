@@ -10,8 +10,11 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 )
 
-func CreateTicket() {
-	// create ticket
+func CreateTicket(provider common.ConfigurationProvider, tenancyID string, homeRegion string, CSI string) {
+	fmt.Println("CreateTicket")
+
+	// Retrieve value from the response.
+	//fmt.Println(resp)
 }
 
 /*

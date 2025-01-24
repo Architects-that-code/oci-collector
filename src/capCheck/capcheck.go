@@ -28,6 +28,7 @@ func Check(provider common.ConfigurationProvider, regions []identity.RegionSubsc
 	var adsAll []identity.AvailabilityDomain
 	var wg sync.WaitGroup
 	wg.Add(len(regions))
+
 	for _, region := range regions {
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()

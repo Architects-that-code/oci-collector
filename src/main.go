@@ -1,6 +1,7 @@
 package main
 
 import (
+	billing "check-limits/billing"
 	capcheck "check-limits/capCheck"
 	"check-limits/capability"
 	compute "check-limits/compute"
@@ -10,6 +11,7 @@ import (
 	network "check-limits/networks"
 	oos "check-limits/objectstorage"
 	scheduler "check-limits/schedule"
+	resourcesearch "check-limits/search"
 	supportresources "check-limits/support"
 
 	children "check-limits/childtenancies"
@@ -41,13 +43,15 @@ func main() {
 	config: check config file and print basic info
 	peeps: fetch user counts (-r to show users)
 	policies: fetch policy counts (-run to show policies -verbose to show statements)
-	groups: fetch group counts (-run to show groups -verbose to show group members)
+	groups: fetch group counts (-run to show groups )
 	support: fetch support tickets (-list to show tickets)
 	capacity: check capacity in all YOUR regions (-ocpus to specify ocpus -memory to specify memory -type to specify shape type)
 	capability: what types of 'things' are available for a shape type (-type to specify shape type)
 	children: dealing with child tenancies
 	object: fetch object storage info
-	network: newtwork related info
+	billing: fetch billing info
+	network: network related info
+	search: search for resources created by a user
 		`
 	)
 
@@ -98,10 +102,16 @@ func main() {
 	objectCmd := flag.NewFlagSet("object", flag.ExitOnError)
 	objectFetch := objectCmd.Bool("run", false, "fetch object storage")
 
+	billingCMD := flag.NewFlagSet("billing", flag.ExitOnError)
+	billingPath := billingCMD.String("path", "./reports", "path to save billing files - default is ./reports")
+
 	scheduleCmd := flag.NewFlagSet("schedule", flag.ExitOnError)
 	scheduleFetch := scheduleCmd.Bool("run", false, "fetch schedule")
 
-	err, config := setup.Getconfig()
+	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
+	searchFetchString := searchCmd.String("searchstring", "", "search string")
+
+	config, err := setup.Getconfig()
 	if err != nil {
 		//fmt.Printf("%+v\n", err)
 		fmt.Printf("Error: %v\n", err)
@@ -184,6 +194,8 @@ func main() {
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 		//_, compartments, _ := setup.CommonSetup(err, client, tenancyID, false)
 
+		supportresources.CreateTicket(provider, tenancyID, homeregion, config.CSI)
+
 		supportresources.ListTickets(provider, tenancyID, homeregion, config.CSI)
 		//helpers.FatalIfError(err)
 		supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
@@ -206,7 +218,7 @@ func main() {
 			capcheck.Check(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory, *capacityShapeType)
 
 		} else {
-			fmt.Println("add -ocpus and -memory and to run")
+			fmt.Println("add -type -ocpus and -memory and to run")
 
 		}
 
@@ -237,8 +249,8 @@ func main() {
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 
-		//children.Children(provider, tenancyID, *childFetch, homeregion)
-		children.Deets(provider, tenancyID, homeregion)
+		children.Children(provider, client, tenancyID, *childFetch, homeregion, config)
+		children.Deets(provider, tenancyID, homeregion, config)
 
 	case "object":
 		fmt.Println("checking object storage")
@@ -246,8 +258,16 @@ func main() {
 		fmt.Printf("objectFetch: %v\n", *objectFetch)
 		provider, client, tenancyID, err := setup.Prep(config)
 		regions, compartments, _, homeregion := setup.CommonSetup(err, client, tenancyID)
-		oos.GetObjectStorageInfo(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
+		//oos.GetObjectStorageInfo(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
 		oos.ObjectStorageSize(provider, regions, tenancyID, compartments, *objectFetch, homeregion)
+
+	case "billing":
+		fmt.Println("checking billing")
+		billingCMD.Parse(os.Args[2:])
+		fmt.Printf("billingFetch: %v\n", &billingPath)
+		provider, client, tenancyID, err := setup.Prep(config)
+		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
+		billing.Getfiles(provider, tenancyID, homeregion, config, *billingPath)
 
 	case "schedule":
 		fmt.Println("checking schedule")
@@ -256,6 +276,12 @@ func main() {
 		provider, client, tenancyID, err := setup.Prep(config)
 		regions, compartments, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 		scheduler.RunSchedule(provider, regions, tenancyID, compartments, homeregion)
+
+	case "search":
+		fmt.Println("checking search")
+		searchCmd.Parse(os.Args[2:])
+		provider, _, tenancyID, _ := setup.Prep(config)
+		resourcesearch.Search(provider, tenancyID, *searchFetchString)
 
 	case "config":
 		fmt.Println("checking config")

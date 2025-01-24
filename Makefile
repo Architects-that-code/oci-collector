@@ -28,4 +28,4 @@ clean:
 	rm  -f ./dist/*
 
 copy_file:
-	cp toolkit-config.yaml dist/toolkit-config.yaml
+	cp sample-toolkit-config.yaml dist/toolkit-config.yaml

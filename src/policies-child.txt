@@ -1,0 +1,229 @@
+     _                    _       _   _                   _             _____   _               _        ____               _
+    / \     _ __    ___  | |__   (_) | |_    ___    ___  | |_   ___    |_   _| | |__     __ _  | |_     / ___|   ___     __| |   ___
+   / _ \   | '__|  / __| | '_ \  | | | __|  / _ \  / __| | __| / __|     | |   | '_ \   / _` | | __|   | |      / _ \   / _` |  / _ \
+  / ___ \  | |    | (__  | | | | | | | |_  |  __/ | (__  | |_  \__ \     | |   | | | | | (_| | | |_    | |___  | (_) | | (_| | |  __/
+ /_/   \_\ |_|     \___| |_| |_| |_|  \__|  \___|  \___|  \__| |___/     |_|   |_| |_|  \__,_|  \__|    \____|  \___/   \__,_|  \___|
+
+
+fetching policies
+policies: true
+Using Config File
+Using profile: DEFAULT
+Config: /Users/jscanlon/.oci/config
+Home Region: us-ashburn-1
+in comp: root policies returned 28
+	Comp: root Policies: analyze_cost_users
+		statements 1
+			Statement: Allow group 'Default'/'Administrators' to read usage-reports in tenancy
+	Comp: root Policies: BigDataService
+		statements 1
+			Statement: allow service bdsprod to {VCN_READ, VNIC_READ, VNIC_ATTACH, VNIC_CREATE, SUBNET_READ, SUBNET_ATTACH, VNIC_DETACH, VNIC_DELETE, SUBNET_DETACH} in tenancy
+	Comp: root Policies: Billing_and_subscription
+		statements 1
+			Statement: Allow group 'Default'/'Administrators' to manage accountmanagement-family in tenancy
+	Comp: root Policies: capRes
+		statements 2
+			Statement: Allow service oke to use compute-capacity-reservations in tenancy
+			Statement: Allow group global_compute to use compute-capacity-reservations in tenancy
+	Comp: root Policies: cloudguard
+		statements 24
+			Statement: allow service cloudguard to read data-safe-family in tenancy
+			Statement: allow service cloudguard to read autonomous-database-family in tenancy
+			Statement: allow service cloudguard to manage cloudevents-rules in tenancy where target.rule.type='managed'
+			Statement: allow service cloudguard to read audit-events in tenancy
+			Statement: allow service cloudguard to read authentication-policies in tenancy
+			Statement: allow service cloudguard to read autonomous-database-family in tenancy
+			Statement: allow service cloudguard to read compartments in tenancy
+			Statement: allow service cloudguard to read compute-management-family in tenancy
+			Statement: allow service cloudguard to read database-family in tenancy
+			Statement: allow service cloudguard to read data-safe-family in tenancy
+			Statement: allow service cloudguard to read dynamic-groups in tenancy
+			Statement: allow service cloudguard to read groups in tenancy
+			Statement: allow service cloudguard to read instance-family in tenancy
+			Statement: allow service cloudguard to read keys in tenancy
+			Statement: allow service cloudguard to read load-balancers in tenancy
+			Statement: allow service cloudguard to read log-groups in tenancy
+			Statement: allow service cloudguard to read object-family in tenancy
+			Statement: allow service cloudguard to read policies in tenancy
+			Statement: allow service cloudguard to read tenancies in tenancy
+			Statement: allow service cloudguard to read users in tenancy
+			Statement: allow service cloudguard to read vaults in tenancy
+			Statement: allow service cloudguard to read virtual-network-family in tenancy
+			Statement: allow service cloudguard to read volume-family in tenancy
+			Statement: allow service cloudguard to use network-security-groups in tenancy
+	Comp: root Policies: Collector
+		statements 1
+			Statement: Allow dynamic-group 'Default'/'global_compute' manage all-resources IN TENANCY
+	Comp: root Policies: console-iam-policy-20230406-1134
+		statements 1
+			Statement: Allow service objectstorage-us-ashburn-1 to manage object-family in tenancy
+	Comp: root Policies: console-iam-policy-20230501-0953
+		statements 1
+			Statement: Allow service objectstorage-us-phoenix-1 to manage object-family in tenancy
+	Comp: root Policies: DataScienceCatchAll
+		statements 3
+			Statement: allow service datascience to use virtual-network-family in tenancy
+			Statement: allow group datascience-scientists to use virtual-network-family in tenancy
+			Statement: allow group datascience-scientists to manage data-science-family in tenancy
+	Comp: root Policies: DBMgmt_User_Policy
+		statements 23
+			Statement: Allow group 'Administrators' to manage dbmgmt-family in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to manage metrics in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to manage alarms in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to manage objects in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to manage buckets in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to use database-family in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to use external-database-family in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to use autonomous-database-family in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to manage virtual-network-family in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to manage secret-family in tenancy where any {target.compartment.name = 'SimpleDBCompartment'}
+			Statement: Allow group 'Administrators' to manage dbmgmt-family in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to manage metrics in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to manage alarms in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to manage objects in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to manage buckets in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to use database-family in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to use external-database-family in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to use autonomous-database-family in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to {DATABASE_SERVICE_USAGE_INSPECT} in tenancy
+			Statement: Allow group 'Administrators' to manage virtual-network-family in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to manage secret-family in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to manage management-dashboard in tenancy where any {target.compartment.name = 'global'}
+			Statement: Allow group 'Administrators' to manage management-saved-search in tenancy where any {target.compartment.name = 'global'}
+	Comp: root Policies: grafana
+		statements 2
+			Statement: allow group grafana to read metrics in tenancy
+			Statement: allow group grafana to read compartments in tenancy
+	Comp: root Policies: logging_analytics_automatic_ingestion_policies
+		statements 11
+			Statement: allow DYNAMIC-GROUP logging_analytics_agent to manage management-agents IN COMPARTMENT Management-Agents
+			Statement: allow DYNAMIC-GROUP logging_analytics_agent to use METRICS IN COMPARTMENT Management-Agents
+			Statement: allow DYNAMIC-GROUP logging_analytics_agent to {LOG_ANALYTICS_LOG_GROUP_UPLOAD_LOGS} in tenancy
+			Statement: allow DYNAMIC-GROUP logging_analytics_agent to read USERS in tenancy
+			Statement: allow service loganalytics to {EVENTRULE_READ} in tenancy
+			Statement: allow service loganalytics to {LOAD_BALANCER_READ} in tenancy
+			Statement: allow service loganalytics to {BUCKET_READ} in tenancy
+			Statement: allow service loganalytics to read functions-family in tenancy
+			Statement: allow service loganalytics to read api-gateway-family in tenancy
+			Statement: allow service loganalytics to {VNIC_READ} in tenancy
+			Statement: allow any-user to {LOG_ANALYTICS_LOG_GROUP_UPLOAD_LOGS} in compartment id ocid1.tenancy.oc1..aaaaaaaa2idurkuedysbfzxktzjtpnv3k54c7ftnovpmqkpgchdl2vev4rta where all {request.principal.type='serviceconnector', target.loganalytics-log-group.id='ocid1.loganalyticsloggroup.oc1.iad.amaaaaaak475dqqaif2jtruo5ajc7rwhue2tsdpyso7g26se43xg37jep6oa', request.principal.compartment.id='ocid1.tenancy.oc1..aaaaaaaa2idurkuedysbfzxktzjtpnv3k54c7ftnovpmqkpgchdl2vev4rta'}
+	Comp: root Policies: logging_analytics_automatic_oci_discovery_policies
+		statements 3
+			Statement: allow service loganalytics to {BUCKET_READ} in tenancy
+			Statement: allow service loganalytics to {VNIC_READ} in tenancy
+			Statement: allow any-user to {LOG_ANALYTICS_LOG_GROUP_UPLOAD_LOGS} in compartment id ocid1.tenancy.oc1..aaaaaaaa2idurkuedysbfzxktzjtpnv3k54c7ftnovpmqkpgchdl2vev4rta where all {request.principal.type='serviceconnector', target.loganalytics-log-group.id='ocid1.loganalyticsloggroup.oc1.iad.amaaaaaak475dqqaif2jtruo5ajc7rwhue2tsdpyso7g26se43xg37jep6oa', request.principal.compartment.id='ocid1.tenancy.oc1..aaaaaaaa2idurkuedysbfzxktzjtpnv3k54c7ftnovpmqkpgchdl2vev4rta'}
+	Comp: root Policies: logging_analytics_automatic_service_policies
+		statements 6
+			Statement: define tenancy sampledata as ocid1.tenancy.oc1..aaaaaaaabmtv54v5bg45j7zd2eeat4df2bwfqkmxe2yy6ecdfrc36wloe4ia
+			Statement: endorse group Administrators to read loganalytics-features-family in tenancy sampledata
+			Statement: endorse group Administrators to read loganalytics-resources-family in tenancy sampledata
+			Statement: endorse group Administrators to read compartments in tenancy sampledata
+			Statement: allow service loganalytics to READ loganalytics-features-family in tenancy
+			Statement: allow service loganalytics to READ compartments in tenancy
+	Comp: root Policies: networks
+		statements 1
+			Statement: Allow group 'Default'/'Administrators' to manage virtual-network-family in tenancy
+	Comp: root Policies: ParentAccess
+		statements 3
+			Statement: define tenancy parent-tenancy as ocid1.tenancy.oc1..aaaaaaaapf32iocmevidwi4ujtrnfvq456dp4elubzvw564v6lh2sby24uua
+			Statement: define group parent-tenancy-admins as ocid1.group.oc1..aaaaaaaaqrkpudrptdnlsjydpqom26lxhg6eqlt6qf27df4yisdipmxlk4wa
+			Statement: admit group parent-tenancy-admins of tenancy parent-tenancy to manage all-resources IN TENANCY
+	Comp: root Policies: path-analyzer
+		statements 1
+			Statement: allow group Administrators to manage vn-path-analyzer-test in tenancy
+	Comp: root Policies: PublicGenAI
+		statements 1
+			Statement: allow any-user to manage generative-ai-family in tenancy
+	Comp: root Policies: reporting_policy
+		statements 1
+			Statement: Allow service metering_overlay to manage objects in tenancy where all {target.bucket.name='reporting', any {request.permission='OBJECT_CREATE', request.permission='OBJECT_DELETE', request.permission='OBJECT_READ'}}
+	Comp: root Policies: s3fs_policy
+		statements 1
+			Statement: Allow group s3fsAdmins to manage object-family in tenancy
+	Comp: root Policies: SFD_Dashboard_ConnectorPolicy_LoggingAnalytics_110620241854
+		statements 1
+			Statement: allow any-user to {LOG_ANALYTICS_LOG_GROUP_UPLOAD_LOGS} in compartment id ocid1.tenancy.oc1..aaaaaaaa2idurkuedysbfzxktzjtpnv3k54c7ftnovpmqkpgchdl2vev4rta where all {request.principal.type='serviceconnector', target.loganalytics-log-group.id='ocid1.loganalyticsloggroup.oc1.iad.amaaaaaak475dqqa3dqzahjc624cx3erfpmjmlp6cdhozyaznoi2sxg2jg3q', request.principal.compartment.id='ocid1.tenancy.oc1..aaaaaaaa2idurkuedysbfzxktzjtpnv3k54c7ftnovpmqkpgchdl2vev4rta'}
+	Comp: root Policies: StackMonitoringPolicyEasyOnboarding
+		statements 4
+			Statement: ALLOW GROUP StackMonitoringAdminGrp TO MANAGE tag-namespaces IN TENANCY
+			Statement: ALLOW GROUP StackMonitoringAdminGrp TO MANAGE tag-defaults IN TENANCY
+			Statement: ALLOW GROUP StackMonitoringViewerGrp TO READ tag-namespaces IN TENANCY
+			Statement: ALLOW GROUP StackMonitoringViewerGrp TO READ tag-defaults IN TENANCY
+	Comp: root Policies: tem_rag_opensearch
+		statements 6
+			Statement: Allow service opensearch to manage vcns in tenancy
+			Statement: Allow service opensearch to manage vnics in  tenancy
+			Statement: Allow service opensearch to use subnets in  tenancy
+			Statement: Allow service opensearch to use network-security-groups in  tenancy
+			Statement: Allow service opensearch to manage virtual-network-family in  tenancy
+			Statement: allow group Administrators to manage agent-family in tenancy
+	Comp: root Policies: tenancy-level-usage-reports
+		statements 2
+			Statement: define tenancy usage-report as ocid1.tenancy.oc1..aaaaaaaaned4fkpkisbwjlr56u7cj63lf3wffbilvqknstgtvzub7vhqkggq
+			Statement: endorse group Administrators to read objects in tenancy usage-report
+	Comp: root Policies: Tenant Admin Policy
+		statements 1
+			Statement: ALLOW GROUP Administrators to manage all-resources IN TENANCY
+	Comp: root Policies: VNPA-Tenancy-Policy
+		statements 5
+			Statement: allow any-user to inspect compartments in tenancy where all { request.principal.type = 'vnpa-service' }
+			Statement: allow any-user to read instances in tenancy where all { request.principal.type = 'vnpa-service' }
+			Statement: allow any-user to read virtual-network-family in tenancy where all { request.principal.type = 'vnpa-service' }
+			Statement: allow any-user to read load-balancers in tenancy where all { request.principal.type = 'vnpa-service' }
+			Statement: allow any-user to read network-security-group in tenancy where all { request.principal.type = 'vnpa-service' }
+	Comp: root Policies: VSS_Qualys
+		statements 2
+			Statement: Define tenancy ocivssprod as ocid1.tenancy.oc1..aaaaaaaa6zt5ejxod5pgthsq4apr5z2uzde7dmbpduc5ua3mic4zv3g5ttma
+			Statement: Endorse dynamic-group tenancy_compute to read objects in tenancy ocivssprod
+	Comp: root Policies: VSSPolicy
+		statements 8
+			Statement: Allow group Administrator to read repos in tenancy
+			Statement: Allow service vulnerability-scanning-service to manage instances in tenancy
+			Statement: Allow service vulnerability-scanning-service to read compartments in tenancy
+			Statement: Allow service vulnerability-scanning-service to read vnics in tenancy
+			Statement: Allow service vulnerability-scanning-service to read vnic-attachments in tenancy
+			Statement: Allow dynamic-group tenancy_compute to read vaults in tenancy
+			Statement: Allow dynamic-group tenancy_compute to read keys in tenancy
+			Statement: Allow dynamic-group tenancy_compute to read secret-family in tenancy
+in comp: baseline_lz_sandbox-44d9862d6afa3db4 policies returned 0
+in comp: DirkSandbox policies returned 0
+in comp: global policies returned 1
+	Comp: global Policies: OpenSearch_and_RAG_Policy-af28
+		statements 5
+			Statement: Allow service opensearch to manage vcns in compartment id ocid1.compartment.oc1..aaaaaaaark7rip4ebhxqka3tbtlzd5qpfmtrwdgdm345bx7ud34ynhodlaoa
+			Statement: Allow service opensearch to manage vnics in compartment id ocid1.compartment.oc1..aaaaaaaark7rip4ebhxqka3tbtlzd5qpfmtrwdgdm345bx7ud34ynhodlaoa
+			Statement: Allow service opensearch to use subnets in compartment id ocid1.compartment.oc1..aaaaaaaark7rip4ebhxqka3tbtlzd5qpfmtrwdgdm345bx7ud34ynhodlaoa
+			Statement: Allow service opensearch to use network-security-groups in compartment id ocid1.compartment.oc1..aaaaaaaark7rip4ebhxqka3tbtlzd5qpfmtrwdgdm345bx7ud34ynhodlaoa
+			Statement: Allow service opensearch to manage virtual-network-family in compartment id ocid1.compartment.oc1..aaaaaaaark7rip4ebhxqka3tbtlzd5qpfmtrwdgdm345bx7ud34ynhodlaoa
+in comp: hpc-testing policies returned 0
+in comp: Management-Agents policies returned 0
+in comp: SimpleDBCompartment policies returned 0
+in comp: testing policies returned 2
+	Comp: testing Policies: oos
+		statements 2
+			Statement: Allow dynamic-group dg_object to read buckets in compartment testing
+			Statement: Allow dynamic-group dg_object to manage objects in compartment testing
+	Comp: testing Policies: StackMonitoringPolicyEasyOnboarding
+		statements 20
+			Statement: ALLOW DYNAMIC-GROUP StackMonitoringManagementAgentsEasyOnboarding TO USE METRICS IN COMPARTMENT testing where target.metrics.namespace = 'oracle_appmgmt'
+			Statement: ALLOW DYNAMIC-GROUP StackMonitoringManagementAgentsEasyOnboarding TO {STACK_MONITORING_DISCOVERY_JOB_RESULT_SUBMIT} IN COMPARTMENT testing
+			Statement: ALLOW DYNAMIC-GROUP StackMonitoringMonitoredInstancesEasyOnboarding TO {MGMT_AGENT_DEPLOY_PLUGIN_CREATE, MGMT_AGENT_INSPECT, MGMT_AGENT_READ, APPMGMT_WORK_REQUEST_READ, INSTANCE_AGENT_PLUGIN_INSPECT} IN COMPARTMENT testing
+			Statement: ALLOW DYNAMIC-GROUP StackMonitoringMonitoredInstancesEasyOnboarding TO {APPMGMT_MONITORED_INSTANCE_READ, APPMGMT_MONITORED_INSTANCE_ACTIVATE} IN COMPARTMENT testing where request.instance.id = target.monitored-instance.id
+			Statement: ALLOW DYNAMIC-GROUP StackMonitoringMonitoredInstancesEasyOnboarding TO {INSTANCE_UPDATE} IN COMPARTMENT testing where request.instance.id = target.instance.id
+			Statement: ALLOW GROUP StackMonitoringAdminGrp TO MANAGE stack-monitoring-family IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringAdminGrp TO {MGMT_AGENT_DEPLOY_PLUGIN_CREATE, MGMT_AGENT_INSPECT, MGMT_AGENT_READ} IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringAdminGrp TO READ metrics IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringAdminGrp to READ instances IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringAdminGrp to MANAGE external-database-family IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringAdminGrp to MANAGE alarms IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringAdminGrp to USE ons-topics IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringAdminGrp TO MANAGE appmgmt-family IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringViewerGrp to READ stack-monitoring-family IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringViewerGrp TO {MGMT_AGENT_INSPECT, MGMT_AGENT_READ} IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringViewerGrp to READ metrics IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringViewerGrp to READ instances IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringViewerGrp to READ external-database-family IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringViewerGrp to READ alarms IN COMPARTMENT testing
+			Statement: ALLOW GROUP StackMonitoringViewerGrp TO USE appmgmt-family IN COMPARTMENT testing
+in comp: testing-global policies returned 0
+Total policies returned 31

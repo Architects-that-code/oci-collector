@@ -70,8 +70,20 @@ func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []id
 	//start := time.Now()
 	//fmt.Print("Fetching ADs\n")
 	var adsAll []identity.AvailabilityDomain
+	/*
+		for _, region := range regions {
+			client.SetRegion(*region.RegionName)
+			ads := GetADs(tenancyID, client)
+			adsAll = append(adsAll, ads...)
+			mu.Unlock()
+		}
+	*/
+	/**     start comment here */
 	var wg sync.WaitGroup
 	wg.Add(len(regions))
+
+	var regionalSlices = make(chan []identity.AvailabilityDomain, len(regions))
+
 	for _, region := range regions {
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()
@@ -79,14 +91,19 @@ func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []id
 			client.SetRegion(*region.RegionName)
 			ads := GetADs(tenancyID, client)
 			adsAll = append(adsAll, ads...)
+			regionalSlices <- ads
 		}(region)
 	}
 	wg.Wait()
+
+	/*  end comment here  */
 	//elapsed := time.Since(start)
 	//fmt.Printf("Fetching ADs took %s \n", elapsed)
-	allReg := getALLRegions(nil, client)
-	fmt.Printf("size of all regions %v ", len(allReg))
-	fmt.Printf(" all regions %v ", allReg)
+	/*
+		allReg := getALLRegions(nil, client)
+			fmt.Printf("size of all regions %v ", len(allReg))
+			fmt.Printf(" all regions %v ", allReg)
+	*/
 	return adsAll
 }
 
@@ -117,7 +134,7 @@ func getHomeRegion(regions []identity.RegionSubscription) string {
 	return ""
 }
 
-func Getconfig() (error, Config) {
+func Getconfig() (Config, error) {
 	data, err := os.ReadFile("toolkit-config.yaml")
 	helpers.FatalIfError(err)
 
@@ -126,7 +143,7 @@ func Getconfig() (error, Config) {
 	if err != nil {
 		// handle error
 	}
-	return err, config
+	return config, err
 }
 
 type Config struct {
@@ -134,6 +151,8 @@ type Config struct {
 	ProfileName          string `yaml:"profileName"`
 	UseInstancePrincipal bool   `yaml:"useinstanceprincipal"`
 	CSI                  string `yaml:"SUPPORT_CSI_NUMBER"`
+	ORG_ID               string `yaml:"ORG_ID"`
+	SUBSCRIPTION_ID      string `yaml:"SUBSCRIPTION_ID"`
 }
 
 func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient, string, error) {
