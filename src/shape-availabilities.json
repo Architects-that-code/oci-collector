@@ -1,0 +1,20 @@
+[
+  {
+    "faultDomain": "string",
+    "instanceShape": "string",
+    "instanceShapeConfig": {
+      "memoryInGBs": 0.0,
+      "nvmes": 0,
+      "ocpus": 0.0
+    }
+  },
+  {
+    "faultDomain": "string",
+    "instanceShape": "string",
+    "instanceShapeConfig": {
+      "memoryInGBs": 0.0,
+      "nvmes": 0,
+      "ocpus": 0.0
+    }
+  }
+]

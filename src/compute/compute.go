@@ -73,17 +73,27 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 
 func GetInstances(client core.ComputeClient, compartment identity.Compartment, region string) []core.Instance {
 	client.SetRegion(region)
+	var allCompute []core.Instance
 	fmt.Printf("Checking: Region: %v\t Compartment: %v\t\n", region, *compartment.Name)
 	req := core.ListInstancesRequest{
 		CompartmentId:  compartment.Id,
 		LifecycleState: core.InstanceLifecycleStateRunning,
 	}
+	for {
+		// Send the request using the service client
+		resp, err := client.ListInstances(context.Background(), req)
+		helpers.FatalIfError(err)
 
-	// Send the request using the service client
-	resp, err := client.ListInstances(context.Background(), req)
-	helpers.FatalIfError(err)
+		allCompute = append(allCompute, resp.Items...)
+		if resp.OpcNextPage != nil {
+			req.Page = resp.OpcNextPage
+		} else {
+			break
+		}
+
+	}
 
 	// Retrieve value from the response.
 
-	return resp.Items
+	return allCompute
 }

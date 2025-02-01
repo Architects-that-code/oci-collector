@@ -52,6 +52,7 @@ func GetLimitDefs(err error, limitsClient limits.LimitsClient, tenancyID string,
 }
 
 func GetLimitsForService(err error, limitsClient limits.LimitsClient, tenancyID string, svc string) limits.ListLimitValuesResponse {
+	//fmt.Printf("Getting limits for service:  %v\n", svc)
 	vals, err := limitsClient.ListLimitValues(context.Background(), limits.ListLimitValuesRequest{
 		CompartmentId:   &tenancyID,
 		ServiceName:     &svc,
@@ -63,6 +64,7 @@ func GetLimitsForService(err error, limitsClient limits.LimitsClient, tenancyID 
 
 func GetServices(limitsClient limits.LimitsClient, err error, tenancyID string, region string) limits.ListServicesResponse {
 	limitsClient.SetRegion(region)
+	fmt.Printf("sending calls to Region: %v\n", region)
 	//util.PrintSpace()
 	//slog.Debug("limitsClientUPDATED: \n", limitsClient.Endpoint())
 	services, err := limitsClient.ListServices(context.Background(), limits.ListServicesRequest{
@@ -110,6 +112,7 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 			var localDatapile []LimitsCollector
 
 			services := GetServices(limitsClient, err, tenancyID, reg)
+
 			for _, s := range services.Items {
 				svc := s.Name
 				vals := GetLimitsForService(err, limitsClient, tenancyID, *svc)
