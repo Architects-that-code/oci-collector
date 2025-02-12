@@ -179,18 +179,24 @@ func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient,
 func CommonSetup(err error, client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
 	var wgDataPrep = sync.WaitGroup{}
 	wgDataPrep.Add(2)
+	/*
+		go func() {
+			defer wgDataPrep.Done()
+			possibleRegions := getALLRegions(err, client)
+			fmt.Printf("\nList of ALL regions: num: %v  \ndump: %v\n", len(possibleRegions), possibleRegions)
+		}()
+	*/
+
 	var compartments []identity.Compartment
 	go func() {
 		defer wgDataPrep.Done()
 		compartments = Getcompartments(err, client, tenancyID)
-		/*
-			for _, comp := range compartments {
-				fmt.Printf("Compartment Name: %v CompartmentID: %v\n", *comp.Name, *comp.CompartmentId)
-			}*/
+
 	}()
 
 	var regions []identity.RegionSubscription
 	var homeregion string
+
 	go func() {
 		defer wgDataPrep.Done()
 		regions, homeregion = getSubscribedRegions(err, client, tenancyID)
