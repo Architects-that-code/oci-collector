@@ -20,6 +20,9 @@ type VcnCollector struct {
 type SubnetCollector struct {
 	Subnet []core.Subnet
 }
+type DrgCollector struct {
+	Drg []core.Drg
+}
 
 func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, networkFetch bool, networkCIDRFetch bool,
 	networkInventoryFetch bool) {
@@ -30,13 +33,27 @@ func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionS
 	var allVCN []VcnCollector
 
 	var wg sync.WaitGroup
+	var totRPC int
 	wg.Add(len(regions))
 	var regionalSlices = make(chan []VcnCollector, len(regions))
 
 	for _, region := range regions {
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()
+
 			for _, compartment := range compartments {
+
+				drgs := getDRGs(client, compartment, *region.RegionName)
+				if len(drgs) > 0 {
+					// fmt.Printf("number drgs for compartment %v in region %v: %v\n", *compartment.Name, *region.RegionName, len(drgs))
+					for _, drg := range drgs {
+
+						rpcs := getRemotePeeringConnections(client, compartment, *drg.Id, *region.RegionName)
+						totRPC += len(rpcs)
+						fmt.Printf("\t\tnumber rpcs for drg %v %v \n", *drg.DisplayName, len(rpcs))
+					}
+				}
+
 				vcn := GetVCN(client, compartment, *region.RegionName)
 
 				var subnets []core.Subnet
@@ -53,13 +70,14 @@ func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionS
 					}
 					allVCN = append(allVCN, v)
 				}
-				//fmt.Printf("comp %v", *compartment.Name)
+
 			}
 			regionalSlices <- allVCN
 		}(region)
 	}
-	wg.Wait()
 
+	wg.Wait()
+	fmt.Printf("\n\t RPC Total number: %v\n", totRPC)
 	fmt.Printf("\n\t Total vcn: %v\n", len(allVCN))
 
 	//fmt.Printf("allVCN: %v\n", allVCN)
@@ -107,5 +125,29 @@ func GetSubnets(client core.VirtualNetworkClient, vcn core.Vcn, region string) [
 
 	//fmt.Printf("GetSubnets: %v\n", resp.Items)
 
+	return resp.Items
+}
+
+func getDRGs(client core.VirtualNetworkClient, compartment identity.Compartment, region string) []core.Drg {
+	client.SetRegion(region)
+	req := core.ListDrgsRequest{
+		CompartmentId: compartment.Id,
+	}
+
+	resp, err := client.ListDrgs(context.Background(), req)
+	helpers.FatalIfError(err)
+	//fmt.Println(resp)
+	return resp.Items
+}
+
+func getRemotePeeringConnections(client core.VirtualNetworkClient, compartment identity.Compartment, drgId string, region string) []core.RemotePeeringConnection {
+	client.SetRegion(region)
+	req := core.ListRemotePeeringConnectionsRequest{
+		CompartmentId: compartment.Id,
+		DrgId:         &drgId,
+	}
+
+	resp, err := client.ListRemotePeeringConnections(context.Background(), req)
+	helpers.FatalIfError(err)
 	return resp.Items
 }

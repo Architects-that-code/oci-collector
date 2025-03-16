@@ -2,6 +2,7 @@ package children
 
 import (
 	config "check-limits/config"
+	utils "check-limits/util"
 	"context"
 	"fmt"
 
@@ -36,6 +37,8 @@ func Children(provider common.ConfigurationProvider, passThruClient identity.Ide
 
 func GetChildTenancies(provider common.ConfigurationProvider, passThruClient identity.IdentityClient, tenancyID string, config config.Config) {
 	fmt.Println("checking child tenancies GetChildTenancies")
+	var Tenancies []TenancyCollector
+
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
 	req := tenantmanagercontrolplane.ListOrganizationTenanciesRequest{
@@ -50,10 +53,23 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 	// Retrieve value from the response.
 	fmt.Printf("count child OrganizationTenancies: %v\n", len(resp.Items))
 	for _, tenancy := range resp.Items {
-		fmt.Printf("Tenancy: %v\n", tenancy)
-		getAllPeople(provider, passThruClient, *tenancy.TenancyId, true)
+		if tenancy.TenancyId != nil && tenancy.Name != nil {
+			var tc = TenancyCollector{
+				TenancyId:   *tenancy.TenancyId,
+				TenancyName: *tenancy.Name,
+			}
+			Tenancies = append(Tenancies, tc)
+		}
+
+		// cross tenancy admission does n
+		// ot apply to Identity services getAllPeople(provider, passThruClient, *tenancy.TenancyId, true)
 	}
+
+	jsonData, _ := utils.ToJSON(Tenancies)
+	fmt.Println(string(jsonData))
+
 }
+
 func Deets(provider common.ConfigurationProvider, tenancyID string, homeregion string, config config.Config) {
 	fmt.Println("checking child tenancies Deets")
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
@@ -91,7 +107,7 @@ func Deets(provider common.ConfigurationProvider, tenancyID string, homeregion s
 
 	}
 
-	fmt.Printf("Organization Tenancy: %v\n", OrganizationTenancy)
+	fmt.Printf("DEETS: Organization Tenancy: %v\n", OrganizationTenancy)
 
 }
 

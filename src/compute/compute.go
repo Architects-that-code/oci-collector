@@ -19,8 +19,8 @@ type InstanceGroups struct {
 }
 
 func RunCompute(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment) {
-	client, err := core.NewComputeClientWithConfigurationProvider(provider)
-	helpers.FatalIfError(err)
+	//client, err := core.NewComputeClientWithConfigurationProvider(provider)
+	//helpers.FatalIfError(err)
 	fmt.Println("in RunCompute")
 
 	//loop thru regionsconst
@@ -37,7 +37,7 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()
 			for _, compartment := range compartments {
-				instances := GetInstances(client, compartment, *region.RegionName)
+				instances := GetInstances(provider, compartment, *region.RegionName)
 				allInstances = append(allInstances, InstanceGroups{Region: *region.RegionName, Compartment: *compartment.Name, Instance: instances})
 				//fmt.Printf("region: \t%v  \tcomp:%v: \t\t%v\n", *region.RegionName, *compartment.Name, len(instances))
 			}
@@ -62,6 +62,7 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 			for _, instance := range instanceGroup.Instance {
 				//fmt.Printf("\tInstance: %v\tShape: %v\tCpus: %v\tMem: %v\tTags: %v\n", *instance.DisplayName, *instance.Shape, *instance.ShapeConfig.Ocpus, *instance.ShapeConfig.MemoryInGBs, *instance.DefinedTags)
 				fmt.Printf("DisplayName: %v\t Shape: %v \t tags: freeform: %v\t   defined: %v \t\n", *instance.DisplayName, *instance.Shape, instance.FreeformTags, instance.DefinedTags)
+
 			}
 		}
 		// can i sort by size
@@ -71,7 +72,9 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 	//fmt.Printf("all instannces %v\n", allInstances)
 }
 
-func GetInstances(client core.ComputeClient, compartment identity.Compartment, region string) []core.Instance {
+func GetInstances(provider common.ConfigurationProvider, compartment identity.Compartment, region string) []core.Instance {
+	client, err := core.NewComputeClientWithConfigurationProvider(provider)
+	helpers.FatalIfError(err)
 	client.SetRegion(region)
 	var allCompute []core.Instance
 	fmt.Printf("Checking: Region: %v\t Compartment: %v\t\n", region, *compartment.Name)
@@ -83,6 +86,10 @@ func GetInstances(client core.ComputeClient, compartment identity.Compartment, r
 		// Send the request using the service client
 		resp, err := client.ListInstances(context.Background(), req)
 		helpers.FatalIfError(err)
+
+		for _, instance := range resp.Items {
+			GetIPs(provider, instance, region, compartment)
+		}
 
 		allCompute = append(allCompute, resp.Items...)
 		if resp.OpcNextPage != nil {
@@ -97,3 +104,49 @@ func GetInstances(client core.ComputeClient, compartment identity.Compartment, r
 
 	return allCompute
 }
+
+// TODO: add fetching IPs for a compute instance  - specifically so we can get the public IP
+func GetIPs(provider common.ConfigurationProvider, instance core.Instance, region string, compartment identity.Compartment) {
+	{
+		client, err := core.NewComputeClientWithConfigurationProvider(provider)
+		helpers.FatalIfError(err)
+		client.SetRegion(region)
+
+		//		#fmt.Printf("instance: %v\n", instance
+		request := core.ListVnicAttachmentsRequest{
+			CompartmentId: instance.CompartmentId,
+			InstanceId:    instance.Id,
+		}
+		response, err := client.ListVnicAttachments(context.Background(), request)
+		helpers.FatalIfError(err)
+
+		for _, vnic := range response.Items {
+			vnicID := *vnic.VnicId
+			getPubIP(provider, vnicID, region, compartment)
+
+		}
+
+	}
+}
+
+func getPubIP(provider common.ConfigurationProvider, vnicID string, region string, compartment identity.Compartment) {
+	client, err := core.NewVirtualNetworkClientWithConfigurationProvider(provider)
+	helpers.FatalIfError(err)
+
+	client.SetRegion(region)
+	fmt.Printf("vnicID: %v\n", vnicID)
+	req := core.GetVnicRequest{
+		VnicId: &vnicID,
+	}
+
+	resp, err := client.GetVnic(context.Background(), req)
+	helpers.FatalIfError(err)
+
+	fmt.Printf("RESPpriv: %s\n", *resp.Vnic.PrivateIp)
+	if resp.Vnic.PublicIp != nil {
+		fmt.Printf("RESPpub: %s\n", *resp.Vnic.PublicIp)
+	}
+
+}
+
+// Retrieve value from the response.

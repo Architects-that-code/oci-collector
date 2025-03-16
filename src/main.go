@@ -13,6 +13,7 @@ import (
 	scheduler "check-limits/schedule"
 	resourcesearch "check-limits/search"
 	supportresources "check-limits/support"
+	"strings"
 
 	children "check-limits/childtenancies"
 	utils "check-limits/util"
@@ -57,6 +58,7 @@ func main() {
 
 	limitCmd := flag.NewFlagSet("limits", flag.ExitOnError)
 	limitFetch := limitCmd.Bool("run", false, "fetch limits in all regions")
+	limitWrite := limitCmd.Bool("write", false, "write limits to file")
 
 	computeCmd := flag.NewFlagSet("compute", flag.ExitOnError)
 	computeFetch := computeCmd.Bool("run", false, "fetch compute active instances in all regions")
@@ -141,10 +143,11 @@ func main() {
 		fmt.Println("fetching limits")
 		limitCmd.Parse(os.Args[2:])
 		fmt.Printf("limitFetch: %v\n", *limitFetch)
+		fmt.Printf("limitWrite: %v\n", *limitWrite)
 		if *limitFetch {
 			provider, client, tenancyID, err := setup.Prep(config)
 			regions, _, _, _ := setup.CommonSetup(err, client, tenancyID)
-			limits.RunLimits(provider, regions, tenancyID)
+			limits.RunLimits(provider, regions, tenancyID, *limitWrite)
 		} else {
 			fmt.Println("add -run to run")
 		}
@@ -250,7 +253,7 @@ func main() {
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 
 		children.Children(provider, client, tenancyID, *childFetch, homeregion, config)
-		children.Deets(provider, tenancyID, homeregion, config)
+		//children.Deets(provider, tenancyID, homeregion, config)
 
 	case "object":
 		fmt.Println("checking object storage")
@@ -296,7 +299,7 @@ func main() {
 			fmt.Printf("subscribed regions: %v\n", len(regions))
 			if *checkFetch {
 				for _, region := range regions {
-					fmt.Printf("\tRegion: %v\n", region)
+					fmt.Printf("\tRegionKey: %v, name: %v \n", strings.ToLower(*region.RegionKey), *region.RegionName)
 				}
 			}
 		}
