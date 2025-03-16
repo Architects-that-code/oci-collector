@@ -13,7 +13,7 @@ func PrintSpace() {
 
 func PrintBanner() {
 	myFigure := figure.NewColorFigure("Architects That Code", "", "blue", false)
-	myFigure.Scroll(5000, 200, "left")
+	myFigure.Scroll(1400, 100, "left")
 	myFigure.Print()
 	PrintSpace()
 }
