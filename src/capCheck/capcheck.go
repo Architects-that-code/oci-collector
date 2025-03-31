@@ -38,7 +38,6 @@ func Check(provider common.ConfigurationProvider, regions []identity.RegionSubsc
 			adsAll = append(adsAll, ads...)
 			//fmt.Printf("ads: %v\n", ads)
 			for _, ad := range ads {
-
 				//fmt.Printf("ad: %v\n", *ad.Name)
 				config := core.CapacityReportInstanceShapeConfig{
 					Ocpus:       common.Float32(float32(capacityShapeOCPUs)),
@@ -71,7 +70,7 @@ func Check(provider common.ConfigurationProvider, regions []identity.RegionSubsc
 func makeInstanceShape(capacityShapeType string) string {
 	// if type is either E4, or E3 or E5 or A1 return "VM.Standard.{}.Flex"
 	var shape string
-	if capacityShapeType == "E4" || capacityShapeType == "E3" || capacityShapeType == "E5" || capacityShapeType == "A1" || capacityShapeType == "A2" {
+	if capacityShapeType == "E4" || capacityShapeType == "E3" || capacityShapeType == "E5" || capacityShapeType == "A1" || capacityShapeType == "A2" || capacityShapeType == "E6" {
 		shape = "VM.Standard." + capacityShapeType + ".Flex"
 	}
 	if capacityShapeType == "X9" {
