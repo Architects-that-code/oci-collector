@@ -13,6 +13,7 @@ import (
 	scheduler "check-limits/schedule"
 	resourcesearch "check-limits/search"
 	supportresources "check-limits/support"
+	"slices"
 	"strings"
 
 	children "check-limits/childtenancies"
@@ -90,7 +91,7 @@ func main() {
 	capacityFetch := capacityCmd.Bool("run", false, "fetch capacity")
 	capacityShapeOCPUs := capacityCmd.Int("ocpus", 0, "number of ocpus")
 	capacityShapeMemory := capacityCmd.Int("memory", 0, "amount of memory")
-	capacityShapeType := capacityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1")
+	capacityShapeType := capacityCmd.String("type", "E4", "use shape type E3, E4, E5, X9, A1, A2 --- OR the ChipSet family AMD, Intel, ARM")
 	capacityAD := capacityCmd.String("ad", "", "availability domain")
 	capacityFD := capacityCmd.String("fd", "", "fault domain")
 
@@ -100,12 +101,13 @@ func main() {
 
 	childCmd := flag.NewFlagSet("children", flag.ExitOnError)
 	childFetch := childCmd.Bool("run", false, "fetch child tenancies")
+	childWrite := childCmd.Bool("write", false, "write  to file")
 
 	objectCmd := flag.NewFlagSet("object", flag.ExitOnError)
 	objectFetch := objectCmd.Bool("run", false, "fetch object storage")
 
 	billingCMD := flag.NewFlagSet("billing", flag.ExitOnError)
-	billingPath := billingCMD.String("path", "./reports", "path to save billing files - default is ./reports")
+	billingPath := billingCMD.String("path", "reports", "path to save billing files - default is ./reports")
 
 	scheduleCmd := flag.NewFlagSet("schedule", flag.ExitOnError)
 	scheduleFetch := scheduleCmd.Bool("run", false, "fetch schedule")
@@ -210,18 +212,23 @@ func main() {
 		fmt.Println("checking capacity")
 		capacityCmd.Parse(os.Args[2:])
 		fmt.Printf("capacityFetch: %v\n", *capacityFetch)
+		fmt.Printf("capacityShapeType: %v\n", *capacityShapeType)
 		fmt.Printf("capacityShapeOCPUs: %v\n", *capacityShapeOCPUs)
 		fmt.Printf("capacityShapeMemory: %v\n", *capacityShapeMemory)
-		fmt.Printf("capacityShapeType: %v\n", *capacityShapeType)
 		fmt.Printf("capacityAD: %v\n", *capacityAD)
 		fmt.Printf("capacityFD: %v\n", *capacityFD)
 		provider, client, tenancyID, err := setup.Prep(config)
 		regions, compartments, _, _ := setup.CommonSetup(err, client, tenancyID)
+		chipsetSlice := []string{"AMD", "INTEL", "ARM"}
 		if *capacityShapeOCPUs > 0 || *capacityShapeMemory > 0 {
-			capcheck.Check(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory, *capacityShapeType)
+			if !slices.Contains(chipsetSlice, strings.ToUpper(*capacityShapeType)) {
+				capcheck.Check(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory, *capacityShapeType)
+			} else {
+				capcheck.CheckFAMILY(provider, regions, tenancyID, compartments, *capacityFetch, *capacityShapeOCPUs, *capacityShapeMemory, *capacityShapeType)
+			}
 
 		} else {
-			fmt.Println("add -type -ocpus and -memory and to run")
+			fmt.Println("add -ocpus and -memory -type  to run - NOTE: for -type you can use shape type 'E3', 'E4', 'E5', 'E6', 'X9', 'A1', 'A2' --- OR the ChipSet family 'AMD', 'Intel', 'ARM'")
 
 		}
 
@@ -249,10 +256,11 @@ func main() {
 		fmt.Println("checking child tenancies")
 		childCmd.Parse(os.Args[2:])
 		fmt.Printf("childFetch: %v\n", *childFetch)
+		fmt.Printf("childWrite: %v\n", *childWrite)
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 
-		children.Children(provider, client, tenancyID, *childFetch, homeregion, config)
+		children.Children(provider, client, tenancyID, *childFetch, homeregion, config, *childWrite)
 		//children.Deets(provider, tenancyID, homeregion, config)
 
 	case "object":

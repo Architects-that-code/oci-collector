@@ -10,6 +10,7 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"github.com/oracle/oci-go-sdk/v65/limits"
+	"gopkg.in/yaml.v2"
 )
 
 func GetLimitsAvailRegionScoped(err error, limitsClient limits.LimitsClient, compartment string, svc string, limitName string) limits.GetResourceAvailabilityResponse {
@@ -165,7 +166,13 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 
 	if write {
 		jsonData, _ := utils.ToJSON(Datapile)
-		fmt.Println(string(jsonData))
+		yamlData, err := yaml.Marshal(Datapile)
+		if err != nil {
+			fmt.Println("Error marshaling to YAML:", err)
+		}
+		utils.WriteToFile("limits.json", []byte(jsonData))
+		utils.WriteToFile("limits.yaml", []byte(yamlData))
+		//fmt.Println(string(yamlData))
 	}
 
 }
