@@ -65,6 +65,7 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 		//fmt.Printf("child OrganizationTenancy: %v\n", *tenancy.TenancyId)
 		if tenancy.TenancyId != nil && tenancy.Name != nil && tenancy.LifecycleState == "ACTIVE" {
 			//fmt.Printf("child OrganizationTenancy: %v\n", *&tenancy.LifecycleState)
+			//fmt.Printf("has tags %v\n", getchildTAGS(passThruClient, *tenancy.TenancyId))
 			var tc = TenancyCollector{
 				TenancyId:         *tenancy.TenancyId,
 				TenancyName:       *tenancy.Name,
@@ -208,6 +209,33 @@ func getchildcompartments(client identity.IdentityClient, tenancyID string) bool
 
 	return len(allCompartments) > 0
 
+}
+func getchildTAGS(client identity.IdentityClient, tenancyID string) bool {
+
+	var allTags []identity.TagNamespaceSummary
+
+	req := identity.ListTagNamespacesRequest{
+		CompartmentId:          &tenancyID,
+		IncludeSubcompartments: common.Bool(false),
+		LifecycleState:         identity.TagNamespaceLifecycleStateActive,
+		Limit:                  common.Int(1000),
+	}
+
+	// Send the request using the service client
+	resp, err := client.ListTagNamespaces(context.Background(), req)
+	if err != nil {
+		//fmt.Printf("error %v\n", tenancyID)
+		return false
+	} else {
+		fmt.Printf("has tags %v\n", tenancyID)
+	}
+
+	allTags = append(allTags, resp.Items...)
+
+	// Retrieve value from the response.
+	//fmt.Println(resp)
+
+	return len(allTags) > 0
 }
 
 // this may never work as IDENTITY service does not FULLY  support cross-tenancy ACCESS at this time
