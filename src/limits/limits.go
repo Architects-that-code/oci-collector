@@ -10,6 +10,7 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/example/helpers"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"github.com/oracle/oci-go-sdk/v65/limits"
+	"gopkg.in/yaml.v2"
 )
 
 func GetLimitsAvailRegionScoped(err error, limitsClient limits.LimitsClient, compartment string, svc string, limitName string) limits.GetResourceAvailabilityResponse {
@@ -52,6 +53,7 @@ func GetLimitDefs(err error, limitsClient limits.LimitsClient, tenancyID string,
 }
 
 func GetLimitsForService(err error, limitsClient limits.LimitsClient, tenancyID string, svc string) limits.ListLimitValuesResponse {
+	//fmt.Printf("Getting limits for service:  %v\n", svc)
 	vals, err := limitsClient.ListLimitValues(context.Background(), limits.ListLimitValuesRequest{
 		CompartmentId:   &tenancyID,
 		ServiceName:     &svc,
@@ -63,6 +65,7 @@ func GetLimitsForService(err error, limitsClient limits.LimitsClient, tenancyID 
 
 func GetServices(limitsClient limits.LimitsClient, err error, tenancyID string, region string) limits.ListServicesResponse {
 	limitsClient.SetRegion(region)
+	fmt.Printf("sending calls to Region: %v\n", region)
 	//util.PrintSpace()
 	//slog.Debug("limitsClientUPDATED: \n", limitsClient.Endpoint())
 	services, err := limitsClient.ListServices(context.Background(), limits.ListServicesRequest{
@@ -78,7 +81,7 @@ func GetServices(limitsClient limits.LimitsClient, err error, tenancyID string, 
 	return services
 }
 
-func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string) {
+func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, write bool) {
 	fmt.Printf("Running limits for tenancy: %v\n", tenancyID)
 	limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
@@ -110,6 +113,7 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 			var localDatapile []LimitsCollector
 
 			services := GetServices(limitsClient, err, tenancyID, reg)
+
 			for _, s := range services.Items {
 				svc := s.Name
 				vals := GetLimitsForService(err, limitsClient, tenancyID, *svc)
@@ -157,8 +161,18 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 	/*for _, dp := range Datapile {
 		fmt.Println(dp)
 	}*/
-	jsonData, _ := utils.ToJSON(Datapile)
-	fmt.Println(string(jsonData))
+
 	fmt.Println(len(Datapile))
+
+	if write {
+		jsonData, _ := utils.ToJSON(Datapile)
+		yamlData, err := yaml.Marshal(Datapile)
+		if err != nil {
+			fmt.Println("Error marshaling to YAML:", err)
+		}
+		utils.WriteToFile("limits.json", []byte(jsonData))
+		utils.WriteToFile("limits.yaml", []byte(yamlData))
+		//fmt.Println(string(yamlData))
+	}
 
 }

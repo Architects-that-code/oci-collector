@@ -5,7 +5,10 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"os"
+	"path/filepath"
+	"sync"
 
 	"github.com/oracle/oci-go-sdk/example/helpers"
 	"github.com/oracle/oci-go-sdk/v65/common"
@@ -29,6 +32,7 @@ func GetBillingInfo() {
 func Getfiles(provider common.ConfigurationProvider, tenancyID string, homeRegion string, config config.Config, outputPath string) {
 	fmt.Println("Getting billing files")
 	destinationPath := outputPath
+	fmt.Println("destinationPath: ", destinationPath)
 	client, err := objectstorage.NewObjectStorageClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
 
@@ -65,36 +69,60 @@ func Getfiles(provider common.ConfigurationProvider, tenancyID string, homeRegio
 		}
 	}
 	fmt.Println(len(objSums))
+	// can we do the following in parallel?
+	var wg sync.WaitGroup
 
 	for _, obj := range objSums {
-		fmt.Println(*obj.Name)
+		wg.Add(1)
+		go func(obj objectstorage.ObjectSummary) {
+			defer wg.Done()
 
-		getReq := objectstorage.GetObjectRequest{
-			NamespaceName: common.String(reportingNamespace),
-			BucketName:    common.String(reportBucket),
-			ObjectName:    common.String(*obj.Name),
-		}
+			fmt.Println(*obj.Name)
 
-		objDetail, err := client.GetObject(ctx, getReq)
+			getReq := objectstorage.GetObjectRequest{
+				NamespaceName: common.String(reportingNamespace),
+				BucketName:    common.String(reportBucket),
+				ObjectName:    common.String(*obj.Name),
+			}
 
-		helpers.FatalIfError(err)
-		// Extract filename
-		filename := *obj.Name
-		fmt.Println("filename: ", filename)
-		// Download and save file
-		filePath := destinationPath + "/" + filename
-		fmt.Println("orig file: ", filePath)
-		fmt.Println("file size: ", objDetail.ContentLength)
-		fmt.Println("contents: ", objDetail.Content.Close())
-		content, _ := io.ReadAll(objDetail.Content)
+			objDetail, err := client.GetObject(ctx, getReq)
+			helpers.FatalIfError(err)
 
-		err = os.WriteFile(filePath, content, 0755)
-		if err != nil {
-			panic(err)
-		}
+			// Extract filename
+			filename := *obj.Name
+			fmt.Println("filename: ", filename)
 
-		fmt.Printf("Downloaded file: %s\n", *obj.Name)
+			// Download and save file
+			homedir, err := os.UserHomeDir()
+			if err != nil {
+				panic(err)
+			}
+			filePath := homedir + "/" + destinationPath + "/" + config.ProfileName + "/" + filename
+			fmt.Println("orig file: ", filePath)
+			fmt.Println("file size: ", *objDetail.ContentLength)
+			//fmt.Println("contentType: ", *objDetail.ContentType)
+			content, _ := io.ReadAll(objDetail.Content)
+			//fmt.Println("content: ", content)
 
+			if err := writeFile(filePath, content); err != nil {
+				log.Fatal(err)
+			}
+
+			fmt.Printf("Downloaded file: %s\n", *obj.Name)
+		}(obj)
 	}
 
+	wg.Wait()
+
+}
+func writeFile(path string, content []byte) error {
+	// Create the directory if it doesn't exist
+
+	dirPath := filepath.Dir(path)
+	if err := os.MkdirAll(dirPath, 0777); err != nil {
+		return err
+	}
+
+	// Write the file with default permissions
+	return os.WriteFile(path, content, 0777)
 }
