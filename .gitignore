@@ -19,6 +19,7 @@
 # vendor/
 .idea
 .vscode
+.DATA
 
 # Go workspace file
 go.work
