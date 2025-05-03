@@ -28,20 +28,26 @@ func ListTickets(provider common.ConfigurationProvider, tenancyID string, homeRe
 	client, err := cims.NewIncidentClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
 	var user_ocid, _ = provider.UserOCID()
+	fmt.Printf("UserOCID: %v\n", user_ocid)
 	req := cims.ListIncidentsRequest{
-		CompartmentId:  &tenancyID,
-		Limit:          common.Int(100),
-		Ocid:           common.String(user_ocid),
-		Csi:            &CSI,
-		LifecycleState: cims.ListIncidentsLifecycleStateActive,
-		ProblemType:    common.String("TECH"),
+		CompartmentId: common.String(tenancyID),
+		//Limit:         common.Int(100),
+		Ocid: common.String(user_ocid),
+		Csi:  common.String(CSI),
+		//LifecycleState: cims.ListIncidentsLifecycleStateActive,
+		Homeregion:  common.String(homeRegion),
+		ProblemType: common.String("TECH"),
 	}
 
 	fmt.Printf("Tech req: %v\n", req)
 
 	resp, err := client.ListIncidents(context.Background(), req)
-	helpers.FatalIfError(err)
-
+	//helpers.FatalIfError(err)
+	if err != nil {
+		fmt.Printf("bad resp: %v\n", resp)
+		fmt.Printf("Error: %v\n", err.Error())
+		return
+	}
 	// Retrieve value from the response.
 	fmt.Printf("Incidents: %v\n", len(resp.Items))
 

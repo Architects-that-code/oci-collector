@@ -199,14 +199,13 @@ func main() {
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 		//_, compartments, _ := setup.CommonSetup(err, client, tenancyID, false)
 
-		supportresources.CreateTicket(provider, tenancyID, homeregion, config.CSI)
-
+		//supportresources.CreateTicket(provider, tenancyID, homeregion, config.CSI)
+		//supportresources.GetCSI(provider, tenancyID, homeregion)
 		supportresources.ListTickets(provider, tenancyID, homeregion, config.CSI)
 		//helpers.FatalIfError(err)
-		supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
-		supportresources.ListBillingTickets(provider, tenancyID, homeregion, config.CSI)
 
-		supportresources.GetCSI(provider, tenancyID, homeregion)
+		//supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
+		//supportresources.ListBillingTickets(provider, tenancyID, homeregion, config.CSI)
 
 	case "capacity":
 		fmt.Println("checking capacity")

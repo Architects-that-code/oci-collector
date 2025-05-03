@@ -5,4 +5,5 @@ type TenancyCollector struct {
 	TenancyName       string `json:"name"`
 	TenancyConfigured bool   `json:"configured"`
 	GovernanceStatus  string `json:"governanceStatus"`
+	LifecycleState    string `json:"lifecycleState"`
 }

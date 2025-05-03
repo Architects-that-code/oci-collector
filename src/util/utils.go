@@ -36,7 +36,7 @@ func WriteToFile(filename string, data []byte) error {
 		fmt.Errorf("failed to get home directory: %w", err)
 	}
 	filename = fmt.Sprintf("%s/%s", homedir, filename)
-	fmt.Printf("Writing to file: %s\n", filename)
+	fmt.Printf("\nWriting to file: %s\n", filename)
 	os.WriteFile(filename, data, 0777)
 
 	return nil
