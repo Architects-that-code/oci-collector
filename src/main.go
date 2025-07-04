@@ -108,6 +108,7 @@ func main() {
 
 	billingCMD := flag.NewFlagSet("billing", flag.ExitOnError)
 	billingPath := billingCMD.String("path", "reports", "path to save billing files - default is ./reports")
+	billingDownload := billingCMD.Bool("download", false, "download billing files")
 
 	scheduleCmd := flag.NewFlagSet("schedule", flag.ExitOnError)
 	scheduleFetch := scheduleCmd.Bool("run", false, "fetch schedule")
@@ -274,10 +275,11 @@ func main() {
 	case "billing":
 		fmt.Println("checking billing")
 		billingCMD.Parse(os.Args[2:])
-		fmt.Printf("billingFetch: %v\n", &billingPath)
+		fmt.Printf("billingPath: %v\n", &billingPath)
+		fmt.Printf("billingDownload: %v\n", *billingDownload)
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
-		billing.Getfiles(provider, tenancyID, homeregion, config, *billingPath)
+		billing.Getfiles(provider, tenancyID, homeregion, config, *billingPath, *billingDownload)
 
 	case "schedule":
 		fmt.Println("checking schedule")
