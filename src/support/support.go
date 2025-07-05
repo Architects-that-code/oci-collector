@@ -121,6 +121,7 @@ func CloseTicket() {
 	// close ticket
 }
 
+/*
 func GetCSI(provider common.ConfigurationProvider, tenancyID string, homeRegion string) {
 	fmt.Println("GetCSI")
 	client, err := cims.NewIncidentClientWithConfigurationProvider(provider)
@@ -144,3 +145,4 @@ func GetCSI(provider common.ConfigurationProvider, tenancyID string, homeRegion 
 	fmt.Println(resp)
 	fmt.Println("GetCSI -end")
 }
+*/
