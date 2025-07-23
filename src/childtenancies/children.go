@@ -34,6 +34,9 @@ func Children(provider common.ConfigurationProvider, passThruClient identity.Ide
 	Organization := resp.Organization
 	fmt.Printf("\tOrganization: %v\n", Organization)
 	Deets(provider, tenancyID, homeregion, config)
+	getOutstandingInvites(provider, tenancyID, homeregion, config)
+
+	//getOutstandingInvites(provider, tenancyID, homeregion, config)
 
 	// does this tenancy have children
 	children := GetChildTenancies(provider, passThruClient, tenancyID, config, write)
@@ -63,7 +66,7 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 	for _, tenancy := range resp.Items {
 		//fmt.Printf("child OrganizationTenancy: %v\n", tenancy)
 		//fmt.Printf("child OrganizationTenancy: %v\n", *tenancy.TenancyId)
-		if tenancy.TenancyId != nil && tenancy.Name != nil && tenancy.LifecycleState == "ACTIVE" {
+		if tenancy.TenancyId != nil && tenancy.Name != nil {
 			//fmt.Printf("child OrganizationTenancy: %v\n", *&tenancy.LifecycleState)
 			//fmt.Printf("has tags %v\n", getchildTAGS(passThruClient, *tenancy.TenancyId))
 			var tc = TenancyCollector{
@@ -71,6 +74,7 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 				TenancyName:       *tenancy.Name,
 				TenancyConfigured: getchildcompartments(passThruClient, *tenancy.TenancyId),
 				GovernanceStatus:  string(tenancy.GovernanceStatus),
+				LifecycleState:    string(tenancy.LifecycleState),
 			}
 			tenancies = append(tenancies, tc)
 			allTenancies = append(allTenancies, tenancy)
@@ -87,6 +91,7 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 	//fmt.Println(string(jsonData))
 
 	// Print the list of child tenancies
+	utils.WriteToFile("collector-childTenancy_counts_lifecycleStates.txt", []byte(lifeCycleStats(tenancies)))
 
 	if write {
 		fmt.Println("-")
@@ -97,11 +102,28 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 		if err != nil {
 			fmt.Println("Error marshaling to YAML:", err)
 		}
-		utils.WriteToFile("childtenancies.yaml", []byte(yamlData))
+		utils.WriteToFile("collector-childtenancies.yaml", []byte(yamlData))
 
 		//fmt.Println(string(yamlData))
 	}
 	return allTenancies
+}
+
+func lifeCycleStats(tenancies []TenancyCollector) string {
+	// Create a map to store the count of each lifecycle state
+	lifecycleStats := make(map[string]int)
+
+	// Iterate over the tenancies and count the lifecycle states
+	for _, tenancy := range tenancies {
+		lifecycleStats[tenancy.LifecycleState]++
+	}
+
+	var result string
+	result += "Lifecycle State Stats:\n"
+	for state, count := range lifecycleStats {
+		result += fmt.Sprintf("%4d %s\n", count, state)
+	}
+	return result
 }
 
 func writetenanciestoFile(tenancies []TenancyCollector) {
@@ -109,7 +131,7 @@ func writetenanciestoFile(tenancies []TenancyCollector) {
 	if err != nil {
 		panic(err)
 	}
-	file, err := os.Create(homedir + "/actualChildren.csv")
+	file, err := os.Create(homedir + "/collector-actualChildren.csv")
 	if err != nil {
 		panic(err)
 	}
@@ -276,4 +298,43 @@ func getAllPeople(provider common.ConfigurationProvider, passThruClient identity
 	}
 	fmt.Printf("Showusers: end \n")
 	return allUsers
+}
+
+func getOutstandingInvites(provider common.ConfigurationProvider, tenancyID string, homeregion string, config config.Config) {
+	fmt.Printf("\nchecking child tenancies Getting Outstanding Invites\n")
+	client, err := tenantmanagercontrolplane.NewSenderInvitationClientWithConfigurationProvider(provider)
+
+	helpers.FatalIfError(err)
+
+	req := tenantmanagercontrolplane.ListSenderInvitationsRequest{
+		CompartmentId:  common.String(tenancyID),
+		Limit:          common.Int(1000),
+		Status:         tenantmanagercontrolplane.ListSenderInvitationsStatusAccepted,
+		LifecycleState: tenantmanagercontrolplane.ListSenderInvitationsLifecycleStateInactive,
+	}
+	fmt.Printf("request is: %v\n", req)
+
+	resp, err := client.ListSenderInvitations(context.Background(), req)
+	helpers.FatalIfError(err)
+
+	// Retrieve value from the response.
+	fmt.Println("number of outstanding invites: ", len(resp.Items))
+
+	/*
+			for _, invite := range resp.Items {
+
+
+				fmt.Printf("Invite: %v\n", invite)
+
+
+					fmt.Printf("InviteID: %v\n", *invite.Id)
+					fmt.Printf("LifecycleState: %v\n", *&invite.LifecycleState)
+					fmt.Printf("Status: %v\n", *&invite.Status)
+
+					fmt.Printf("recip email: %v\n", *&invite.RecipientEmailAddress)
+					fmt.Printf("timecreated: %v\n", *invite.TimeCreated)
+
+		}
+	*/
+
 }

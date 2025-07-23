@@ -112,14 +112,16 @@ func getSubscribedRegions(err error, client identity.IdentityClient, tenancyID s
 		TenancyId: &tenancyID,
 	})
 	helpers.FatalIfError(err)
-	//fmt.Printf("List of regions: %v", reqReg.Items)
-
+	//fmt.Printf("List of subcribed regions:\n %v", reqReg.Items)
+	//getALLRegions(err, client)
 	return reqReg.Items, getHomeRegion(reqReg.Items)
+
 }
 func getALLRegions(err error, client identity.IdentityClient) []identity.Region {
-	allReg, err := client.ListRegions(context.Background())
+	allReg, err := client.ListRegions(context.Background()) // this gets all POSSIBLE regions -
+
 	helpers.FatalIfError(err)
-	//fmt.Printf("List of regions: %v", reqReg.Items)
+	//fmt.Printf("\nList of ALL regions: \n %v", allReg.Items)
 
 	return allReg.Items
 }

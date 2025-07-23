@@ -108,6 +108,9 @@ func main() {
 
 	billingCMD := flag.NewFlagSet("billing", flag.ExitOnError)
 	billingPath := billingCMD.String("path", "reports", "path to save billing files - default is ./reports")
+	billingDownload := billingCMD.Bool("download", false, "download billing files")
+	billingProcess := billingCMD.Bool("process", false, "process downloaded billing files")
+	billingRedownloadErrors := billingCMD.Bool("redownload-errors", false, "re-download files listed in error_files.txt")
 
 	scheduleCmd := flag.NewFlagSet("schedule", flag.ExitOnError)
 	scheduleFetch := scheduleCmd.Bool("run", false, "fetch schedule")
@@ -199,14 +202,13 @@ func main() {
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
 		//_, compartments, _ := setup.CommonSetup(err, client, tenancyID, false)
 
-		supportresources.CreateTicket(provider, tenancyID, homeregion, config.CSI)
-
+		//supportresources.CreateTicket(provider, tenancyID, homeregion, config.CSI)
+		//supportresources.GetCSI(provider, tenancyID, homeregion)
 		supportresources.ListTickets(provider, tenancyID, homeregion, config.CSI)
 		//helpers.FatalIfError(err)
-		supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
-		supportresources.ListBillingTickets(provider, tenancyID, homeregion, config.CSI)
 
-		supportresources.GetCSI(provider, tenancyID, homeregion)
+		//supportresources.ListLimitsTickets(provider, tenancyID, homeregion, config.CSI)
+		//supportresources.ListBillingTickets(provider, tenancyID, homeregion, config.CSI)
 
 	case "capacity":
 		fmt.Println("checking capacity")
@@ -275,10 +277,43 @@ func main() {
 	case "billing":
 		fmt.Println("checking billing")
 		billingCMD.Parse(os.Args[2:])
-		fmt.Printf("billingFetch: %v\n", &billingPath)
+		fmt.Printf("billingPath: %v\n", *billingPath)
+		fmt.Printf("billingDownload: %v\n", *billingDownload)
+		fmt.Printf("billingProcess: %v\n", *billingProcess)
+
+		// Prepare OCI configuration once
 		provider, client, tenancyID, err := setup.Prep(config)
 		_, _, _, homeregion := setup.CommonSetup(err, client, tenancyID)
-		billing.Getfiles(provider, tenancyID, homeregion, config, *billingPath)
+
+		// Always run Getfiles to get the list of available files and determine new files
+		// The 'download' parameter controls whether actual file downloads occur.
+		billing.Getfiles(provider, tenancyID, homeregion, config, *billingPath, *billingDownload)
+
+		// Handle re-downloading error files if requested
+		if *billingRedownloadErrors {
+			fmt.Println("Re-downloading error files...")
+			err := billing.RedownloadErrorFiles(provider, tenancyID, homeregion, config, *billingPath)
+			if err != nil {
+				fmt.Printf("Error re-downloading error files: %v\n", err)
+				os.Exit(1)
+			} else {
+				fmt.Println("Re-download of error files completed.")
+			}
+		}
+
+		// Handle processing if requested
+		if *billingProcess {
+			fmt.Println("Processing billing files...")
+			err := billing.ProcessBillingFiles(*billingPath, config.ProfileName)
+			if err != nil {
+				fmt.Printf("Error processing billing files: %v\n", err)
+				os.Exit(1)
+			} else {
+				fmt.Println("Billing files processed successfully.")
+			}
+		} else if !*billingDownload && !*billingRedownloadErrors && !*billingProcess { // Only print usage if no action flags are true
+			fmt.Println("No action specified for billing. Use -download, -redownload-errors, or -process.")
+		}
 
 	case "schedule":
 		fmt.Println("checking schedule")
