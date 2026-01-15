@@ -153,8 +153,6 @@ type Config struct {
 	ProfileName          string `yaml:"profileName"`
 	UseInstancePrincipal bool   `yaml:"useinstanceprincipal"`
 	CSI                  string `yaml:"SUPPORT_CSI_NUMBER"`
-	ORG_ID               string `yaml:"ORG_ID"`
-	SUBSCRIPTION_ID      string `yaml:"SUBSCRIPTION_ID"`
 }
 
 func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient, string, error) {

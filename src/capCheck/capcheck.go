@@ -148,7 +148,7 @@ func makeInstanceFAMILYShapes(capacityShapeType string) []string {
 	case "INTEL":
 		result = []string{"VM.Standard3.Flex"}
 	case "ARM":
-		result = []string{"VM.Standard.A1.Flex", "VM.Standard.A2.Flex"}
+		result = []string{"VM.Standard.A1.Flex", "VM.Standard.A2.Flex", "VM.Standard.A4.Flex"}
 	default:
 		fmt.Println("Invalid capacity shape type")
 	}

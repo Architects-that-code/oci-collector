@@ -16,14 +16,39 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+func getOrgID(tenancyOCID string, provider common.ConfigurationProvider) (string, error) {
+	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
+	if err != nil {
+		return "", err
+	}
+
+	request := tenantmanagercontrolplane.ListOrganizationsRequest{
+		CompartmentId: common.String(tenancyOCID),
+	}
+
+	response, err := client.ListOrganizations(context.Background(), request)
+	if err != nil {
+		return "", err
+	}
+
+	if len(response.Items) == 0 {
+		return "", fmt.Errorf("no organization found for this tenancy")
+	}
+
+	// Returns the ID of the first associated organization
+	fmt.Printf("orgid: %v\n", *response.Items[0].Id)
+	return *response.Items[0].Id, nil
+
+}
+
 func Children(provider common.ConfigurationProvider, passThruClient identity.IdentityClient, tenancyID string, childFetch bool, homeregion string, config config.Config, write bool) {
 	fmt.Println("checking child tenancies Children")
-	fmt.Println("OrgId: ", config.ORG_ID)
+	orgID, err := getOrgID(tenancyID, provider)
 
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
 	req := tenantmanagercontrolplane.GetOrganizationRequest{
 
-		OrganizationId: common.String(config.ORG_ID),
+		OrganizationId: common.String(orgID),
 	}
 	helpers.FatalIfError(err)
 	// Send the request using the service client
@@ -49,11 +74,13 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 	var allTenancies []tenantmanagercontrolplane.OrganizationTenancySummary
 	var tenancies []TenancyCollector
 
+	orgID, err := getOrgID(tenancyID, provider)
+
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
 	req := tenantmanagercontrolplane.ListOrganizationTenanciesRequest{
 		Limit:          common.Int(1000),
-		OrganizationId: common.String(config.ORG_ID),
+		OrganizationId: common.String(orgID),
 	}
 
 	// Send the request using the service client
@@ -152,8 +179,11 @@ func Deets(provider common.ConfigurationProvider, tenancyID string, homeregion s
 	fmt.Println("checking child tenancies Getting Governance rules")
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
+
+	orgID, err := getOrgID(tenancyID, provider)
+
 	req := tenantmanagercontrolplane.GetOrganizationTenancyRequest{
-		OrganizationId: common.String(config.ORG_ID),
+		OrganizationId: common.String(orgID),
 		TenancyId:      common.String(tenancyID),
 	}
 
