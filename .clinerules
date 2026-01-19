@@ -1,0 +1,2 @@
+- always ensure project is buildable before committing
+- always ensure that project run correctly before committing

@@ -11,7 +11,7 @@ APP := oci-collector
 
 .PHONY: mac-amd64
 mac-amd64:
-	GOOS=darwin GOARCH=amd64 go build  -ldflags='$(GO_LDFLAGS)' -o ../dist/$(APP)-$(VERSION)-mac-amd64 .
+	GOOS=darwin GOARCH=amd64 go build  -ldflags='$(GO_LDFLAGS)' -o ./dist/$(APP)-$(VERSION)-mac-amd64 .
 
 .PHONY: all
 all: windows-amd64 linux-amd64 linux-arm64 mac-amd64 mac-arm copy_file

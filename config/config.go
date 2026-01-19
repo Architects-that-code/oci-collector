@@ -1,4 +1,4 @@
-package setup
+package config
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/common/auth"
-	"github.com/oracle/oci-go-sdk/v65/example/helpers"
+	"oci-collector/util"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"gopkg.in/yaml.v2"
 )
@@ -18,7 +18,7 @@ func GetCompartmentsHeirarchy(err error, client identity.IdentityClient, tenancy
 
 }
 
-func Getcompartments(err error, client identity.IdentityClient, tenancyID string) []identity.Compartment {
+func Getcompartments(client identity.IdentityClient, tenancyID string) []identity.Compartment {
 	var allCompartments []identity.Compartment
 	allCompartments = append(allCompartments, identity.Compartment{Id: &tenancyID,
 		Name: common.String("root")})
@@ -34,7 +34,7 @@ func Getcompartments(err error, client identity.IdentityClient, tenancyID string
 	}
 	for {
 		respComp, err := client.ListCompartments(context.Background(), req)
-		helpers.FatalIfError(err)
+		util.FatalIfError(err)
 		allCompartments = append(allCompartments, respComp.Items...)
 		if respComp.OpcNextPage != nil {
 			req.Page = respComp.OpcNextPage
@@ -53,7 +53,7 @@ func GetADs(tenancyID string, client identity.IdentityClient) []identity.Availab
 		CompartmentId: &tenancyID,
 	}
 	adResp, err := client.ListAvailabilityDomains(context.Background(), adReq)
-	helpers.FatalIfError(err)
+	util.FatalIfError(err)
 	return adResp.Items
 }
 func FDs(tenancyID string, client identity.IdentityClient, ad identity.AvailabilityDomain) []identity.FaultDomain {
@@ -62,7 +62,7 @@ func FDs(tenancyID string, client identity.IdentityClient, ad identity.Availabil
 		AvailabilityDomain: ad.Name,
 	}
 	fdResp, err := client.ListFaultDomains(context.Background(), fdreq)
-	helpers.FatalIfError(err)
+	util.FatalIfError(err)
 	fmt.Printf("Fault Domains: %v\n", fdResp)
 	return fdResp.Items
 }
@@ -107,20 +107,20 @@ func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []id
 	return adsAll
 }
 
-func getSubscribedRegions(err error, client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, string) {
+func getSubscribedRegions(client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, string) {
 	reqReg, err := client.ListRegionSubscriptions(context.Background(), identity.ListRegionSubscriptionsRequest{
 		TenancyId: &tenancyID,
 	})
-	helpers.FatalIfError(err)
+	util.FatalIfError(err)
 	//fmt.Printf("List of subcribed regions:\n %v", reqReg.Items)
 	//getALLRegions(err, client)
 	return reqReg.Items, getHomeRegion(reqReg.Items)
 
 }
-func getALLRegions(err error, client identity.IdentityClient) []identity.Region {
+func getALLRegions(client identity.IdentityClient) []identity.Region {
 	allReg, err := client.ListRegions(context.Background()) // this gets all POSSIBLE regions -
 
-	helpers.FatalIfError(err)
+	util.FatalIfError(err)
 	//fmt.Printf("\nList of ALL regions: \n %v", allReg.Items)
 
 	return allReg.Items
@@ -138,7 +138,7 @@ func getHomeRegion(regions []identity.RegionSubscription) string {
 
 func Getconfig() (Config, error) {
 	data, err := os.ReadFile("toolkit-config.yaml")
-	helpers.FatalIfError(err)
+	util.FatalIfError(err)
 
 	var config Config
 	err = yaml.Unmarshal(data, &config)
@@ -169,14 +169,14 @@ func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient,
 	}
 
 	client, err := identity.NewIdentityClientWithConfigurationProvider(_provider)
-	helpers.FatalIfError(err)
+	util.FatalIfError(err)
 	tenancyID, err := _provider.TenancyOCID()
-	helpers.FatalIfError(err)
+	util.FatalIfError(err)
 	return _provider, client, tenancyID, err
 
 }
 
-func CommonSetup(err error, client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
+func CommonSetup(client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
 	var wgDataPrep = sync.WaitGroup{}
 	wgDataPrep.Add(2)
 	/*
@@ -190,7 +190,7 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string) ([
 	var compartments []identity.Compartment
 	go func() {
 		defer wgDataPrep.Done()
-		compartments = Getcompartments(err, client, tenancyID)
+		compartments = Getcompartments(client, tenancyID)
 
 	}()
 
@@ -199,7 +199,7 @@ func CommonSetup(err error, client identity.IdentityClient, tenancyID string) ([
 
 	go func() {
 		defer wgDataPrep.Done()
-		regions, homeregion = getSubscribedRegions(err, client, tenancyID)
+		regions, homeregion = getSubscribedRegions(client, tenancyID)
 
 		/*
 			for _, region := range regions {
@@ -224,7 +224,7 @@ func getTenancyObj(client identity.IdentityClient, tenancyID string, homeregion 
 		TenancyId: common.String(tenancyID),
 	}
 	resp, err := client.GetTenancy(context.Background(), req)
-	helpers.FatalIfError(err)
+	util.FatalIfError(err)
 	fmt.Printf("Tenancy: %v\n", resp.Tenancy)
 
 }

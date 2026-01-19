@@ -33,11 +33,13 @@ func ToYAML[T any](data T) ([]byte, error) {
 func WriteToFile(filename string, data []byte) error {
 	homedir, err := os.UserHomeDir()
 	if err != nil {
-		fmt.Errorf("failed to get home directory: %w", err)
+		return fmt.Errorf("failed to get home directory: %w", err)
 	}
 	filename = fmt.Sprintf("%s/%s", homedir, filename)
 	fmt.Printf("\nWriting to file: %s\n", filename)
-	os.WriteFile(filename, data, 0777)
+	if err := os.WriteFile(filename, data, 0644); err != nil {
+		return fmt.Errorf("failed to write file: %w", err)
+	}
 
 	return nil
 }
