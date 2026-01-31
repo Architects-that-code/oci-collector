@@ -1,39 +1,53 @@
-/*
-Copyright © 2025 Joe Scanlon
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
 package cmd
 
 import (
 	"os"
 
 	"github.com/spf13/cobra"
+
+	"limits"
+	"compute"
+	"config"
+	"peeps"
+	"policies"
+	"groups"
+	"support"
+	"network"
+	"capacity"
+	"capability"
+	"children"
+	"object"
+	"billing"
+	"schedule"
+	"search"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "automator",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Use:   "oci-collector",
+	Short: "A utility belt for OCI tenancy management",
+	Long: `This is designed to be a loose collection of tools to help manage and monitor your OCI tenancy.
+	
+usage: oci-collector [command] [flags]
+	
+Specify the action you want to take:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+limits: fetch limits in all YOUR regions
+compute: fetch compute active instances in all YOUR regions
+config: check config file and print basic info
+peeps: fetch user counts (-r to show users)
+policies: fetch policy counts (-run to show policies -verbose to show statements)
+groups: fetch group counts (-run to show groups )
+support: fetch support tickets (-list to show tickets)
+capacity: check capacity in all YOUR regions (-ocpus to specify ocpus -memory to specify memory -type to specify shape type)
+capability: what types of 'things' are available for a shape type (-type to specify shape type)
+children: dealing with child tenancies
+object: fetch object storage info
+billing: fetch billing info
+network: network related info
+search: search for resources created by a user
+schedule: fetch schedule
+`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -45,22 +59,28 @@ func Execute() {
 	}
 }
 
-var fileLocation string
-
-const baseFile = "/terraform.tfvars.json"
-
 func init() {
+	rootCmd.AddCommand(limits.Cmd)
+	rootCmd.AddCommand(compute.Cmd)
+	rootCmd.AddCommand(config.Cmd)
+	rootCmd.AddCommand(peeps.Cmd)
+	rootCmd.AddCommand(policies.Cmd)
+	rootCmd.AddCommand(groups.Cmd)
+	rootCmd.AddCommand(support.Cmd)
+	rootCmd.AddCommand(network.Cmd)
+	rootCmd.AddCommand(capacity.Cmd)
+	rootCmd.AddCommand(capability.Cmd)
+	rootCmd.AddCommand(children.Cmd)
+	rootCmd.AddCommand(object.Cmd)
+	rootCmd.AddCommand(billing.Cmd)
+	rootCmd.AddCommand(schedule.Cmd)
+	rootCmd.AddCommand(search.Cmd)
+
 	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
+	// Cobra supports Persistent Flags which, if defined here,
 	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.automator.yaml)")
-
-	rootCmd.PersistentFlags().StringVarP(&fileLocation, "file", "f", "", "path to the file")
-	rootCmd.MarkPersistentFlagRequired("file") // Mark the flag as required
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
 }

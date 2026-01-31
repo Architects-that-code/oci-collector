@@ -10,3 +10,46 @@ cat list.txt
 for report in read list.txt; do oci --profile <<PROFILE>> os object get -bn $TN -ns bling --name $report --file - ; done
 
  while read -r report; do oci --profile <<NATIONAL02>> os object get -bn bling -ns $TN  $report; done < list.txt
+ 
+ 
+ 
+ 
+inside of vpn
+test run with
+data collection in parallel then all regions in parallel
+
+what is time
+what is number of results
+28411
+go run main.go run  108.66s user 20.55s system 51% cpu 4:09.07 total
+
+=======
+now create sep internal collector and add channel and pass back from channel into main
+
+(trying to ensure no data contention and conflict issues that 'could have happened' from all routines using Datapile in parall
+
+what is time
+what is number of results
+30
+go run main.go run  113.58s user 21.96s system 54% cpu 4:10.72 total
+
+obvious fail - we are printing for each region and each only has 1 item in it -
+
++++++
+fix code (in 'loop was appending local to data and not local to local'
+what is time
+what is number of results
+28147
+go run main.go run  106.83s user 20.36s system 52% cpu 4:03.06 total
+
+back to staging and fixing
+28418
+./check-limits run  87.01s user 17.74s system 40% cpu 4:18.53 total
+
+
+
+(base) ➜  src git:(staging) ✗ cat /Users/jscanlon/childtenancies.yaml|grep lifecyclestate | awk '{print $2}' |sort |uniq -c
+ 295 ACTIVE
+   1 DELETED
+  16 DELETING
+   4 FAILED
