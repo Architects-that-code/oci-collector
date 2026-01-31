@@ -36,9 +36,11 @@ This is NOT to replace the CLI or SDK's that are available but has been put toge
 SHOULD the 'core' data (in config) be pushing into a library as almost everything else utilizes those data structures
 
 ## Should we refactor to use something like COBRA so adding additional tools is easier?
+yes
 
 NOTE: 
 if you are using INSTANCE PRINCIPAL you need to have the correct policies in place to allow the instance to read the data (dynamic group and policy etc)
+
 
 
 
