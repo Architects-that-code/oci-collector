@@ -38,6 +38,8 @@ func init() {
 	rootCmd.AddCommand(networkCmd)
 	rootCmd.AddCommand(scheduleCmd)
 	rootCmd.AddCommand(searchCmd)
+    rootCmd.AddCommand(cloudAdvisorCmd)
+    rootCmd.AddCommand(autonomousCmd)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports Persistent Flags which, if defined here,

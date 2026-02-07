@@ -1,3 +1,17 @@
+### Cloud Advisor
+
+Cloud Advisor (Optimizer) is a home-region service. This command collects all recommendations for the tenancy using the home region detected from your subscribed regions.
+
+Examples:
+
+  oci-collector cloudadvisor -f json
+
+  oci-collector cloudadvisor -f text
+
+Flags:
+- -f, --format: json (default) or text
+- -o, --out: optional file path to write the output
+
 So I am viewing this as a fun 'Batman’s utility belt' type of project. What are the common things that we keep sending to our accounts.
 
 # GLOBAL view of my OCI estate (tenancy) is key
@@ -43,3 +57,14 @@ if you are using INSTANCE PRINCIPAL you need to have the correct policies in pla
 
 
 ORACLE AND ITS AFFILIATES DO NOT PROVIDE ANY WARRANTY WHATSOEVER, EXPRESS OR IMPLIED, FOR ANY SOFTWARE, MATERIAL OR CONTENT OF ANY KIND CONTAINED OR PRODUCED WITHIN THIS REPOSITORY, AND IN PARTICULAR SPECIFICALLY DISCLAIM ANY AND ALL IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A PARTICULAR PURPOSE. FURTHERMORE, ORACLE AND ITS AFFILIATES DO NOT REPRESENT THAT ANY CUSTOMARY SECURITY REVIEW HAS BEEN PERFORMED WITH RESPECT TO ANY SOFTWARE, MATERIAL OR CONTENT CONTAINED OR PRODUCED WITHIN THIS REPOSITORY. IN ADDITION, AND WITHOUT LIMITING THE FOREGOING, THIRD PARTIES MAY HAVE POSTED SOFTWARE, MATERIAL OR CONTENT TO THIS REPOSITORY WITHOUT ANY REVIEW. USE AT YOUR OWN RISK.
+
+
+### Autonomous Databases
+
+Lists all Autonomous Databases (ATP/ADW/AJD) across your subscribed regions and all compartments.
+
+Examples:
+
+  oci-collector autonomous
+
+This reads credentials from toolkit-config.yaml (configPath/profileName or instance principal) and prints a concise table with region, compartment, name, workload, size and state.
