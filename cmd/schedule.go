@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	scheduler "oci-collector/schedule"
 	"oci-collector/config"
+	scheduler "oci-collector/schedule"
 	"oci-collector/util"
 )
 

@@ -20,9 +20,11 @@ var computeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		run, _ := cmd.Flags().GetBool("run")
 		metrics, _ := cmd.Flags().GetBool("metrics")
+		enableMetrics, _ := cmd.Flags().GetBool("enable-metrics")
 		discover, _ := cmd.Flags().GetBool("metrics-discover")
 		discoverWindow, _ := cmd.Flags().GetString("discover-window")
 		discoverInstance, _ := cmd.Flags().GetString("discover-instance")
+		// metricsTypes, _ := cmd.Flags().GetStringSlice("metrics-types") // TODO: implement multiple metrics types
 		format, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("out")
 
@@ -36,6 +38,15 @@ var computeCmd = &cobra.Command{
 			util.FatalIfError(err)
 		}
 		regions, compartments, _, _ := config.CommonSetup(client, tenancyID)
+
+		if enableMetrics {
+			err := compute.EnableMetrics(provider, regions, compartments)
+			if err != nil {
+				util.FatalIfError(err)
+			}
+			fmt.Println("Oracle Cloud Agent metric collection enabled on applicable instances")
+			return
+		}
 
 		if discover {
 			// parse lookback
@@ -53,7 +64,8 @@ var computeCmd = &cobra.Command{
 			// print concise report to stdout
 			for _, s := range summaries {
 				if s.Found {
-					fmt.Printf("FOUND %s | %s | %s | ns=%s metric=%s dim=%s rg=%s samples=%d\n", s.Region, s.Compartment, s.Name, s.Namespace, s.Metric, s.DimensionKey, s.ResourceGroup, s.Samples)
+					metricsList := strings.Join(s.AvailableMetrics, ", ")
+					fmt.Printf("FOUND %s | %s | %s | ns=%s metric=%s dim=%s rg=%s samples=%d | available: %s\n", s.Region, s.Compartment, s.Name, s.Namespace, s.Metric, s.DimensionKey, s.ResourceGroup, s.Samples, metricsList)
 				} else {
 					fmt.Printf("NONE  %s | %s | %s | %s\n", s.Region, s.Compartment, s.Name, s.Note)
 				}
@@ -120,9 +132,11 @@ var computeCmd = &cobra.Command{
 func init() {
 	computeCmd.Flags().BoolP("run", "r", false, "fetch compute active instances in all regions")
 	computeCmd.Flags().BoolP("metrics", "m", false, "collect CPU utilization metrics (day/week/month) for running instances")
+	computeCmd.Flags().Bool("enable-metrics", false, "enable Oracle Cloud Agent metric collection on instances")
 	computeCmd.Flags().Bool("metrics-discover", false, "probe Monitoring to find the namespace/dimension that returns datapoints per instance")
 	computeCmd.Flags().String("discover-window", "1h", "lookback duration for discovery (e.g., 1h, 24h, 7d)")
 	computeCmd.Flags().String("discover-instance", "", "optional instance OCID to limit discovery")
 	computeCmd.Flags().StringP("format", "f", "json", "output format: for metrics (default json), for run specify json or csv; omit for text output")
 	computeCmd.Flags().StringP("out", "o", "", "optional file path to write output (metrics or run)")
+	computeCmd.Flags().StringSlice("metrics-types", []string{"CpuUtilization"}, "metrics to collect (cpu,memory,disk,network); default cpu")
 }

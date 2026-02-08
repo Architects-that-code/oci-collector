@@ -171,9 +171,9 @@ func CreateComputeCapacityReport(ctx context.Context, provider common.Configurat
 
 	resp, err := client.CreateComputeCapacityReport(ctx, req)
 	helpers.FatalIfError(err)
-    for i, a := range resp.ComputeCapacityReport.ShapeAvailabilities {
-        fmt.Println()
-        fmt.Println(*region.RegionName)
+	for i, a := range resp.ComputeCapacityReport.ShapeAvailabilities {
+		fmt.Println()
+		fmt.Println(*region.RegionName)
 		fmt.Printf("\tshape: %v\n", *resp.ShapeAvailabilities[i].InstanceShape)
 		fmt.Printf("\t\tocpu: %v\n", *resp.ShapeAvailabilities[i].InstanceShapeConfig.Ocpus)
 		fmt.Printf("\t\tmem:  %v\n", *resp.ShapeAvailabilities[i].InstanceShapeConfig.MemoryInGBs)

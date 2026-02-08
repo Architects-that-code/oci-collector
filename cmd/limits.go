@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"oci-collector/limits"
 	"oci-collector/config"
+	"oci-collector/limits"
 	"oci-collector/util"
 )
 

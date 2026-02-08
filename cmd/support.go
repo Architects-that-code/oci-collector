@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	supportresources "oci-collector/support"
 	"oci-collector/config"
+	supportresources "oci-collector/support"
 	"oci-collector/util"
 )
 

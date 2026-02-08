@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	network "oci-collector/networks"
 	"oci-collector/config"
+	network "oci-collector/networks"
 	"oci-collector/util"
 )
 

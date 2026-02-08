@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	resourcesearch "oci-collector/search"
 	"oci-collector/config"
+	resourcesearch "oci-collector/search"
 )
 
 var searchCmd = &cobra.Command{

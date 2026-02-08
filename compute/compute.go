@@ -27,12 +27,13 @@ type InstanceGroups struct {
 
 // InstanceRow is a flat record suitable for JSON/CSV output
 type InstanceRow struct {
-	Region      string            `json:"region"`
-	Compartment string            `json:"compartment"`
-	InstanceID  string            `json:"instanceId"`
-	DisplayName string            `json:"displayName"`
-	Shape       string            `json:"shape"`
-	Freeform    map[string]string `json:"freeformTags,omitempty"`
+	Region         string            `json:"region"`
+	Compartment    string            `json:"compartment"`
+	InstanceID     string            `json:"instanceId"`
+	DisplayName    string            `json:"displayName"`
+	Shape          string            `json:"shape"`
+	Freeform       map[string]string `json:"freeformTags,omitempty"`
+	AgentInstalled bool              `json:"agentInstalled"`
 }
 
 func RunCompute(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, format string, output string) error {
@@ -101,11 +102,12 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 		for _, instanceGroup := range allInstances {
 			if len(instanceGroup.Instance) > 0 {
 				fmt.Printf("all instances: Region: %v Compartment: %v  NumInstance: %v \n", instanceGroup.Region, instanceGroup.Compartment, len(instanceGroup.Instance))
-				for _, instance := range instanceGroup.Instance {
-					name := safeStr(instance.DisplayName)
-					shape := safeStr(instance.Shape)
-					fmt.Printf("DisplayName: %s\t Shape: %s \t tags: freeform: %v\t   defined: %v \t\n", name, shape, instance.FreeformTags, instance.DefinedTags)
-				}
+		for _, instance := range instanceGroup.Instance {
+			name := safeStr(instance.DisplayName)
+			shape := safeStr(instance.Shape)
+			agent := isAgentInstalled(instance)
+			fmt.Printf("DisplayName: %s\t Shape: %s\t AgentInstalled: %t\t tags: freeform: %v\t defined: %v\n", name, shape, agent, instance.FreeformTags, instance.DefinedTags)
+		}
 			}
 		}
 	}
@@ -119,12 +121,13 @@ func flattenInstances(groups []InstanceGroups) []InstanceRow {
 	for _, g := range groups {
 		for _, inst := range g.Instance {
 			rows = append(rows, InstanceRow{
-				Region:      g.Region,
-				Compartment: g.Compartment,
-				InstanceID:  safeStr(inst.Id),
-				DisplayName: safeStr(inst.DisplayName),
-				Shape:       safeStr(inst.Shape),
-				Freeform:    inst.FreeformTags,
+				Region:         g.Region,
+				Compartment:    g.Compartment,
+				InstanceID:     safeStr(inst.Id),
+				DisplayName:    safeStr(inst.DisplayName),
+				Shape:          safeStr(inst.Shape),
+				Freeform:       inst.FreeformTags,
+				AgentInstalled: isAgentInstalled(inst),
 			})
 		}
 	}
@@ -135,9 +138,9 @@ func flattenInstances(groups []InstanceGroups) []InstanceRow {
 func toCSV(rows []InstanceRow) string {
 	var buf bytes.Buffer
 	w := csv.NewWriter(&buf)
-	_ = w.Write([]string{"region", "compartment", "instanceId", "displayName", "shape"})
+	_ = w.Write([]string{"region", "compartment", "instanceId", "displayName", "shape", "agentInstalled"})
 	for _, r := range rows {
-		_ = w.Write([]string{r.Region, r.Compartment, r.InstanceID, r.DisplayName, r.Shape})
+		_ = w.Write([]string{r.Region, r.Compartment, r.InstanceID, r.DisplayName, r.Shape, fmt.Sprintf("%t", r.AgentInstalled)})
 	}
 	w.Flush()
 	return buf.String()
@@ -278,6 +281,31 @@ func isTooManyRequests(err error) bool {
 		return true
 	}
 	return false
+}
+
+// EnableMetrics enables Oracle Cloud Agent metric collection on instances that have the agent but monitoring disabled
+// Note: UpdateInstanceAgentConfig API not available in current SDK version (v65)
+// This is a placeholder for future implementation
+func EnableMetrics(provider common.ConfigurationProvider, regions []identity.RegionSubscription, compartments []identity.Compartment) error {
+	fmt.Println("EnableMetrics: API not available in current SDK version")
+	fmt.Println("To enable metrics manually:")
+	fmt.Println("1. SSH to instance")
+	fmt.Println("2. Run: sudo /opt/oracle/cloud-agent/bin/cloud-agent-control enable monitoring")
+	fmt.Println("3. Or use OCI Console: Compute > Instances > Instance Details > Oracle Cloud Agent")
+	return nil
+}
+
+// isAgentInstalled checks if Oracle Cloud Agent is installed and monitoring is enabled
+func isAgentInstalled(inst core.Instance) bool {
+	if inst.AgentConfig == nil {
+		return false
+	}
+	// If monitoring is explicitly disabled, agent is not considered installed for monitoring
+	if inst.AgentConfig.IsMonitoringDisabled != nil && *inst.AgentConfig.IsMonitoringDisabled {
+		return false
+	}
+	// If AgentConfig exists and monitoring not disabled, assume agent is installed
+	return true
 }
 
 // backoffWithJitter returns an exponential backoff duration with jitter and a sane cap
