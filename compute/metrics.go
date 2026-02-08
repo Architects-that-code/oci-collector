@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/oracle/oci-go-sdk/core"
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"github.com/oracle/oci-go-sdk/v65/monitoring"
@@ -46,13 +47,39 @@ type InstanceMetricsSummary struct {
 	Note           string          `json:"note,omitempty"`
 }
 
+// MetricTask represents a single metric collection task
+type MetricTask struct {
+	Client       monitoring.MonitoringClient
+	CompartmentID string
+	InstanceID   string
+	MetricName   string
+	Start        time.Time
+	End          time.Time
+	Namespaces   []string
+}
+
+// MetricResult holds the result of a metric collection task
+type MetricResult struct {
+	Task   MetricTask
+	Metrics InstanceMetrics
+	Error  error
+}
+
 // CollectMetrics enumerates running instances and collects utilization metrics for each over the last day, week, and month.
 func CollectMetrics(provider common.ConfigurationProvider, regions []identity.RegionSubscription, compartments []identity.Compartment) ([]InstanceMetricsSummary, error) {
-	var results []InstanceMetricsSummary
-
-	client, err := monitoring.NewMonitoringClientWithConfigurationProvider(provider)
+	// Create base monitoring client
+	baseClient, err := monitoring.NewMonitoringClientWithConfigurationProvider(provider)
 	if err != nil {
 		return nil, err
+	}
+
+	// Collect all instances first
+	var allInstances []struct {
+		region       string
+		compartment  string
+		compID       string
+		instance     core.Instance
+		agentInstalled bool
 	}
 
 	for _, region := range regions {
@@ -60,99 +87,224 @@ func CollectMetrics(provider common.ConfigurationProvider, regions []identity.Re
 		if region.RegionName != nil {
 			regionName = *region.RegionName
 		}
-		client.SetRegion(regionName)
 
 		for _, compartment := range compartments {
 			instances := GetInstances(provider, compartment, regionName, false)
+			compName := ""
+			compID := ""
+			if compartment.Name != nil {
+				compName = *compartment.Name
+			}
+			if compartment.Id != nil {
+				compID = *compartment.Id
+			}
+
 			for _, inst := range instances {
-				id := ""
-				name := ""
-				shape := ""
-				if inst.Id != nil {
-					id = *inst.Id
-				}
-				if inst.DisplayName != nil {
-					name = *inst.DisplayName
-				}
-				if inst.Shape != nil {
-					shape = *inst.Shape
-				}
-
-				compID := ""
-				compName := ""
-				if compartment.Id != nil {
-					compID = *compartment.Id
-				}
-				if compartment.Name != nil {
-					compName = *compartment.Name
-				}
-
-				agentInstalled := isAgentInstalled(inst)
-
-				// Collect metrics for different time windows
-				now := time.Now().UTC()
-				dayStart := now.Add(-24 * time.Hour)
-				weekStart := now.Add(-7 * 24 * time.Hour)
-				monthStart := now.Add(-30 * 24 * time.Hour) // approx month
-
-				// Always try CPU
-				cpuDay, _ := getMetric(client, compID, id, "CpuUtilization", dayStart, now)
-				cpuWeek, _ := getMetric(client, compID, id, "CpuUtilization", weekStart, now)
-				cpuMonth, _ := getMetric(client, compID, id, "CpuUtilization", monthStart, now)
-
-				summary := InstanceMetricsSummary{
-					Region:         regionName,
-					Compartment:    compName,
-					InstanceID:     id,
-					Name:           name,
-					Shape:          shape,
-					AgentInstalled: agentInstalled,
-					CpuDay:         cpuDay,
-					CpuWeek:        cpuWeek,
-					CpuMonth:       cpuMonth,
-				}
-
-				// If agent is installed, collect additional metrics
-				if agentInstalled {
-					memDay, _ := getMetric(client, compID, id, "MemoryUtilization", dayStart, now)
-					memWeek, _ := getMetric(client, compID, id, "MemoryUtilization", weekStart, now)
-					memMonth, _ := getMetric(client, compID, id, "MemoryUtilization", monthStart, now)
-					summary.MemoryDay = memDay
-					summary.MemoryWeek = memWeek
-					summary.MemoryMonth = memMonth
-
-					diskDay, _ := getMetric(client, compID, id, "DiskUtilization", dayStart, now)
-					diskWeek, _ := getMetric(client, compID, id, "DiskUtilization", weekStart, now)
-					diskMonth, _ := getMetric(client, compID, id, "DiskUtilization", monthStart, now)
-					summary.DiskDay = diskDay
-					summary.DiskWeek = diskWeek
-					summary.DiskMonth = diskMonth
-
-					netDay, _ := getMetric(client, compID, id, "NetworkBytesIn", dayStart, now)
-					netWeek, _ := getMetric(client, compID, id, "NetworkBytesIn", weekStart, now)
-					netMonth, _ := getMetric(client, compID, id, "NetworkBytesIn", monthStart, now)
-					summary.NetworkDay = netDay
-					summary.NetworkWeek = netWeek
-					summary.NetworkMonth = netMonth
-				}
-
-				results = append(results, summary)
+				allInstances = append(allInstances, struct {
+					region       string
+					compartment  string
+					compID       string
+					instance     core.Instance
+					agentInstalled bool
+				}{
+					region:         regionName,
+					compartment:    compName,
+					compID:         compID,
+					instance:       inst,
+					agentInstalled: isAgentInstalled(inst),
+				})
 			}
 		}
 	}
 
-	return results, nil
+	// Create tasks for all metric collections
+	var tasks []MetricTask
+	now := time.Now().UTC()
+	dayStart := now.Add(-24 * time.Hour)
+	weekStart := now.Add(-7 * 24 * time.Hour)
+	monthStart := now.Add(-30 * 24 * time.Hour)
+
+	for _, inst := range allInstances {
+		id := ""
+		if inst.instance.Id != nil {
+			id = *inst.instance.Id
+		}
+
+		// Always collect CPU metrics
+		for _, timeWindow := range []struct{ start, end time.Time }{
+			{dayStart, now},
+			{weekStart, now},
+			{monthStart, now},
+		} {
+			tasks = append(tasks, MetricTask{
+				Client:       baseClient,
+				CompartmentID: inst.compID,
+				InstanceID:   id,
+				MetricName:   "CpuUtilization",
+				Start:        timeWindow.start,
+				End:          timeWindow.end,
+				Namespaces:   []string{"oci_computeagent", "oci_compute_infrastructure"},
+			})
+		}
+
+		// Collect additional metrics if agent is installed
+		if inst.agentInstalled {
+			for _, metric := range []string{"MemoryUtilization", "DiskUtilization", "NetworkBytesIn"} {
+				for _, timeWindow := range []struct{ start, end time.Time }{
+					{dayStart, now},
+					{weekStart, now},
+					{monthStart, now},
+				} {
+					tasks = append(tasks, MetricTask{
+						Client:       baseClient,
+						CompartmentID: inst.compID,
+						InstanceID:   id,
+						MetricName:   metric,
+						Start:        timeWindow.start,
+						End:          timeWindow.end,
+						Namespaces:   []string{"oci_computeagent"},
+					})
+				}
+			}
+		}
+	}
+
+	// Execute tasks with rate limiting
+	results := executeMetricTasks(tasks)
+
+	// Group results by instance
+	instanceMap := make(map[string]*InstanceMetricsSummary)
+	for _, inst := range allInstances {
+		id := ""
+		if inst.instance.Id != nil {
+			id = *inst.instance.Id
+		}
+		name := ""
+		if inst.instance.DisplayName != nil {
+			name = *inst.instance.DisplayName
+		}
+		shape := ""
+		if inst.instance.Shape != nil {
+			shape = *inst.instance.Shape
+		}
+
+		instanceMap[id] = &InstanceMetricsSummary{
+			Region:         inst.region,
+			Compartment:    inst.compartment,
+			InstanceID:     id,
+			Name:           name,
+			Shape:          shape,
+			AgentInstalled: inst.agentInstalled,
+		}
+	}
+
+	// Populate metrics results
+	for _, result := range results {
+		if result.Error != nil {
+			continue // Skip failed metrics
+		}
+
+		summary := instanceMap[result.Task.InstanceID]
+		if summary == nil {
+			continue
+		}
+
+		duration := result.Task.End.Sub(result.Task.Start)
+		var timeKey string
+		if duration <= 25*time.Hour {
+			timeKey = "Day"
+		} else if duration <= 8*24*time.Hour {
+			timeKey = "Week"
+		} else {
+			timeKey = "Month"
+		}
+
+		switch result.Task.MetricName {
+		case "CpuUtilization":
+			switch timeKey {
+			case "Day":
+				summary.CpuDay = result.Metrics
+			case "Week":
+				summary.CpuWeek = result.Metrics
+			case "Month":
+				summary.CpuMonth = result.Metrics
+			}
+		case "MemoryUtilization":
+			switch timeKey {
+			case "Day":
+				summary.MemoryDay = result.Metrics
+			case "Week":
+				summary.MemoryWeek = result.Metrics
+			case "Month":
+				summary.MemoryMonth = result.Metrics
+			}
+		case "DiskUtilization":
+			switch timeKey {
+			case "Day":
+				summary.DiskDay = result.Metrics
+			case "Week":
+				summary.DiskWeek = result.Metrics
+			case "Month":
+				summary.DiskMonth = result.Metrics
+			}
+		case "NetworkBytesIn":
+			switch timeKey {
+			case "Day":
+				summary.NetworkDay = result.Metrics
+			case "Week":
+				summary.NetworkWeek = result.Metrics
+			case "Month":
+				summary.NetworkMonth = result.Metrics
+			}
+		}
+	}
+
+	// Convert map to slice
+	var finalResults []InstanceMetricsSummary
+	for _, summary := range instanceMap {
+		finalResults = append(finalResults, *summary)
+	}
+
+	return finalResults, nil
+}
+
+// executeMetricTasks runs metric collection tasks with rate limiting
+func executeMetricTasks(tasks []MetricTask) []MetricResult {
+	const maxConcurrent = 10 // Limit concurrent API calls
+	semaphore := make(chan struct{}, maxConcurrent)
+	results := make(chan MetricResult, len(tasks))
+
+	// Start workers
+	for _, task := range tasks {
+		go func(t MetricTask) {
+			semaphore <- struct{}{} // Acquire
+			defer func() { <-semaphore }() // Release
+
+			metrics, err := getMetric(t.Client, t.CompartmentID, t.InstanceID, t.MetricName, t.Start, t.End)
+			results <- MetricResult{
+				Task:    t,
+				Metrics: metrics,
+				Error:   err,
+			}
+		}(task)
+	}
+
+	// Collect results
+	var finalResults []MetricResult
+	for i := 0; i < len(tasks); i++ {
+		finalResults = append(finalResults, <-results)
+	}
+
+	return finalResults
 }
 
 // getMetric queries Monitoring for a specific metric over the given time window
 func getMetric(client monitoring.MonitoringClient, compartmentID, instanceID, metricName string, start, end time.Time) (InstanceMetrics, error) {
 	// Determine namespace based on metric
 	var namespaces []string
-	if metricName == "CpuUtilization" && start.After(time.Now().Add(-24*time.Hour)) {
-		// For recent CPU, try both
+	if metricName == "CpuUtilization" {
+		// For CPU, try both namespaces
 		namespaces = []string{"oci_computeagent", "oci_compute_infrastructure"}
-	} else if metricName == "CpuUtilization" {
-		namespaces = []string{"oci_compute_infrastructure", "oci_computeagent"}
 	} else {
 		// Memory, Disk, Network require agent
 		namespaces = []string{"oci_computeagent"}
@@ -217,7 +369,7 @@ func getMetricStat(client monitoring.MonitoringClient, compartmentID, instanceID
 		}
 
 		for _, q := range queries {
-			fmt.Printf("Trying query: namespace=%s, query=%s\n", ns, q)
+			//fmt.Printf("Trying query: namespace=%s, query=%s\n", ns, q)
 			req := monitoring.SummarizeMetricsDataRequest{
 				CompartmentId: &compartmentID,
 				SummarizeMetricsDataDetails: monitoring.SummarizeMetricsDataDetails{
