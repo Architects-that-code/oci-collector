@@ -31,7 +31,7 @@ var limitsCmd = &cobra.Command{
 			regions, _, _, _ := config.CommonSetup(client, tenancyID)
 			limits.RunLimits(provider, regions, tenancyID, write)
 		} else {
-			fmt.Println("add -run to run")
+			fmt.Println("add -r to run")
 		}
 	},
 }

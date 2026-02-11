@@ -102,12 +102,12 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 		for _, instanceGroup := range allInstances {
 			if len(instanceGroup.Instance) > 0 {
 				fmt.Printf("all instances: Region: %v Compartment: %v  NumInstance: %v \n", instanceGroup.Region, instanceGroup.Compartment, len(instanceGroup.Instance))
-		for _, instance := range instanceGroup.Instance {
-			name := safeStr(instance.DisplayName)
-			shape := safeStr(instance.Shape)
-			agent := isAgentInstalled(instance)
-			fmt.Printf("DisplayName: %s\t Shape: %s\t AgentInstalled: %t\t tags: freeform: %v\t defined: %v\n", name, shape, agent, instance.FreeformTags, instance.DefinedTags)
-		}
+				for _, instance := range instanceGroup.Instance {
+					name := safeStr(instance.DisplayName)
+					shape := safeStr(instance.Shape)
+					agent := isAgentInstalled(instance)
+					fmt.Printf("DisplayName: %s\t Shape: %s\t AgentInstalled: %t\t tags: freeform: %v\t defined: %v\n", name, shape, agent, instance.FreeformTags, instance.DefinedTags)
+				}
 			}
 		}
 	}

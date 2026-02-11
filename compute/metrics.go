@@ -47,74 +47,87 @@ type InstanceMetricsSummary struct {
 	Note           string          `json:"note,omitempty"`
 }
 
+// InstanceInventory is a light-weight record of a running instance in a given region/compartment.
+// This is used by metrics collection to avoid re-querying instances when the caller already
+// has an inventory available.
+type InstanceInventory struct {
+	RegionName  string
+	Compartment identity.Compartment
+	Instance    core.Instance
+}
+
+// GatherInstances builds an inventory of running instances across regions/compartments.
+// NOTE: metrics.go lives in the compute package, so we can reuse GetInstances from compute.go.
+func GatherInstances(provider common.ConfigurationProvider, regions []identity.RegionSubscription, compartments []identity.Compartment, verbose bool) []InstanceInventory {
+	var inv []InstanceInventory
+	for _, region := range regions {
+		regionName := ""
+		if region.RegionName != nil {
+			regionName = *region.RegionName
+		}
+		for _, comp := range compartments {
+			instances := GetInstances(provider, comp, regionName, verbose)
+			for _, inst := range instances {
+				inv = append(inv, InstanceInventory{RegionName: regionName, Compartment: comp, Instance: inst})
+			}
+		}
+	}
+	return inv
+}
+
 // MetricTask represents a single metric collection task
 type MetricTask struct {
-	Client       monitoring.MonitoringClient
+	Client        monitoring.MonitoringClient
 	CompartmentID string
-	InstanceID   string
-	MetricName   string
-	Start        time.Time
-	End          time.Time
-	Namespaces   []string
+	InstanceID    string
+	MetricName    string
+	Start         time.Time
+	End           time.Time
+	Namespaces    []string
 }
 
 // MetricResult holds the result of a metric collection task
 type MetricResult struct {
-	Task   MetricTask
+	Task    MetricTask
 	Metrics InstanceMetrics
-	Error  error
+	Error   error
 }
 
 // CollectMetrics enumerates running instances and collects utilization metrics for each over the last day, week, and month.
-func CollectMetrics(provider common.ConfigurationProvider, regions []identity.RegionSubscription, compartments []identity.Compartment) ([]InstanceMetricsSummary, error) {
+func CollectMetrics(provider common.ConfigurationProvider, regions []identity.RegionSubscription, compartments []identity.Compartment, inventory []InstanceInventory) ([]InstanceMetricsSummary, error) {
 	// Create base monitoring client
 	baseClient, err := monitoring.NewMonitoringClientWithConfigurationProvider(provider)
 	if err != nil {
 		return nil, err
 	}
 
-	// Collect all instances first
+	if inventory == nil {
+		inventory = GatherInstances(provider, regions, compartments, false)
+	}
 	var allInstances []struct {
-		region       string
-		compartment  string
-		compID       string
-		instance     core.Instance
+		region         string
+		compartment    string
+		compID         string
+		instance       core.Instance
 		agentInstalled bool
 	}
-
-	for _, region := range regions {
-		regionName := ""
-		if region.RegionName != nil {
-			regionName = *region.RegionName
-		}
-
-		for _, compartment := range compartments {
-			instances := GetInstances(provider, compartment, regionName, false)
-			compName := ""
-			compID := ""
-			if compartment.Name != nil {
-				compName = *compartment.Name
-			}
-			if compartment.Id != nil {
-				compID = *compartment.Id
-			}
-
-			for _, inst := range instances {
-				allInstances = append(allInstances, struct {
-					region       string
-					compartment  string
-					compID       string
-					instance     core.Instance
-					agentInstalled bool
-				}{
-					region:         regionName,
-					compartment:    compName,
-					compID:         compID,
-					instance:       inst,
-					agentInstalled: isAgentInstalled(inst),
-				})
-			}
-		}
+	for _, entry := range inventory {
+		regionName := entry.RegionName
+		compName := safeStr(entry.Compartment.Name)
+		compID := safeStr(entry.Compartment.Id)
+		allInstances = append(allInstances, struct {
+			region         string
+			compartment    string
+			compID         string
+			instance       core.Instance
+			agentInstalled bool
+		}{
+			region:         regionName,
+			compartment:    compName,
+			compID:         compID,
+			instance:       entry.Instance,
+			agentInstalled: isAgentInstalled(entry.Instance),
+		})
 	}
 
 	// Create tasks for all metric collections
@@ -137,13 +150,13 @@ func CollectMetrics(provider common.ConfigurationProvider, regions []identity.Re
 			{monthStart, now},
 		} {
 			tasks = append(tasks, MetricTask{
-				Client:       baseClient,
+				Client:        baseClient,
 				CompartmentID: inst.compID,
-				InstanceID:   id,
-				MetricName:   "CpuUtilization",
-				Start:        timeWindow.start,
-				End:          timeWindow.end,
-				Namespaces:   []string{"oci_computeagent", "oci_compute_infrastructure"},
+				InstanceID:    id,
+				MetricName:    "CpuUtilization",
+				Start:         timeWindow.start,
+				End:           timeWindow.end,
+				Namespaces:    []string{"oci_computeagent", "oci_compute_infrastructure"},
 			})
 		}
 
@@ -156,13 +169,13 @@ func CollectMetrics(provider common.ConfigurationProvider, regions []identity.Re
 					{monthStart, now},
 				} {
 					tasks = append(tasks, MetricTask{
-						Client:       baseClient,
+						Client:        baseClient,
 						CompartmentID: inst.compID,
-						InstanceID:   id,
-						MetricName:   metric,
-						Start:        timeWindow.start,
-						End:          timeWindow.end,
-						Namespaces:   []string{"oci_computeagent"},
+						InstanceID:    id,
+						MetricName:    metric,
+						Start:         timeWindow.start,
+						End:           timeWindow.end,
+						Namespaces:    []string{"oci_computeagent"},
 					})
 				}
 			}
@@ -277,7 +290,7 @@ func executeMetricTasks(tasks []MetricTask) []MetricResult {
 	// Start workers
 	for _, task := range tasks {
 		go func(t MetricTask) {
-			semaphore <- struct{}{} // Acquire
+			semaphore <- struct{}{}        // Acquire
 			defer func() { <-semaphore }() // Release
 
 			metrics, err := getMetric(t.Client, t.CompartmentID, t.InstanceID, t.MetricName, t.Start, t.End)

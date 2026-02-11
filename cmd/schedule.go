@@ -30,7 +30,7 @@ var scheduleCmd = &cobra.Command{
 			regions, compartments, _, homeregion := config.CommonSetup(client, tenancyID)
 			scheduler.RunSchedule(provider, regions, tenancyID, compartments, homeregion)
 		} else {
-			fmt.Println("add -run to run")
+			fmt.Println("add -r to run")
 		}
 	},
 }

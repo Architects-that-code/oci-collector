@@ -9,6 +9,8 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/core"
 	"github.com/oracle/oci-go-sdk/v65/identity"
+
+	"oci-collector/util"
 )
 
 type VcnCollector struct {
@@ -103,9 +105,12 @@ func GetVCN(client core.VirtualNetworkClient, compartment identity.Compartment, 
 		CompartmentId:  compartment.Id,
 		LifecycleState: core.VcnLifecycleStateAvailable}
 
-	resp, err := client.ListVcns(context.Background(), req)
-
-	helpers.FatalIfError(err)
+	resp, err := util.RetryWithBackoff(func() (core.ListVcnsResponse, error) {
+		return client.ListVcns(context.Background(), req)
+	})
+	if err != nil {
+		helpers.FatalIfError(err)
+	}
 	//fmt.Printf("GetVCNs: %v\n", resp.Items)
 
 	return resp.Items
@@ -119,9 +124,12 @@ func GetSubnets(client core.VirtualNetworkClient, vcn core.Vcn, region string) [
 		VcnId:          vcn.Id,
 	}
 
-	resp, err := client.ListSubnets(context.Background(), req)
-
-	helpers.FatalIfError(err)
+	resp, err := util.RetryWithBackoff(func() (core.ListSubnetsResponse, error) {
+		return client.ListSubnets(context.Background(), req)
+	})
+	if err != nil {
+		helpers.FatalIfError(err)
+	}
 
 	//fmt.Printf("GetSubnets: %v\n", resp.Items)
 
@@ -134,8 +142,12 @@ func getDRGs(client core.VirtualNetworkClient, compartment identity.Compartment,
 		CompartmentId: compartment.Id,
 	}
 
-	resp, err := client.ListDrgs(context.Background(), req)
-	helpers.FatalIfError(err)
+	resp, err := util.RetryWithBackoff(func() (core.ListDrgsResponse, error) {
+		return client.ListDrgs(context.Background(), req)
+	})
+	if err != nil {
+		helpers.FatalIfError(err)
+	}
 	//fmt.Println(resp)
 	return resp.Items
 }
@@ -147,7 +159,11 @@ func getRemotePeeringConnections(client core.VirtualNetworkClient, compartment i
 		DrgId:         &drgId,
 	}
 
-	resp, err := client.ListRemotePeeringConnections(context.Background(), req)
-	helpers.FatalIfError(err)
+	resp, err := util.RetryWithBackoff(func() (core.ListRemotePeeringConnectionsResponse, error) {
+		return client.ListRemotePeeringConnections(context.Background(), req)
+	})
+	if err != nil {
+		helpers.FatalIfError(err)
+	}
 	return resp.Items
 }

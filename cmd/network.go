@@ -32,7 +32,7 @@ var networkCmd = &cobra.Command{
 			regions, compartments, _, _ := config.CommonSetup(client, tenancyID)
 			network.GetAllVcn(provider, regions, tenancyID, compartments, run, cidr, ip)
 		} else {
-			fmt.Println("add -run to run")
+			fmt.Println("add -r to run")
 		}
 	},
 }

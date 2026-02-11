@@ -11,18 +11,18 @@ import (
 )
 
 type InstanceDiscovery struct {
-	Region        string `json:"region"`
-	Compartment   string `json:"compartment"`
-	InstanceID    string `json:"instanceId"`
-	Name          string `json:"displayName"`
-	Shape         string `json:"shape"`
-	Found         bool   `json:"found"`
-	Namespace     string `json:"namespace,omitempty"`
-	Metric        string `json:"metric,omitempty"`
-	DimensionKey  string `json:"dimensionKey,omitempty"`
-	ResourceGroup string `json:"resourceGroup,omitempty"`
-	Samples       int    `json:"samples"`
-	Note          string `json:"note,omitempty"`
+	Region           string   `json:"region"`
+	Compartment      string   `json:"compartment"`
+	InstanceID       string   `json:"instanceId"`
+	Name             string   `json:"displayName"`
+	Shape            string   `json:"shape"`
+	Found            bool     `json:"found"`
+	Namespace        string   `json:"namespace,omitempty"`
+	Metric           string   `json:"metric,omitempty"`
+	DimensionKey     string   `json:"dimensionKey,omitempty"`
+	ResourceGroup    string   `json:"resourceGroup,omitempty"`
+	Samples          int      `json:"samples"`
+	Note             string   `json:"note,omitempty"`
 	AvailableMetrics []string `json:"availableMetrics,omitempty"`
 }
 

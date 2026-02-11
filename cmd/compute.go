@@ -73,8 +73,13 @@ var computeCmd = &cobra.Command{
 			return
 		}
 
+		var instances []compute.InstanceInventory
+		if run || metrics {
+			instances = compute.GatherInstances(provider, regions, compartments, run)
+		}
+
 		if metrics {
-			summaries, err := compute.CollectMetrics(provider, regions, compartments)
+			summaries, err := compute.CollectMetrics(provider, regions, compartments, instances)
 			if err != nil {
 				util.FatalIfError(err)
 			}
@@ -102,7 +107,6 @@ var computeCmd = &cobra.Command{
 					fmt.Println(data)
 				}
 			}
-			return
 		}
 
 		if run {
@@ -122,10 +126,11 @@ var computeCmd = &cobra.Command{
 			if err := compute.RunCompute(provider, regions, tenancyID, compartments, runFormat, runOut); err != nil {
 				util.FatalIfError(err)
 			}
-			return
 		}
 
-		fmt.Println("add -run to list instances, or use --metrics to collect utilization metrics")
+		if !run && !metrics {
+			fmt.Println("add -run to list instances, or use --metrics to collect utilization metrics")
+		}
 	},
 }
 
