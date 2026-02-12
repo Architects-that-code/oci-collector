@@ -27,7 +27,7 @@ type DrgCollector struct {
 }
 
 func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, networkFetch bool, networkCIDRFetch bool,
-	networkInventoryFetch bool) {
+	networkInventoryFetch bool, rpcFetch bool) {
 
 	client, err := core.NewVirtualNetworkClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
@@ -44,15 +44,15 @@ func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionS
 			defer wg.Done()
 
 			for _, compartment := range compartments {
-
-				drgs := getDRGs(client, compartment, *region.RegionName)
-				if len(drgs) > 0 {
-					// fmt.Printf("number drgs for compartment %v in region %v: %v\n", *compartment.Name, *region.RegionName, len(drgs))
-					for _, drg := range drgs {
-
-						rpcs := getRemotePeeringConnections(client, compartment, *drg.Id, *region.RegionName)
-						totRPC += len(rpcs)
-						fmt.Printf("\t\tnumber rpcs for drg %v %v \n", *drg.DisplayName, len(rpcs))
+				if rpcFetch {
+					drgs := getDRGs(client, compartment, *region.RegionName)
+					if len(drgs) > 0 {
+						// fmt.Printf("number drgs for compartment %v in region %v: %v\n", *compartment.Name, *region.RegionName, len(drgs))
+						for _, drg := range drgs {
+							rpcs := getRemotePeeringConnections(client, compartment, *drg.Id, *region.RegionName)
+							totRPC += len(rpcs)
+							fmt.Printf("\t\tnumber rpcs for drg %v %v \n", *drg.DisplayName, len(rpcs))
+						}
 					}
 				}
 
@@ -79,7 +79,9 @@ func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionS
 	}
 
 	wg.Wait()
-	fmt.Printf("\n\t RPC Total number: %v\n", totRPC)
+	if rpcFetch {
+		fmt.Printf("\n\t RPC Total number: %v\n", totRPC)
+	}
 	fmt.Printf("\n\t Total vcn: %v\n", len(allVCN))
 
 	//fmt.Printf("allVCN: %v\n", allVCN)

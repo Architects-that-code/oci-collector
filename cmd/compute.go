@@ -128,8 +128,8 @@ var computeCmd = &cobra.Command{
 			}
 		}
 
-		if !run && !metrics {
-			fmt.Println("add -run to list instances, or use --metrics to collect utilization metrics")
+		if !run && !metrics && !enableMetrics && !discover {
+			_ = cmd.Help()
 		}
 	},
 }

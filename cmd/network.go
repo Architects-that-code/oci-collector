@@ -19,6 +19,7 @@ var networkCmd = &cobra.Command{
 		run, _ := cmd.Flags().GetBool("run")
 		cidr, _ := cmd.Flags().GetBool("cidr")
 		ip, _ := cmd.Flags().GetBool("ip")
+		rpc, _ := cmd.Flags().GetBool("rpc")
 		if run {
 			cfg, err := config.Getconfig()
 			if err != nil {
@@ -30,9 +31,9 @@ var networkCmd = &cobra.Command{
 				util.FatalIfError(err)
 			}
 			regions, compartments, _, _ := config.CommonSetup(client, tenancyID)
-			network.GetAllVcn(provider, regions, tenancyID, compartments, run, cidr, ip)
+			network.GetAllVcn(provider, regions, tenancyID, compartments, run, cidr, ip, rpc)
 		} else {
-			fmt.Println("add -r to run")
+			_ = cmd.Help()
 		}
 	},
 }
@@ -41,4 +42,5 @@ func init() {
 	networkCmd.Flags().BoolP("run", "r", false, "fetch all vcn in all regions")
 	networkCmd.Flags().BoolP("cidr", "c", false, "also fetch CIDR blocks")
 	networkCmd.Flags().BoolP("ip", "i", false, "fetch IP inventory")
+	networkCmd.Flags().Bool("rpc", false, "also fetch DRG remote peering connections (RPCs)")
 }

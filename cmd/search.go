@@ -17,7 +17,7 @@ var searchCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		searchString, _ := cmd.Flags().GetString("searchstring")
 		if searchString == "" {
-			fmt.Println("add --searchstring to run")
+			_ = cmd.Help()
 			return
 		}
 		cfg, err := config.Getconfig()
