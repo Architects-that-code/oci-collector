@@ -7,6 +7,7 @@ import (
 	config "oci-collector/config"
 	utils "oci-collector/util"
 	"os"
+	"sort"
 
 	"github.com/oracle/oci-go-sdk/example/helpers"
 	"github.com/oracle/oci-go-sdk/v65/common"
@@ -118,7 +119,7 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 	//fmt.Println(string(jsonData))
 
 	// Print the list of child tenancies
-	utils.WriteToFile("collector-childTenancy_counts_lifecycleStates.txt", []byte(lifeCycleStats(tenancies)))
+	utils.WriteToFile("collector-childTenancy-fromtenancy-counts-lifecyclestates.txt", []byte(lifeCycleStats(tenancies)))
 
 	if write {
 		fmt.Println("-")
@@ -129,7 +130,7 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 		if err != nil {
 			fmt.Println("Error marshaling to YAML:", err)
 		}
-		utils.WriteToFile("collector-childtenancies.yaml", []byte(yamlData))
+		utils.WriteToFile("collector-actualchildren-fromtenancy.yaml", []byte(yamlData))
 
 		//fmt.Println(string(yamlData))
 	}
@@ -155,10 +156,13 @@ func lifeCycleStats(tenancies []TenancyCollector) string {
 
 func writetenanciestoFile(tenancies []TenancyCollector) {
 	homedir, err := os.UserHomeDir()
+	sort.Slice(tenancies, func(i, j int) bool {
+		return tenancies[i].TenancyName < tenancies[j].TenancyName
+	})
 	if err != nil {
 		panic(err)
 	}
-	file, err := os.Create(homedir + "/collector-actualChildren.csv")
+	file, err := os.Create(homedir + "/collector-actualchildren-fromtenancy.csv")
 	if err != nil {
 		panic(err)
 	}
@@ -245,21 +249,12 @@ func getchildcompartments(client identity.IdentityClient, tenancyID string) bool
 			fmt.Print("e")
 			return false
 		} else {
-			//fmt.Printf("success %v\n", tenancyID)
 			fmt.Print("s")
-			allCompartments = append(allCompartments, respComp.Items...)
-			if respComp.OpcNextPage != nil {
-				req.Page = respComp.OpcNextPage
-			} else {
-				break
-			}
+			return len(respComp.Items) > 0
 
 		}
 
 	}
-	//fmt.Printf("List of compartments: %v", allCompartments)
-
-	return len(allCompartments) > 0
 
 }
 func getchildTAGS(client identity.IdentityClient, tenancyID string) bool {
