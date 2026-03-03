@@ -8,6 +8,7 @@ import (
 	utils "oci-collector/util"
 	"os"
 	"sort"
+	"sync"
 
 	"github.com/oracle/oci-go-sdk/example/helpers"
 	"github.com/oracle/oci-go-sdk/v65/common"
@@ -37,7 +38,7 @@ func getOrgID(tenancyOCID string, provider common.ConfigurationProvider) (string
 	}
 
 	// Returns the ID of the first associated organization
-	fmt.Printf("orgid: %v\n", *response.Items[0].Id)
+	//fmt.Printf("orgid: %v\n", *response.Items[0].Id)
 	return *response.Items[0].Id, nil
 
 }
@@ -58,9 +59,10 @@ func Children(provider common.ConfigurationProvider, passThruClient identity.Ide
 
 	// Retrieve value from the response.
 	Organization := resp.Organization
+
 	fmt.Printf("\tOrganization: %v\n", Organization)
-	Deets(provider, tenancyID, homeregion, config)
-	getOutstandingInvites(provider, tenancyID, homeregion, config)
+
+	//getDeets(provider, tenancyID, homeregion, config)
 
 	//getOutstandingInvites(provider, tenancyID, homeregion, config)
 
@@ -100,7 +102,7 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 			var tc = TenancyCollector{
 				TenancyId:         *tenancy.TenancyId,
 				TenancyName:       *tenancy.Name,
-				TenancyConfigured: getchildcompartments(passThruClient, *tenancy.TenancyId),
+				TenancyConfigured: false,
 				GovernanceStatus:  string(tenancy.GovernanceStatus),
 				LifecycleState:    string(tenancy.LifecycleState),
 			}
@@ -114,6 +116,8 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 		//getAllPeople(provider, passThruClient, *tenancy.TenancyId, true)
 		//getchildcompartments(passThruClient, *tenancy.TenancyId)
 	}
+
+	populateTenancyConfigured(passThruClient, tenancies, 10)
 
 	//jsonData, _ := utils.ToJSON(tenancies)
 	//fmt.Println(string(jsonData))
@@ -135,6 +139,24 @@ func GetChildTenancies(provider common.ConfigurationProvider, passThruClient ide
 		//fmt.Println(string(yamlData))
 	}
 	return allTenancies
+}
+
+func populateTenancyConfigured(client identity.IdentityClient, tenancies []TenancyCollector, maxParallel int) {
+	if maxParallel <= 0 {
+		maxParallel = 1
+	}
+	sem := make(chan struct{}, maxParallel)
+	var wg sync.WaitGroup
+	for i := range tenancies {
+		wg.Add(1)
+		sem <- struct{}{}
+		go func(idx int) {
+			defer wg.Done()
+			defer func() { <-sem }()
+			tenancies[idx].TenancyConfigured = getchildcompartments(client, tenancies[idx].TenancyId)
+		}(i)
+	}
+	wg.Wait()
 }
 
 func lifeCycleStats(tenancies []TenancyCollector) string {
@@ -179,7 +201,7 @@ func writetenanciestoFile(tenancies []TenancyCollector) {
 	fmt.Println("\nwrote to file")
 }
 
-func Deets(provider common.ConfigurationProvider, tenancyID string, homeregion string, config config.Config) {
+func getDeets(provider common.ConfigurationProvider, tenancyID string, homeregion string, config config.Config) {
 	fmt.Println("checking child tenancies Getting Governance rules")
 	client, err := tenantmanagercontrolplane.NewOrganizationClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
