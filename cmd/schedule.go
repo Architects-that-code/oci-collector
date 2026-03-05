@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	scheduler "oci-collector/schedule"
 	"oci-collector/config"
+	scheduler "oci-collector/schedule"
 	"oci-collector/util"
 )
 
@@ -30,7 +30,7 @@ var scheduleCmd = &cobra.Command{
 			regions, compartments, _, homeregion := config.CommonSetup(client, tenancyID)
 			scheduler.RunSchedule(provider, regions, tenancyID, compartments, homeregion)
 		} else {
-			fmt.Println("add -run to run")
+			_ = cmd.Help()
 		}
 	},
 }

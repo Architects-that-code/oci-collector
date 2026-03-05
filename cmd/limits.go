@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"oci-collector/limits"
 	"oci-collector/config"
+	"oci-collector/limits"
 	"oci-collector/util"
 )
 
@@ -31,7 +31,7 @@ var limitsCmd = &cobra.Command{
 			regions, _, _, _ := config.CommonSetup(client, tenancyID)
 			limits.RunLimits(provider, regions, tenancyID, write)
 		} else {
-			fmt.Println("add -run to run")
+			_ = cmd.Help()
 		}
 	},
 }

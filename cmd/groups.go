@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	peopleresource "oci-collector/iam"
 	"oci-collector/config"
+	peopleresource "oci-collector/iam"
 	"oci-collector/util"
 )
 

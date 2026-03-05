@@ -9,6 +9,8 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/core"
 	"github.com/oracle/oci-go-sdk/v65/identity"
+
+	"oci-collector/util"
 )
 
 type VcnCollector struct {
@@ -25,7 +27,7 @@ type DrgCollector struct {
 }
 
 func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, networkFetch bool, networkCIDRFetch bool,
-	networkInventoryFetch bool) {
+	networkInventoryFetch bool, rpcFetch bool) {
 
 	client, err := core.NewVirtualNetworkClientWithConfigurationProvider(provider)
 	helpers.FatalIfError(err)
@@ -42,15 +44,15 @@ func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionS
 			defer wg.Done()
 
 			for _, compartment := range compartments {
-
-				drgs := getDRGs(client, compartment, *region.RegionName)
-				if len(drgs) > 0 {
-					// fmt.Printf("number drgs for compartment %v in region %v: %v\n", *compartment.Name, *region.RegionName, len(drgs))
-					for _, drg := range drgs {
-
-						rpcs := getRemotePeeringConnections(client, compartment, *drg.Id, *region.RegionName)
-						totRPC += len(rpcs)
-						fmt.Printf("\t\tnumber rpcs for drg %v %v \n", *drg.DisplayName, len(rpcs))
+				if rpcFetch {
+					drgs := getDRGs(client, compartment, *region.RegionName)
+					if len(drgs) > 0 {
+						// fmt.Printf("number drgs for compartment %v in region %v: %v\n", *compartment.Name, *region.RegionName, len(drgs))
+						for _, drg := range drgs {
+							rpcs := getRemotePeeringConnections(client, compartment, *drg.Id, *region.RegionName)
+							totRPC += len(rpcs)
+							fmt.Printf("\t\tnumber rpcs for drg %v %v \n", *drg.DisplayName, len(rpcs))
+						}
 					}
 				}
 
@@ -77,7 +79,9 @@ func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionS
 	}
 
 	wg.Wait()
-	fmt.Printf("\n\t RPC Total number: %v\n", totRPC)
+	if rpcFetch {
+		fmt.Printf("\n\t RPC Total number: %v\n", totRPC)
+	}
 	fmt.Printf("\n\t Total vcn: %v\n", len(allVCN))
 
 	//fmt.Printf("allVCN: %v\n", allVCN)
@@ -103,9 +107,12 @@ func GetVCN(client core.VirtualNetworkClient, compartment identity.Compartment, 
 		CompartmentId:  compartment.Id,
 		LifecycleState: core.VcnLifecycleStateAvailable}
 
-	resp, err := client.ListVcns(context.Background(), req)
-
-	helpers.FatalIfError(err)
+	resp, err := util.RetryWithBackoff(func() (core.ListVcnsResponse, error) {
+		return client.ListVcns(context.Background(), req)
+	})
+	if err != nil {
+		helpers.FatalIfError(err)
+	}
 	//fmt.Printf("GetVCNs: %v\n", resp.Items)
 
 	return resp.Items
@@ -119,9 +126,12 @@ func GetSubnets(client core.VirtualNetworkClient, vcn core.Vcn, region string) [
 		VcnId:          vcn.Id,
 	}
 
-	resp, err := client.ListSubnets(context.Background(), req)
-
-	helpers.FatalIfError(err)
+	resp, err := util.RetryWithBackoff(func() (core.ListSubnetsResponse, error) {
+		return client.ListSubnets(context.Background(), req)
+	})
+	if err != nil {
+		helpers.FatalIfError(err)
+	}
 
 	//fmt.Printf("GetSubnets: %v\n", resp.Items)
 
@@ -134,8 +144,12 @@ func getDRGs(client core.VirtualNetworkClient, compartment identity.Compartment,
 		CompartmentId: compartment.Id,
 	}
 
-	resp, err := client.ListDrgs(context.Background(), req)
-	helpers.FatalIfError(err)
+	resp, err := util.RetryWithBackoff(func() (core.ListDrgsResponse, error) {
+		return client.ListDrgs(context.Background(), req)
+	})
+	if err != nil {
+		helpers.FatalIfError(err)
+	}
 	//fmt.Println(resp)
 	return resp.Items
 }
@@ -147,7 +161,11 @@ func getRemotePeeringConnections(client core.VirtualNetworkClient, compartment i
 		DrgId:         &drgId,
 	}
 
-	resp, err := client.ListRemotePeeringConnections(context.Background(), req)
-	helpers.FatalIfError(err)
+	resp, err := util.RetryWithBackoff(func() (core.ListRemotePeeringConnectionsResponse, error) {
+		return client.ListRemotePeeringConnections(context.Background(), req)
+	})
+	if err != nil {
+		helpers.FatalIfError(err)
+	}
 	return resp.Items
 }

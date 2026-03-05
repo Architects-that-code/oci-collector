@@ -6,15 +6,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// rootCmd is the root Cobra command for the OCI Collector CLI.
 var rootCmd = &cobra.Command{
 	Use:   "oci-collector",
 	Short: "A utility belt for OCI tenancy management",
-    Long: `A loose collection of tools to help manage and monitor your OCI tenancy. Use the commands below to perform specific actions.`,
+	Long:  `A loose collection of tools to help manage and monitor your OCI tenancy. Use the commands below to perform specific actions.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-	return cmd.Help()
-},
+		return cmd.Help()
+	},
 }
 
+// Execute runs the root command.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -22,6 +24,7 @@ func Execute() {
 	}
 }
 
+// init adds all subcommands to rootCmd and sets up flags.
 func init() {
 	rootCmd.AddCommand(limitsCmd)
 	rootCmd.AddCommand(computeCmd)
@@ -38,6 +41,8 @@ func init() {
 	rootCmd.AddCommand(networkCmd)
 	rootCmd.AddCommand(scheduleCmd)
 	rootCmd.AddCommand(searchCmd)
+	rootCmd.AddCommand(cloudAdvisorCmd)
+	rootCmd.AddCommand(autonomousCmd)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports Persistent Flags which, if defined here,

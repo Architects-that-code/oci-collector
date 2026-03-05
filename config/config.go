@@ -8,9 +8,9 @@ import (
 
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/common/auth"
-	"oci-collector/util"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"gopkg.in/yaml.v2"
+	"oci-collector/util"
 )
 
 // GetCompartmentsHeirarchy returns a list of compartments in a tenancy - including the root compartment and all nested compartments
@@ -136,6 +136,7 @@ func getHomeRegion(regions []identity.RegionSubscription) string {
 	return ""
 }
 
+// Getconfig reads and parses toolkit-config.yaml into a Config struct.
 func Getconfig() (Config, error) {
 	data, err := os.ReadFile("toolkit-config.yaml")
 	util.FatalIfError(err)
@@ -148,6 +149,7 @@ func Getconfig() (Config, error) {
 	return config, err
 }
 
+// Config holds authentication and configuration settings from YAML.
 type Config struct {
 	ConfigPath           string `yaml:"configPath"`
 	ProfileName          string `yaml:"profileName"`
@@ -155,6 +157,8 @@ type Config struct {
 	CSI                  string `yaml:"SUPPORT_CSI_NUMBER"`
 }
 
+// Prep creates OCI ConfigurationProvider and IdentityClient based on config.
+// Supports Instance Principal or config file auth.
 func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient, string, error) {
 	var _provider common.ConfigurationProvider
 
@@ -176,6 +180,8 @@ func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient,
 
 }
 
+// CommonSetup fetches subscribed regions, compartments, and availability domains.
+// Uses concurrency for efficiency.
 func CommonSetup(client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
 	var wgDataPrep = sync.WaitGroup{}
 	wgDataPrep.Add(2)
