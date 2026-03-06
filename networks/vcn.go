@@ -28,20 +28,23 @@ type DrgCollector struct {
 
 func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, networkFetch bool, networkCIDRFetch bool,
 	networkInventoryFetch bool, rpcFetch bool) {
-
-	client, err := core.NewVirtualNetworkClientWithConfigurationProvider(provider)
-	helpers.FatalIfError(err)
-
-	var allVCN []VcnCollector
+	type regionalResult struct {
+		vcns []VcnCollector
+		rpcs int
+	}
 
 	var wg sync.WaitGroup
-	var totRPC int
 	wg.Add(len(regions))
-	var regionalSlices = make(chan []VcnCollector, len(regions))
+	results := make(chan regionalResult, len(regions))
 
 	for _, region := range regions {
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()
+			client, err := core.NewVirtualNetworkClientWithConfigurationProvider(provider)
+			helpers.FatalIfError(err)
+
+			localVCN := make([]VcnCollector, 0)
+			localRPC := 0
 
 			for _, compartment := range compartments {
 				if rpcFetch {
@@ -50,7 +53,7 @@ func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionS
 						// fmt.Printf("number drgs for compartment %v in region %v: %v\n", *compartment.Name, *region.RegionName, len(drgs))
 						for _, drg := range drgs {
 							rpcs := getRemotePeeringConnections(client, compartment, *drg.Id, *region.RegionName)
-							totRPC += len(rpcs)
+							localRPC += len(rpcs)
 							fmt.Printf("\t\tnumber rpcs for drg %v %v \n", *drg.DisplayName, len(rpcs))
 						}
 					}
@@ -70,15 +73,24 @@ func GetAllVcn(provider common.ConfigurationProvider, regions []identity.RegionS
 						VCN:             vcn,
 						Subnets:         SubnetCollector{Subnet: subnets},
 					}
-					allVCN = append(allVCN, v)
+					localVCN = append(localVCN, v)
 				}
 
 			}
-			regionalSlices <- allVCN
+			results <- regionalResult{vcns: localVCN, rpcs: localRPC}
 		}(region)
 	}
 
 	wg.Wait()
+	close(results)
+
+	var allVCN []VcnCollector
+	totRPC := 0
+	for r := range results {
+		allVCN = append(allVCN, r.vcns...)
+		totRPC += r.rpcs
+	}
+
 	if rpcFetch {
 		fmt.Printf("\n\t RPC Total number: %v\n", totRPC)
 	}

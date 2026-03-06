@@ -10,7 +10,6 @@ import (
 	"os"
 	"sort"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/oracle/oci-go-sdk/core"
@@ -18,6 +17,8 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 )
+
+const defaultComputeWorkerPoolSize = 25
 
 type InstanceGroups struct {
 	Region      string
@@ -36,33 +37,20 @@ type InstanceRow struct {
 	AgentInstalled bool              `json:"agentInstalled"`
 }
 
-func RunCompute(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, format string, output string) error {
+func RunCompute(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, format string, output string, verbose bool, showProgress bool, inventory []InstanceInventory) error {
 	//client, err := core.NewComputeClientWithConfigurationProvider(provider)
 	//helpers.FatalIfError(err)
-	fmt.Println("in RunCompute")
+	_ = tenancyID
 
 	//loop thru regionsconst
 
 	//		in region loop thru compartments
 	//TODO: ADD turbonium to region and compartments
 
-	var allInstances []InstanceGroups
-	var wg sync.WaitGroup
-	wg.Add(len(regions))
-	var regionalSlices = make(chan []InstanceGroups, len(regions))
-
-	for _, region := range regions {
-		go func(region identity.RegionSubscription) {
-			defer wg.Done()
-			for _, compartment := range compartments {
-				instances := GetInstances(provider, compartment, *region.RegionName, true)
-				allInstances = append(allInstances, InstanceGroups{Region: *region.RegionName, Compartment: *compartment.Name, Instance: instances})
-				//fmt.Printf("region: \t%v  \tcomp:%v: \t\t%v\n", *region.RegionName, *compartment.Name, len(instances))
-			}
-			regionalSlices <- allInstances
-		}(region)
+	if inventory == nil {
+		inventory = GatherInstancesWithOptions(provider, regions, compartments, verbose, showProgress)
 	}
-	wg.Wait()
+	allInstances := groupInventoryByRegionCompartment(inventory)
 
 	//fmt.Printf("Total instances: %v\n", len(allInstances))
 
@@ -98,21 +86,55 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 			fmt.Print(data)
 		}
 	default:
-		fmt.Println("ONLY PRINTING for ACTIVE instances per region/compartment")
+		fmt.Println("ACTIVE instance summary by region/compartment")
+		total := 0
 		for _, instanceGroup := range allInstances {
 			if len(instanceGroup.Instance) > 0 {
-				fmt.Printf("all instances: Region: %v Compartment: %v  NumInstance: %v \n", instanceGroup.Region, instanceGroup.Compartment, len(instanceGroup.Instance))
-				for _, instance := range instanceGroup.Instance {
-					name := safeStr(instance.DisplayName)
-					shape := safeStr(instance.Shape)
-					agent := isAgentInstalled(instance)
-					fmt.Printf("DisplayName: %s\t Shape: %s\t AgentInstalled: %t\t tags: freeform: %v\t defined: %v\n", name, shape, agent, instance.FreeformTags, instance.DefinedTags)
+				total += len(instanceGroup.Instance)
+				fmt.Printf("region=%s compartment=%s instances=%d\n", instanceGroup.Region, instanceGroup.Compartment, len(instanceGroup.Instance))
+				if verbose {
+					for _, instance := range instanceGroup.Instance {
+						name := safeStr(instance.DisplayName)
+						shape := safeStr(instance.Shape)
+						agent := isAgentInstalled(instance)
+						fmt.Printf("  name=%s shape=%s agentInstalled=%t tags=%v\n", name, shape, agent, instance.FreeformTags)
+					}
 				}
 			}
 		}
+		fmt.Printf("Total active instances: %d\n", total)
 	}
 
 	return nil
+}
+
+func groupInventoryByRegionCompartment(inventory []InstanceInventory) []InstanceGroups {
+	groupsByKey := make(map[string]*InstanceGroups)
+	orderedKeys := make([]string, 0)
+
+	for _, item := range inventory {
+		compName := safeStr(item.Compartment.Name)
+		key := item.RegionName + "|" + compName
+
+		g, exists := groupsByKey[key]
+		if !exists {
+			g = &InstanceGroups{
+				Region:      item.RegionName,
+				Compartment: compName,
+			}
+			groupsByKey[key] = g
+			orderedKeys = append(orderedKeys, key)
+		}
+
+		g.Instance = append(g.Instance, item.Instance)
+	}
+
+	groups := make([]InstanceGroups, 0, len(orderedKeys))
+	for _, key := range orderedKeys {
+		groups = append(groups, *groupsByKey[key])
+	}
+
+	return groups
 }
 
 // flattenInstances converts grouped instances into flat rows for export

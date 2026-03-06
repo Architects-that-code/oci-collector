@@ -21,22 +21,19 @@ func Check(provider common.ConfigurationProvider, regions []identity.RegionSubsc
 	//for all regions loop thru region
 	// for each region get ads
 	// for each ad loop
-	client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
-	helpers.FatalIfError(err)
-
 	instanceType := makeInstanceShape(capacityShapeType)
 
-	var adsAll []identity.AvailabilityDomain
 	var wg sync.WaitGroup
 	wg.Add(len(regions))
 
 	for _, region := range regions {
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()
+			client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
+			helpers.FatalIfError(err)
 			//fmt.Printf("Region: %v\n", *region.RegionName)
 			client.SetRegion(*region.RegionName)
 			ads := config.GetADs(tenancyID, client)
-			adsAll = append(adsAll, ads...)
 			//fmt.Printf("ads: %v\n", ads)
 			for _, ad := range ads {
 
@@ -75,20 +72,17 @@ func CheckFAMILY(provider common.ConfigurationProvider, regions []identity.Regio
 	//for all regions loop thru region
 	// for each region get ads
 	// for each ad loop thru the instance types to build up SET of types for
-	client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
-	helpers.FatalIfError(err)
-
-	var adsAll []identity.AvailabilityDomain
 	var wg sync.WaitGroup
 	wg.Add(len(regions))
 
 	for _, region := range regions {
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()
+			client, err := identity.NewIdentityClientWithConfigurationProvider(provider)
+			helpers.FatalIfError(err)
 			//fmt.Printf("Region: %v\n", *region.RegionName)
 			client.SetRegion(*region.RegionName)
 			ads := config.GetADs(tenancyID, client)
-			adsAll = append(adsAll, ads...)
 			//fmt.Printf("ads: %v\n", ads)
 			for _, ad := range ads {
 
