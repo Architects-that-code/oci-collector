@@ -18,6 +18,10 @@ var policiesCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		run, _ := cmd.Flags().GetBool("run")
 		verbose, _ := cmd.Flags().GetBool("verbose")
+		if !run {
+			_ = cmd.Help()
+			return
+		}
 		cfg, err := config.Getconfig()
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -28,7 +32,7 @@ var policiesCmd = &cobra.Command{
 			util.FatalIfError(err)
 		}
 		_, compartments, _, _ := config.CommonSetup(client, tenancyID)
-		peopleresource.GetAllPolicies(provider, client, tenancyID, compartments, run, verbose)
+		peopleresource.GetAllPolicies(provider, client, tenancyID, compartments, true, verbose)
 	},
 }
 

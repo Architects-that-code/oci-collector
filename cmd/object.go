@@ -17,6 +17,10 @@ var objectCmd = &cobra.Command{
 	Long:  `Fetch object storage buckets and sizes across regions.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		run, _ := cmd.Flags().GetBool("run")
+		if !run {
+			_ = cmd.Help()
+			return
+		}
 		cfg, err := config.Getconfig()
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -27,7 +31,7 @@ var objectCmd = &cobra.Command{
 			util.FatalIfError(err)
 		}
 		regions, compartments, _, homeregion := config.CommonSetup(client, tenancyID)
-		oos.ObjectStorageSize(provider, regions, tenancyID, compartments, run, homeregion)
+		oos.ObjectStorageSize(provider, regions, tenancyID, compartments, true, homeregion)
 	},
 }
 

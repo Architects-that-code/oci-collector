@@ -29,10 +29,13 @@ func BackoffWithJitter(attempt int) time.Duration {
 	if attempt < 0 {
 		attempt = 0
 	}
-	base := time.Second
-	duration := base << attempt
-	if duration > maxBackoffDuration {
-		duration = maxBackoffDuration
+	duration := time.Second
+	for i := 0; i < attempt && duration < maxBackoffDuration; i++ {
+		duration *= 2
+		if duration > maxBackoffDuration {
+			duration = maxBackoffDuration
+			break
+		}
 	}
 	jitter := time.Duration(mathrand.Intn(300)) * time.Millisecond
 	return duration + jitter

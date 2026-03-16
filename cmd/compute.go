@@ -26,7 +26,6 @@ var computeCmd = &cobra.Command{
 		discover, _ := cmd.Flags().GetBool("metrics-discover")
 		discoverWindow, _ := cmd.Flags().GetString("discover-window")
 		discoverInstance, _ := cmd.Flags().GetString("discover-instance")
-		// metricsTypes, _ := cmd.Flags().GetStringSlice("metrics-types") // TODO: implement multiple metrics types
 		format, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("out")
 
@@ -147,5 +146,4 @@ func init() {
 	computeCmd.Flags().String("discover-instance", "", "optional instance OCID to limit discovery")
 	computeCmd.Flags().StringP("format", "f", "json", "output format: for metrics (default json), for run specify json or csv; omit for text output")
 	computeCmd.Flags().StringP("out", "o", "", "optional file path to write output (metrics or run)")
-	computeCmd.Flags().StringSlice("metrics-types", []string{"CpuUtilization"}, "metrics to collect (cpu,memory,disk,network); default cpu")
 }

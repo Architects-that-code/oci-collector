@@ -17,6 +17,10 @@ var peepsCmd = &cobra.Command{
 	Long:  `Fetch user information in the tenancy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		run, _ := cmd.Flags().GetBool("run")
+		if !run {
+			_ = cmd.Help()
+			return
+		}
 		cfg, err := config.Getconfig()
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -26,7 +30,7 @@ var peepsCmd = &cobra.Command{
 		if err != nil {
 			util.FatalIfError(err)
 		}
-		peopleresource.GetAllPeople(provider, client, tenancyID, run)
+		peopleresource.GetAllPeople(provider, client, tenancyID, true)
 	},
 }
 

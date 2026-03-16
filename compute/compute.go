@@ -30,6 +30,8 @@ type InstanceGroups struct {
 type InstanceRow struct {
 	Region         string            `json:"region"`
 	Compartment    string            `json:"compartment"`
+	AvailabilityAD string            `json:"availabilityDomain"`
+	FaultDomain    string            `json:"faultDomain"`
 	InstanceID     string            `json:"instanceId"`
 	DisplayName    string            `json:"displayName"`
 	Shape          string            `json:"shape"`
@@ -145,6 +147,8 @@ func flattenInstances(groups []InstanceGroups) []InstanceRow {
 			rows = append(rows, InstanceRow{
 				Region:         g.Region,
 				Compartment:    g.Compartment,
+				AvailabilityAD: safeStr(inst.AvailabilityDomain),
+				FaultDomain:    safeStr(inst.FaultDomain),
 				InstanceID:     safeStr(inst.Id),
 				DisplayName:    safeStr(inst.DisplayName),
 				Shape:          safeStr(inst.Shape),
@@ -160,9 +164,9 @@ func flattenInstances(groups []InstanceGroups) []InstanceRow {
 func toCSV(rows []InstanceRow) string {
 	var buf bytes.Buffer
 	w := csv.NewWriter(&buf)
-	_ = w.Write([]string{"region", "compartment", "instanceId", "displayName", "shape", "agentInstalled"})
+	_ = w.Write([]string{"region", "compartment", "availabilityDomain", "faultDomain", "instanceId", "displayName", "shape", "agentInstalled"})
 	for _, r := range rows {
-		_ = w.Write([]string{r.Region, r.Compartment, r.InstanceID, r.DisplayName, r.Shape, fmt.Sprintf("%t", r.AgentInstalled)})
+		_ = w.Write([]string{r.Region, r.Compartment, r.AvailabilityAD, r.FaultDomain, r.InstanceID, r.DisplayName, r.Shape, fmt.Sprintf("%t", r.AgentInstalled)})
 	}
 	w.Flush()
 	return buf.String()
@@ -335,10 +339,13 @@ func backoffWithJitter(attempt int) time.Duration {
 	if attempt < 0 {
 		attempt = 0
 	}
-	base := time.Second
-	d := base << attempt // 1s,2s,4s,...
-	if d > 30*time.Second {
-		d = 30 * time.Second
+	d := time.Second
+	for i := 0; i < attempt && d < 30*time.Second; i++ {
+		d *= 2
+		if d > 30*time.Second {
+			d = 30 * time.Second
+			break
+		}
 	}
 	j := time.Duration(rand.Intn(300)) * time.Millisecond
 	return d + j

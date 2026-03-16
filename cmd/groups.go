@@ -17,6 +17,10 @@ var groupsCmd = &cobra.Command{
 	Long:  `Fetch group information in the tenancy.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		run, _ := cmd.Flags().GetBool("run")
+		if !run {
+			_ = cmd.Help()
+			return
+		}
 		cfg, err := config.Getconfig()
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -26,7 +30,7 @@ var groupsCmd = &cobra.Command{
 		if err != nil {
 			util.FatalIfError(err)
 		}
-		peopleresource.Groups(provider, client, tenancyID, run)
+		peopleresource.Groups(provider, client, tenancyID, true)
 	},
 }
 

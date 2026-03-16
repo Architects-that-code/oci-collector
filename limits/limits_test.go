@@ -1,28 +1,35 @@
 package limits
 
 import (
-	"fmt"
-	utils "oci-collector/util"
+	"encoding/json"
 	"testing"
 )
 
-func TestMain(t *testing.T) {
-
-	var Datapile []LimitsCollector
-
-	var r = LimitsCollector{
-		Region:    "myRegoin",
-		Service:   "something HEre",
-		Limitname: "banana",
-		Avail:     500,
-		Used:      22,
+func TestLimitsCollectorJSONSerialization(t *testing.T) {
+	data := []LimitsCollector{
+		{
+			Region:    "us-phoenix-1",
+			Service:   "compute",
+			Limitname: "vm-standard-e4",
+			Avail:     500,
+			Used:      22,
+		},
 	}
 
-	Datapile = append(Datapile, r)
+	b, err := json.Marshal(data)
+	if err != nil {
+		t.Fatalf("marshal error: %v", err)
+	}
 
-	jsonData, _ := utils.ToJSON(Datapile)
-	fmt.Printf("Datapile: %v\n", Datapile)
-	utils.PrintSpace()
-	fmt.Println(string(jsonData))
+	var out []LimitsCollector
+	if err := json.Unmarshal(b, &out); err != nil {
+		t.Fatalf("unmarshal error: %v", err)
+	}
 
+	if len(out) != 1 {
+		t.Fatalf("expected 1 item, got %d", len(out))
+	}
+	if out[0].Region != "us-phoenix-1" || out[0].Service != "compute" || out[0].Limitname != "vm-standard-e4" {
+		t.Fatalf("unexpected payload after round-trip: %+v", out[0])
+	}
 }
