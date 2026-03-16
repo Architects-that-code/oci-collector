@@ -30,6 +30,8 @@ type InstanceMetrics struct {
 type InstanceMetricsSummary struct {
 	Region         string          `json:"region"`
 	Compartment    string          `json:"compartment"`
+	AvailabilityAD string          `json:"availabilityDomain"`
+	FaultDomain    string          `json:"faultDomain"`
 	InstanceID     string          `json:"instanceId"`
 	Name           string          `json:"displayName"`
 	Shape          string          `json:"shape"`
@@ -289,10 +291,20 @@ func CollectMetrics(provider common.ConfigurationProvider, regions []identity.Re
 		if inst.instance.Shape != nil {
 			shape = *inst.instance.Shape
 		}
+		availabilityAD := ""
+		if inst.instance.AvailabilityDomain != nil {
+			availabilityAD = *inst.instance.AvailabilityDomain
+		}
+		faultDomain := ""
+		if inst.instance.FaultDomain != nil {
+			faultDomain = *inst.instance.FaultDomain
+		}
 
 		instanceMap[id] = &InstanceMetricsSummary{
 			Region:         inst.region,
 			Compartment:    inst.compartment,
+			AvailabilityAD: availabilityAD,
+			FaultDomain:    faultDomain,
 			InstanceID:     id,
 			Name:           name,
 			Shape:          shape,
@@ -515,7 +527,7 @@ func ToCSV(summaries []InstanceMetricsSummary) string {
 	var buf bytes.Buffer
 	w := csv.NewWriter(&buf)
 	_ = w.Write([]string{
-		"region", "compartment", "instanceId", "displayName", "shape", "agentInstalled",
+		"region", "compartment", "availabilityDomain", "faultDomain", "instanceId", "displayName", "shape", "agentInstalled",
 		"cpu_day_avg", "cpu_day_p95", "cpu_day_p99", "cpu_day_max", "cpu_day_samples",
 		"cpu_week_avg", "cpu_week_p95", "cpu_week_p99", "cpu_week_max", "cpu_week_samples",
 		"cpu_month_avg", "cpu_month_p95", "cpu_month_p99", "cpu_month_max", "cpu_month_samples",
@@ -533,7 +545,7 @@ func ToCSV(summaries []InstanceMetricsSummary) string {
 			note += " cpu_month:" + s.CpuMonth.Note
 		}
 		_ = w.Write([]string{
-			s.Region, s.Compartment, s.InstanceID, s.Name, s.Shape, fmt.Sprintf("%t", s.AgentInstalled),
+			s.Region, s.Compartment, s.AvailabilityAD, s.FaultDomain, s.InstanceID, s.Name, s.Shape, fmt.Sprintf("%t", s.AgentInstalled),
 			fmt.Sprintf("%.2f", s.CpuDay.Avg), fmt.Sprintf("%.2f", s.CpuDay.P95), fmt.Sprintf("%.2f", s.CpuDay.P99), fmt.Sprintf("%.2f", s.CpuDay.Max), fmt.Sprintf("%d", s.CpuDay.SampleCount),
 			fmt.Sprintf("%.2f", s.CpuWeek.Avg), fmt.Sprintf("%.2f", s.CpuWeek.P95), fmt.Sprintf("%.2f", s.CpuWeek.P99), fmt.Sprintf("%.2f", s.CpuWeek.Max), fmt.Sprintf("%d", s.CpuWeek.SampleCount),
 			fmt.Sprintf("%.2f", s.CpuMonth.Avg), fmt.Sprintf("%.2f", s.CpuMonth.P95), fmt.Sprintf("%.2f", s.CpuMonth.P99), fmt.Sprintf("%.2f", s.CpuMonth.Max), fmt.Sprintf("%d", s.CpuMonth.SampleCount),
