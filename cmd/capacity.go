@@ -55,6 +55,4 @@ func init() {
 	capacityCmd.Flags().IntP("ocpus", "o", 0, "number of ocpus")
 	capacityCmd.Flags().IntP("memory", "m", 0, "amount of memory")
 	capacityCmd.Flags().StringP("type", "t", "E4", "use shape type E3, E4, E5, X9, A1, A2 --- OR the ChipSet family AMD, Intel, ARM")
-	capacityCmd.Flags().StringP("ad", "a", "", "availability domain")
-	capacityCmd.Flags().StringP("fd", "f", "", "fault domain")
 }

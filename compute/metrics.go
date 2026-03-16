@@ -6,6 +6,8 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/oracle/oci-go-sdk/core"
@@ -59,19 +61,106 @@ type InstanceInventory struct {
 // GatherInstances builds an inventory of running instances across regions/compartments.
 // NOTE: metrics.go lives in the compute package, so we can reuse GetInstances from compute.go.
 func GatherInstances(provider common.ConfigurationProvider, regions []identity.RegionSubscription, compartments []identity.Compartment, verbose bool) []InstanceInventory {
-	var inv []InstanceInventory
+	return GatherInstancesWithOptions(provider, regions, compartments, verbose, false)
+}
+
+// GatherInstancesWithOptions builds an inventory of running instances with optional progress reporting.
+func GatherInstancesWithOptions(provider common.ConfigurationProvider, regions []identity.RegionSubscription, compartments []identity.Compartment, verbose bool, showProgress bool) []InstanceInventory {
+	type gatherTask struct {
+		regionName string
+		comp       identity.Compartment
+	}
+
+	totalTasks := len(regions) * len(compartments)
+	if totalTasks == 0 {
+		return nil
+	}
+
+	tasks := make(chan gatherTask, totalTasks)
+	results := make(chan []InstanceInventory, totalTasks)
+
+	workerCount := defaultComputeWorkerPoolSize
+	if workerCount <= 0 {
+		workerCount = 1
+	}
+	if totalTasks < workerCount {
+		workerCount = totalTasks
+	}
+
+	var completedTasks atomic.Int64
+	var foundInstances atomic.Int64
+	var progressDone chan struct{}
+	if showProgress {
+		fmt.Printf("Collecting compute inventory (%d regions x %d compartments = %d tasks, %d workers)\n", len(regions), len(compartments), totalTasks, workerCount)
+		progressDone = make(chan struct{})
+		go func() {
+			ticker := time.NewTicker(2 * time.Second)
+			defer ticker.Stop()
+			for {
+				select {
+				case <-ticker.C:
+					done := completedTasks.Load()
+					instances := foundInstances.Load()
+					pct := float64(done) * 100.0 / float64(totalTasks)
+					fmt.Printf("\rcompute inventory progress: %d/%d tasks (%.1f%%), instances found: %d", done, totalTasks, pct, instances)
+				case <-progressDone:
+					done := completedTasks.Load()
+					instances := foundInstances.Load()
+					fmt.Printf("\rcompute inventory progress: %d/%d tasks (100.0%%), instances found: %d\n", done, totalTasks, instances)
+					return
+				}
+			}
+		}()
+	}
+
+	var wg sync.WaitGroup
+	for i := 0; i < workerCount; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for task := range tasks {
+				instances := GetInstances(provider, task.comp, task.regionName, verbose)
+				local := make([]InstanceInventory, 0, len(instances))
+				for _, inst := range instances {
+					local = append(local, InstanceInventory{
+						RegionName:  task.regionName,
+						Compartment: task.comp,
+						Instance:    inst,
+					})
+				}
+				if showProgress {
+					completedTasks.Add(1)
+					foundInstances.Add(int64(len(local)))
+				}
+				results <- local
+			}
+		}()
+	}
+
 	for _, region := range regions {
 		regionName := ""
 		if region.RegionName != nil {
 			regionName = *region.RegionName
 		}
 		for _, comp := range compartments {
-			instances := GetInstances(provider, comp, regionName, verbose)
-			for _, inst := range instances {
-				inv = append(inv, InstanceInventory{RegionName: regionName, Compartment: comp, Instance: inst})
-			}
+			tasks <- gatherTask{regionName: regionName, comp: comp}
 		}
 	}
+	close(tasks)
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	inv := make([]InstanceInventory, 0)
+	for chunk := range results {
+		inv = append(inv, chunk...)
+	}
+	if showProgress {
+		close(progressDone)
+	}
+
 	return inv
 }
 

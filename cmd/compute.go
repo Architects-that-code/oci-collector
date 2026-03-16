@@ -20,11 +20,12 @@ var computeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		run, _ := cmd.Flags().GetBool("run")
 		metrics, _ := cmd.Flags().GetBool("metrics")
+		verbose, _ := cmd.Flags().GetBool("verbose")
+		progress, _ := cmd.Flags().GetBool("progress")
 		enableMetrics, _ := cmd.Flags().GetBool("enable-metrics")
 		discover, _ := cmd.Flags().GetBool("metrics-discover")
 		discoverWindow, _ := cmd.Flags().GetString("discover-window")
 		discoverInstance, _ := cmd.Flags().GetString("discover-instance")
-		// metricsTypes, _ := cmd.Flags().GetStringSlice("metrics-types") // TODO: implement multiple metrics types
 		format, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("out")
 
@@ -75,7 +76,7 @@ var computeCmd = &cobra.Command{
 
 		var instances []compute.InstanceInventory
 		if run || metrics {
-			instances = compute.GatherInstances(provider, regions, compartments, run)
+			instances = compute.GatherInstancesWithOptions(provider, regions, compartments, verbose, progress)
 		}
 
 		if metrics {
@@ -123,7 +124,7 @@ var computeCmd = &cobra.Command{
 					runFormat = "json"
 				}
 			}
-			if err := compute.RunCompute(provider, regions, tenancyID, compartments, runFormat, runOut); err != nil {
+			if err := compute.RunCompute(provider, regions, tenancyID, compartments, runFormat, runOut, verbose, progress, instances); err != nil {
 				util.FatalIfError(err)
 			}
 		}
@@ -137,11 +138,12 @@ var computeCmd = &cobra.Command{
 func init() {
 	computeCmd.Flags().BoolP("run", "r", false, "fetch compute active instances in all regions")
 	computeCmd.Flags().BoolP("metrics", "m", false, "collect CPU utilization metrics (day/week/month) for running instances")
+	computeCmd.Flags().BoolP("verbose", "v", false, "verbose output (prints per-instance details in text mode)")
+	computeCmd.Flags().Bool("progress", true, "show periodic progress while collecting inventory")
 	computeCmd.Flags().Bool("enable-metrics", false, "enable Oracle Cloud Agent metric collection on instances")
 	computeCmd.Flags().Bool("metrics-discover", false, "probe Monitoring to find the namespace/dimension that returns datapoints per instance")
 	computeCmd.Flags().String("discover-window", "1h", "lookback duration for discovery (e.g., 1h, 24h, 7d)")
 	computeCmd.Flags().String("discover-instance", "", "optional instance OCID to limit discovery")
 	computeCmd.Flags().StringP("format", "f", "json", "output format: for metrics (default json), for run specify json or csv; omit for text output")
 	computeCmd.Flags().StringP("out", "o", "", "optional file path to write output (metrics or run)")
-	computeCmd.Flags().StringSlice("metrics-types", []string{"CpuUtilization"}, "metrics to collect (cpu,memory,disk,network); default cpu")
 }

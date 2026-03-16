@@ -83,8 +83,6 @@ func GetServices(limitsClient limits.LimitsClient, err error, tenancyID string, 
 
 func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, write bool) {
 	fmt.Printf("Running limits for tenancy: %v\n", tenancyID)
-	limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
-	helpers.FatalIfError(err)
 	//util.PrintSpace()
 	//fmt.Printf("limitsClient: %v\n", limitsClient)
 
@@ -111,6 +109,10 @@ func RunLimits(provider common.ConfigurationProvider, regions []identity.RegionS
 		go func(reg string, goroutineID int) {
 			defer wg_regional.Done()
 			var localDatapile []LimitsCollector
+
+			// Create a dedicated client per goroutine to avoid SetRegion endpoint races.
+			limitsClient, err := limits.NewLimitsClientWithConfigurationProvider(provider)
+			helpers.FatalIfError(err)
 
 			services := GetServices(limitsClient, err, tenancyID, reg)
 

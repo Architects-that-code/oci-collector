@@ -14,9 +14,13 @@ import (
 var supportCmd = &cobra.Command{
 	Use:   "support",
 	Short: "Fetch support tickets",
-	Long:  `Fetch support ticket information using CSI.`,
+	Long:  `Support actions. Use --list to list support tickets using configured CSI.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// list flag currently unused
+		list, _ := cmd.Flags().GetBool("list")
+		if !list {
+			_ = cmd.Help()
+			return
+		}
 		cfg, err := config.Getconfig()
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)

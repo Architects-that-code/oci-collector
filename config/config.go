@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"sync"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/common/auth"
@@ -67,43 +66,14 @@ func FDs(tenancyID string, client identity.IdentityClient, ad identity.Availabil
 	return fdResp.Items
 }
 func GetALLADdata(client identity.IdentityClient, tenancyID string, regions []identity.RegionSubscription) []identity.AvailabilityDomain {
-	//start := time.Now()
-	//fmt.Print("Fetching ADs\n")
+	// IMPORTANT: SetRegion mutates client endpoint state.
+	// Do this sequentially on a shared client to avoid endpoint races/corruption.
 	var adsAll []identity.AvailabilityDomain
-	/*
-		for _, region := range regions {
-			client.SetRegion(*region.RegionName)
-			ads := GetADs(tenancyID, client)
-			adsAll = append(adsAll, ads...)
-			mu.Unlock()
-		}
-	*/
-	/**     start comment here */
-	var wg sync.WaitGroup
-	wg.Add(len(regions))
-
-	var regionalSlices = make(chan []identity.AvailabilityDomain, len(regions))
-
 	for _, region := range regions {
-		go func(region identity.RegionSubscription) {
-			defer wg.Done()
-			//fmt.Printf("Region: %v\n", *region.RegionName)
-			client.SetRegion(*region.RegionName)
-			ads := GetADs(tenancyID, client)
-			adsAll = append(adsAll, ads...)
-			regionalSlices <- ads
-		}(region)
+		client.SetRegion(*region.RegionName)
+		ads := GetADs(tenancyID, client)
+		adsAll = append(adsAll, ads...)
 	}
-	wg.Wait()
-
-	/*  end comment here  */
-	//elapsed := time.Since(start)
-	//fmt.Printf("Fetching ADs took %s \n", elapsed)
-	/*
-		allReg := getALLRegions(nil, client)
-			fmt.Printf("size of all regions %v ", len(allReg))
-			fmt.Printf(" all regions %v ", allReg)
-	*/
 	return adsAll
 }
 
@@ -183,41 +153,11 @@ func Prep(config Config) (common.ConfigurationProvider, identity.IdentityClient,
 // CommonSetup fetches subscribed regions, compartments, and availability domains.
 // Uses concurrency for efficiency.
 func CommonSetup(client identity.IdentityClient, tenancyID string) ([]identity.RegionSubscription, []identity.Compartment, []identity.AvailabilityDomain, string) {
-	var wgDataPrep = sync.WaitGroup{}
-	wgDataPrep.Add(2)
-	/*
-		go func() {
-			defer wgDataPrep.Done()
-			possibleRegions := getALLRegions(err, client)
-			fmt.Printf("\nList of ALL regions: num: %v  \ndump: %v\n", len(possibleRegions), possibleRegions)
-		}()
-	*/
-
-	var compartments []identity.Compartment
-	go func() {
-		defer wgDataPrep.Done()
-		compartments = Getcompartments(client, tenancyID)
-
-	}()
-
-	var regions []identity.RegionSubscription
-	var homeregion string
-
-	go func() {
-		defer wgDataPrep.Done()
-		regions, homeregion = getSubscribedRegions(client, tenancyID)
-
-		/*
-			for _, region := range regions {
-				fmt.Printf("Region: %v\n", *region.RegionName)
-			}*/
-		//util.PrintSpace()
-		//slog.Debug("List of regions:", regions)
-	}()
-	wgDataPrep.Wait()
-	var ads []identity.AvailabilityDomain
-
-	ads = GetALLADdata(client, tenancyID, regions)
+	// Keep setup deterministic and race-free on a shared Identity client.
+	// (SetRegion is used later for AD enumeration.)
+	compartments := Getcompartments(client, tenancyID)
+	regions, homeregion := getSubscribedRegions(client, tenancyID)
+	ads := GetALLADdata(client, tenancyID, regions)
 
 	//getTenancyObj(client, tenancyID, homeregion)
 

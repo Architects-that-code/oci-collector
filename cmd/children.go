@@ -18,6 +18,10 @@ var childrenCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		run, _ := cmd.Flags().GetBool("run")
 		write, _ := cmd.Flags().GetBool("write")
+		if !run {
+			_ = cmd.Help()
+			return
+		}
 		cfg, err := config.Getconfig()
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -28,7 +32,7 @@ var childrenCmd = &cobra.Command{
 			util.FatalIfError(err)
 		}
 		_, _, _, homeregion := config.CommonSetup(client, tenancyID)
-		children.Children(provider, client, tenancyID, run, homeregion, cfg, write)
+		children.Children(provider, client, tenancyID, true, homeregion, cfg, write)
 	},
 }
 

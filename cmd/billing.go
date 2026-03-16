@@ -14,12 +14,16 @@ import (
 var billingCmd = &cobra.Command{
 	Use:   "billing",
 	Short: "Fetch billing info",
-	Long:  `Manage billing reports: download and process Cost Analysis files.`,
+	Long:  `Manage billing reports. Use one or more action flags: --download, --process, --redownload-errors.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		path, _ := cmd.Flags().GetString("path")
 		download, _ := cmd.Flags().GetBool("download")
 		process, _ := cmd.Flags().GetBool("process")
 		redownloadErrors, _ := cmd.Flags().GetBool("redownload-errors")
+		if !download && !redownloadErrors && !process {
+			_ = cmd.Help()
+			return
+		}
 		cfg, err := config.Getconfig()
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -30,7 +34,9 @@ var billingCmd = &cobra.Command{
 			util.FatalIfError(err)
 		}
 		_, _, _, homeregion := config.CommonSetup(client, tenancyID)
-		billing.Getfiles(provider, tenancyID, homeregion, cfg, path, download)
+		if download {
+			billing.Getfiles(provider, tenancyID, homeregion, cfg, path, true)
+		}
 		if redownloadErrors {
 			fmt.Println("Re-downloading error files...")
 			err := billing.RedownloadErrorFiles(provider, tenancyID, homeregion, cfg, path)
@@ -50,8 +56,6 @@ var billingCmd = &cobra.Command{
 			} else {
 				fmt.Println("Billing files processed successfully.")
 			}
-		} else if !download && !redownloadErrors && !process { // Only print usage if no action flags are true
-			fmt.Println("No action specified for billing. Use -download, -redownload-errors, or -process.")
 		}
 	},
 }

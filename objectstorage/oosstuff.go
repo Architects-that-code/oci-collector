@@ -43,29 +43,37 @@ func namespace(ctx context.Context, c objectstorage.ObjectStorageClient) string 
 }
 
 func BucketInfo(provider common.ConfigurationProvider, regions []identity.RegionSubscription, namespace string, tenancyId string, compartments []identity.Compartment) {
-
-	client, err := objectstorage.NewObjectStorageClientWithConfigurationProvider(provider)
-	helpers.FatalIfError(err)
 	//for each region for each compartent get list of buckets
+	type regionalBuckets struct {
+		items []objectstorage.BucketSummary
+	}
 
-	allBuckets := []objectstorage.BucketSummary{}
 	var wg sync.WaitGroup
 	wg.Add(len(regions))
-	var regionalSlices = make(chan []objectstorage.BucketSummary, len(regions))
+	regionalSlices := make(chan regionalBuckets, len(regions))
 
 	for _, region := range regions {
 		go func(region identity.RegionSubscription) {
 			defer wg.Done()
+			client, err := objectstorage.NewObjectStorageClientWithConfigurationProvider(provider)
+			helpers.FatalIfError(err)
+
+			localBuckets := make([]objectstorage.BucketSummary, 0)
 			for _, compartment := range compartments {
 				buckets := Buckets(client, namespace, *region.RegionName, compartment, tenancyId)
-				allBuckets = append(allBuckets, buckets.Items...)
+				localBuckets = append(localBuckets, buckets.Items...)
 				//fmt.Printf("region: \t%v  \tcomp:%v \t\t\n", *region.RegionName, *compartment.Name)
 			}
-			regionalSlices <- allBuckets
+			regionalSlices <- regionalBuckets{items: localBuckets}
 		}(region)
 	}
 	wg.Wait()
 	close(regionalSlices)
+
+	allBuckets := make([]objectstorage.BucketSummary, 0)
+	for r := range regionalSlices {
+		allBuckets = append(allBuckets, r.items...)
+	}
 
 	fmt.Printf("all buckets: %v\n", len(allBuckets))
 	/*
