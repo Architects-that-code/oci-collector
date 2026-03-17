@@ -12,6 +12,7 @@ import (
 
 	"github.com/oracle/oci-go-sdk/core"
 	"github.com/oracle/oci-go-sdk/v65/common"
+	"github.com/oracle/oci-go-sdk/v65/computeinstanceagent"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"github.com/oracle/oci-go-sdk/v65/monitoring"
 )
@@ -28,36 +29,38 @@ type InstanceMetrics struct {
 
 // InstanceMetricsSummary is a digestible summary for an instance with various metrics.
 type InstanceMetricsSummary struct {
-	Region         string          `json:"region"`
-	Compartment    string          `json:"compartment"`
-	AvailabilityAD string          `json:"availabilityDomain"`
-	FaultDomain    string          `json:"faultDomain"`
-	InstanceID     string          `json:"instanceId"`
-	Name           string          `json:"displayName"`
-	Shape          string          `json:"shape"`
-	AgentInstalled bool            `json:"agentInstalled"`
-	CpuDay         InstanceMetrics `json:"cpuDay"`
-	CpuWeek        InstanceMetrics `json:"cpuWeek"`
-	CpuMonth       InstanceMetrics `json:"cpuMonth"`
-	MemoryDay      InstanceMetrics `json:"memoryDay,omitempty"`
-	MemoryWeek     InstanceMetrics `json:"memoryWeek,omitempty"`
-	MemoryMonth    InstanceMetrics `json:"memoryMonth,omitempty"`
-	DiskDay        InstanceMetrics `json:"diskDay,omitempty"`
-	DiskWeek       InstanceMetrics `json:"diskWeek,omitempty"`
-	DiskMonth      InstanceMetrics `json:"diskMonth,omitempty"`
-	NetworkDay     InstanceMetrics `json:"networkDay,omitempty"`
-	NetworkWeek    InstanceMetrics `json:"networkWeek,omitempty"`
-	NetworkMonth   InstanceMetrics `json:"networkMonth,omitempty"`
-	Note           string          `json:"note,omitempty"`
+	Region         string             `json:"region"`
+	Compartment    string             `json:"compartment"`
+	AvailabilityAD string             `json:"availabilityDomain"`
+	FaultDomain    string             `json:"faultDomain"`
+	InstanceID     string             `json:"instanceId"`
+	Name           string             `json:"displayName"`
+	Shape          string             `json:"shape"`
+	AgentInstalled bool               `json:"agentInstalled"`
+	AgentPlugins   []AgentPluginState `json:"agentPlugins,omitempty"`
+	CpuDay         InstanceMetrics    `json:"cpuDay"`
+	CpuWeek        InstanceMetrics    `json:"cpuWeek"`
+	CpuMonth       InstanceMetrics    `json:"cpuMonth"`
+	MemoryDay      InstanceMetrics    `json:"memoryDay,omitempty"`
+	MemoryWeek     InstanceMetrics    `json:"memoryWeek,omitempty"`
+	MemoryMonth    InstanceMetrics    `json:"memoryMonth,omitempty"`
+	DiskDay        InstanceMetrics    `json:"diskDay,omitempty"`
+	DiskWeek       InstanceMetrics    `json:"diskWeek,omitempty"`
+	DiskMonth      InstanceMetrics    `json:"diskMonth,omitempty"`
+	NetworkDay     InstanceMetrics    `json:"networkDay,omitempty"`
+	NetworkWeek    InstanceMetrics    `json:"networkWeek,omitempty"`
+	NetworkMonth   InstanceMetrics    `json:"networkMonth,omitempty"`
+	Note           string             `json:"note,omitempty"`
 }
 
 // InstanceInventory is a light-weight record of a running instance in a given region/compartment.
 // This is used by metrics collection to avoid re-querying instances when the caller already
 // has an inventory available.
 type InstanceInventory struct {
-	RegionName  string
-	Compartment identity.Compartment
-	Instance    core.Instance
+	RegionName   string
+	Compartment  identity.Compartment
+	Instance     core.Instance
+	AgentPlugins []AgentPluginState
 }
 
 // GatherInstances builds an inventory of running instances across regions/compartments.
@@ -122,12 +125,28 @@ func GatherInstancesWithOptions(provider common.ConfigurationProvider, regions [
 			defer wg.Done()
 			for task := range tasks {
 				instances := GetInstances(provider, task.comp, task.regionName, verbose)
+				pluginClient, pluginClientErr := computeinstanceagent.NewPluginClientWithConfigurationProvider(provider)
+				if pluginClientErr == nil {
+					pluginClient.SetRegion(task.regionName)
+				}
 				local := make([]InstanceInventory, 0, len(instances))
 				for _, inst := range instances {
+					plugins := instanceConfigPlugins(inst)
+					if pluginClientErr == nil {
+						compartmentID := safeStr(inst.CompartmentId)
+						instanceID := safeStr(inst.Id)
+						if compartmentID != "" && instanceID != "" {
+							runtimePlugins, err := listInstanceAgentPlugins(pluginClient, compartmentID, instanceID)
+							if err == nil {
+								plugins = runtimePlugins
+							}
+						}
+					}
 					local = append(local, InstanceInventory{
-						RegionName:  task.regionName,
-						Compartment: task.comp,
-						Instance:    inst,
+						RegionName:   task.regionName,
+						Compartment:  task.comp,
+						Instance:     inst,
+						AgentPlugins: plugins,
 					})
 				}
 				if showProgress {
@@ -166,6 +185,14 @@ func GatherInstancesWithOptions(provider common.ConfigurationProvider, regions [
 	return inv
 }
 
+func instanceConfigPlugins(inst core.Instance) []AgentPluginState {
+	// This project currently uses the legacy non-v65 core.Instance model,
+	// which does not expose per-plugin desired-state configuration.
+	// Plugin details are resolved from Compute Instance Agent API calls.
+	_ = inst
+	return nil
+}
+
 // MetricTask represents a single metric collection task
 type MetricTask struct {
 	Client        monitoring.MonitoringClient
@@ -201,6 +228,7 @@ func CollectMetrics(provider common.ConfigurationProvider, regions []identity.Re
 		compID         string
 		instance       core.Instance
 		agentInstalled bool
+		agentPlugins   []AgentPluginState
 	}
 	for _, entry := range inventory {
 		regionName := entry.RegionName
@@ -212,12 +240,14 @@ func CollectMetrics(provider common.ConfigurationProvider, regions []identity.Re
 			compID         string
 			instance       core.Instance
 			agentInstalled bool
+			agentPlugins   []AgentPluginState
 		}{
 			region:         regionName,
 			compartment:    compName,
 			compID:         compID,
 			instance:       entry.Instance,
-			agentInstalled: isAgentInstalled(entry.Instance),
+			agentInstalled: isAgentInstalledWithPlugins(isAgentInstalled(entry.Instance), entry.AgentPlugins),
+			agentPlugins:   entry.AgentPlugins,
 		})
 	}
 
@@ -309,6 +339,7 @@ func CollectMetrics(provider common.ConfigurationProvider, regions []identity.Re
 			Name:           name,
 			Shape:          shape,
 			AgentInstalled: inst.agentInstalled,
+			AgentPlugins:   inst.agentPlugins,
 		}
 	}
 
@@ -527,7 +558,7 @@ func ToCSV(summaries []InstanceMetricsSummary) string {
 	var buf bytes.Buffer
 	w := csv.NewWriter(&buf)
 	_ = w.Write([]string{
-		"region", "compartment", "availabilityDomain", "faultDomain", "instanceId", "displayName", "shape", "agentInstalled",
+		"region", "compartment", "availabilityDomain", "faultDomain", "instanceId", "displayName", "shape", "agentInstalled", "agentPlugins",
 		"cpu_day_avg", "cpu_day_p95", "cpu_day_p99", "cpu_day_max", "cpu_day_samples",
 		"cpu_week_avg", "cpu_week_p95", "cpu_week_p99", "cpu_week_max", "cpu_week_samples",
 		"cpu_month_avg", "cpu_month_p95", "cpu_month_p99", "cpu_month_max", "cpu_month_samples",
@@ -545,7 +576,7 @@ func ToCSV(summaries []InstanceMetricsSummary) string {
 			note += " cpu_month:" + s.CpuMonth.Note
 		}
 		_ = w.Write([]string{
-			s.Region, s.Compartment, s.AvailabilityAD, s.FaultDomain, s.InstanceID, s.Name, s.Shape, fmt.Sprintf("%t", s.AgentInstalled),
+			s.Region, s.Compartment, s.AvailabilityAD, s.FaultDomain, s.InstanceID, s.Name, s.Shape, fmt.Sprintf("%t", s.AgentInstalled), formatAgentPlugins(s.AgentPlugins),
 			fmt.Sprintf("%.2f", s.CpuDay.Avg), fmt.Sprintf("%.2f", s.CpuDay.P95), fmt.Sprintf("%.2f", s.CpuDay.P99), fmt.Sprintf("%.2f", s.CpuDay.Max), fmt.Sprintf("%d", s.CpuDay.SampleCount),
 			fmt.Sprintf("%.2f", s.CpuWeek.Avg), fmt.Sprintf("%.2f", s.CpuWeek.P95), fmt.Sprintf("%.2f", s.CpuWeek.P99), fmt.Sprintf("%.2f", s.CpuWeek.Max), fmt.Sprintf("%d", s.CpuWeek.SampleCount),
 			fmt.Sprintf("%.2f", s.CpuMonth.Avg), fmt.Sprintf("%.2f", s.CpuMonth.P95), fmt.Sprintf("%.2f", s.CpuMonth.P99), fmt.Sprintf("%.2f", s.CpuMonth.Max), fmt.Sprintf("%d", s.CpuMonth.SampleCount),

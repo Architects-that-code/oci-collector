@@ -14,7 +14,10 @@ func TestToJSONProducesValidPayload(t *testing.T) {
 			Compartment: "root",
 			InstanceID:  "ocid1.instance.oc1..abc",
 			Name:        "worker-1",
-			CpuDay:      InstanceMetrics{Avg: 1.5, P95: 2.0, P99: 2.2, Max: 3.0, SampleCount: 10},
+			AgentPlugins: []AgentPluginState{
+				{Name: "Bastion", Status: "RUNNING"},
+			},
+			CpuDay: InstanceMetrics{Avg: 1.5, P95: 2.0, P99: 2.2, Max: 3.0, SampleCount: 10},
 		},
 	}
 
@@ -30,6 +33,9 @@ func TestToJSONProducesValidPayload(t *testing.T) {
 	if len(got) != 1 || got[0].Name != "worker-1" {
 		t.Fatalf("unexpected decoded payload: %+v", got)
 	}
+	if len(got[0].AgentPlugins) != 1 || got[0].AgentPlugins[0].Name != "Bastion" {
+		t.Fatalf("expected agent plugin in JSON payload, got: %+v", got[0].AgentPlugins)
+	}
 }
 
 func TestToCSVIncludesHeaderAndNoteAggregation(t *testing.T) {
@@ -43,10 +49,14 @@ func TestToCSVIncludesHeaderAndNoteAggregation(t *testing.T) {
 			Name:           "worker-1",
 			Shape:          "VM.Standard.E4.Flex",
 			AgentInstalled: true,
-			CpuDay:         InstanceMetrics{Avg: 1.00, P95: 2.00, P99: 3.00, Max: 4.00, SampleCount: 5, Note: "missing data"},
-			CpuWeek:        InstanceMetrics{Avg: 1.10, P95: 2.10, P99: 3.10, Max: 4.10, SampleCount: 6},
-			CpuMonth:       InstanceMetrics{Avg: 1.20, P95: 2.20, P99: 3.20, Max: 4.20, SampleCount: 7, Note: "sparse"},
-			Note:           "base",
+			AgentPlugins: []AgentPluginState{
+				{Name: "Bastion", Status: "RUNNING"},
+				{Name: "Vulnerability Scanning", Status: "STOPPED"},
+			},
+			CpuDay:   InstanceMetrics{Avg: 1.00, P95: 2.00, P99: 3.00, Max: 4.00, SampleCount: 5, Note: "missing data"},
+			CpuWeek:  InstanceMetrics{Avg: 1.10, P95: 2.10, P99: 3.10, Max: 4.10, SampleCount: 6},
+			CpuMonth: InstanceMetrics{Avg: 1.20, P95: 2.20, P99: 3.20, Max: 4.20, SampleCount: 7, Note: "sparse"},
+			Note:     "base",
 		},
 	}
 
@@ -61,17 +71,20 @@ func TestToCSVIncludesHeaderAndNoteAggregation(t *testing.T) {
 		t.Fatalf("expected header + row, got %d records", len(records))
 	}
 	header := records[0]
-	if header[0] != "region" || header[23] != "note" {
+	if header[0] != "region" || header[8] != "agentPlugins" || header[24] != "note" {
 		t.Fatalf("unexpected header: %v", header)
 	}
 	row := records[1]
 	if row[0] != "us-phoenix-1" || row[5] != "worker-1" || row[7] != "true" {
 		t.Fatalf("unexpected fixed columns: %v", row)
 	}
-	if row[8] != "1.00" || row[18] != "1.20" {
+	if row[8] != "Bastion:RUNNING;Vulnerability Scanning:STOPPED" {
+		t.Fatalf("unexpected agent plugins column: %q", row[8])
+	}
+	if row[9] != "1.00" || row[19] != "1.20" {
 		t.Fatalf("unexpected metric formatting: %v", row)
 	}
-	if !strings.Contains(row[23], "base") || !strings.Contains(row[23], "cpu_day:missing data") || !strings.Contains(row[23], "cpu_month:sparse") {
-		t.Fatalf("unexpected note column: %q", row[23])
+	if !strings.Contains(row[24], "base") || !strings.Contains(row[24], "cpu_day:missing data") || !strings.Contains(row[24], "cpu_month:sparse") {
+		t.Fatalf("unexpected note column: %q", row[24])
 	}
 }

@@ -23,20 +23,21 @@ const defaultComputeWorkerPoolSize = 25
 type InstanceGroups struct {
 	Region      string
 	Compartment string
-	Instance    []core.Instance
+	Items       []InstanceInventory
 }
 
 // InstanceRow is a flat record suitable for JSON/CSV output
 type InstanceRow struct {
-	Region         string            `json:"region"`
-	Compartment    string            `json:"compartment"`
-	AvailabilityAD string            `json:"availabilityDomain"`
-	FaultDomain    string            `json:"faultDomain"`
-	InstanceID     string            `json:"instanceId"`
-	DisplayName    string            `json:"displayName"`
-	Shape          string            `json:"shape"`
-	Freeform       map[string]string `json:"freeformTags,omitempty"`
-	AgentInstalled bool              `json:"agentInstalled"`
+	Region         string             `json:"region"`
+	Compartment    string             `json:"compartment"`
+	AvailabilityAD string             `json:"availabilityDomain"`
+	FaultDomain    string             `json:"faultDomain"`
+	InstanceID     string             `json:"instanceId"`
+	DisplayName    string             `json:"displayName"`
+	Shape          string             `json:"shape"`
+	Freeform       map[string]string  `json:"freeformTags,omitempty"`
+	AgentInstalled bool               `json:"agentInstalled"`
+	AgentPlugins   []AgentPluginState `json:"agentPlugins,omitempty"`
 }
 
 func RunCompute(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, format string, output string, verbose bool, showProgress bool, inventory []InstanceInventory) error {
@@ -58,7 +59,7 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 
 	//fmt.Printf("allInstances: %v\n", allInstances)
 	sort.Slice(allInstances, func(i, j int) bool {
-		return len(allInstances[i].Instance) > len(allInstances[j].Instance)
+		return len(allInstances[i].Items) > len(allInstances[j].Items)
 	})
 	// If a structured format is requested, output JSON/CSV instead of text
 	switch strings.ToLower(format) {
@@ -91,15 +92,17 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 		fmt.Println("ACTIVE instance summary by region/compartment")
 		total := 0
 		for _, instanceGroup := range allInstances {
-			if len(instanceGroup.Instance) > 0 {
-				total += len(instanceGroup.Instance)
-				fmt.Printf("region=%s compartment=%s instances=%d\n", instanceGroup.Region, instanceGroup.Compartment, len(instanceGroup.Instance))
+			if len(instanceGroup.Items) > 0 {
+				total += len(instanceGroup.Items)
+				fmt.Printf("region=%s compartment=%s instances=%d\n", instanceGroup.Region, instanceGroup.Compartment, len(instanceGroup.Items))
 				if verbose {
-					for _, instance := range instanceGroup.Instance {
+					for _, item := range instanceGroup.Items {
+						instance := item.Instance
 						name := safeStr(instance.DisplayName)
 						shape := safeStr(instance.Shape)
-						agent := isAgentInstalled(instance)
-						fmt.Printf("  name=%s shape=%s agentInstalled=%t tags=%v\n", name, shape, agent, instance.FreeformTags)
+						agent := isAgentInstalledWithPlugins(isAgentInstalled(instance), item.AgentPlugins)
+						plugins := formatAgentPlugins(item.AgentPlugins)
+						fmt.Printf("  name=%s shape=%s agentInstalled=%t agentPlugins=%s tags=%v\n", name, shape, agent, plugins, instance.FreeformTags)
 					}
 				}
 			}
@@ -128,7 +131,7 @@ func groupInventoryByRegionCompartment(inventory []InstanceInventory) []Instance
 			orderedKeys = append(orderedKeys, key)
 		}
 
-		g.Instance = append(g.Instance, item.Instance)
+		g.Items = append(g.Items, item)
 	}
 
 	groups := make([]InstanceGroups, 0, len(orderedKeys))
@@ -143,7 +146,8 @@ func groupInventoryByRegionCompartment(inventory []InstanceInventory) []Instance
 func flattenInstances(groups []InstanceGroups) []InstanceRow {
 	var rows []InstanceRow
 	for _, g := range groups {
-		for _, inst := range g.Instance {
+		for _, item := range g.Items {
+			inst := item.Instance
 			rows = append(rows, InstanceRow{
 				Region:         g.Region,
 				Compartment:    g.Compartment,
@@ -153,7 +157,8 @@ func flattenInstances(groups []InstanceGroups) []InstanceRow {
 				DisplayName:    safeStr(inst.DisplayName),
 				Shape:          safeStr(inst.Shape),
 				Freeform:       inst.FreeformTags,
-				AgentInstalled: isAgentInstalled(inst),
+				AgentInstalled: isAgentInstalledWithPlugins(isAgentInstalled(inst), item.AgentPlugins),
+				AgentPlugins:   item.AgentPlugins,
 			})
 		}
 	}
@@ -164,9 +169,9 @@ func flattenInstances(groups []InstanceGroups) []InstanceRow {
 func toCSV(rows []InstanceRow) string {
 	var buf bytes.Buffer
 	w := csv.NewWriter(&buf)
-	_ = w.Write([]string{"region", "compartment", "availabilityDomain", "faultDomain", "instanceId", "displayName", "shape", "agentInstalled"})
+	_ = w.Write([]string{"region", "compartment", "availabilityDomain", "faultDomain", "instanceId", "displayName", "shape", "agentInstalled", "agentPlugins"})
 	for _, r := range rows {
-		_ = w.Write([]string{r.Region, r.Compartment, r.AvailabilityAD, r.FaultDomain, r.InstanceID, r.DisplayName, r.Shape, fmt.Sprintf("%t", r.AgentInstalled)})
+		_ = w.Write([]string{r.Region, r.Compartment, r.AvailabilityAD, r.FaultDomain, r.InstanceID, r.DisplayName, r.Shape, fmt.Sprintf("%t", r.AgentInstalled), formatAgentPlugins(r.AgentPlugins)})
 	}
 	w.Flush()
 	return buf.String()
