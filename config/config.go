@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/oracle/oci-go-sdk/v65/common"
 	"github.com/oracle/oci-go-sdk/v65/common/auth"
@@ -11,6 +12,14 @@ import (
 	"gopkg.in/yaml.v2"
 	"oci-collector/util"
 )
+
+var profileNameOverride string
+
+// SetProfileOverride sets a runtime profile name that overrides profileName in toolkit-config.yaml.
+// Passing an empty string clears the override.
+func SetProfileOverride(profile string) {
+	profileNameOverride = strings.TrimSpace(profile)
+}
 
 // GetCompartmentsHeirarchy returns a list of compartments in a tenancy - including the root compartment and all nested compartments
 func GetCompartmentsHeirarchy(err error, client identity.IdentityClient, tenancyID string) {
@@ -115,6 +124,9 @@ func Getconfig() (Config, error) {
 	err = yaml.Unmarshal(data, &config)
 	if err != nil {
 		// handle error
+	}
+	if profileNameOverride != "" {
+		config.ProfileName = profileNameOverride
 	}
 	return config, err
 }

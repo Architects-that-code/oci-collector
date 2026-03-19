@@ -34,6 +34,12 @@ go build -o oci-collector .
 ./oci-collector config -v
 ```
 
+Optional: override the configured OCI profile for a single run:
+
+```bash
+./oci-collector -profile MY_PROFILE compute -r
+```
+
 ## Minimal Config
 
 ```yaml

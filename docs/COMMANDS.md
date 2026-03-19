@@ -10,6 +10,9 @@ This document reflects command behavior in `cmd/*.go`.
 
 If a command receives no required action flag, many commands print help or a guidance message.
 
+Global flags:
+- `-profile` or `--profile` override `profileName` from `toolkit-config.yaml` for the current run.
+
 ## Configuration and Discovery
 
 ### `config`
@@ -155,4 +158,4 @@ Flags:
 Base command; prints help by default.
 
 Flags:
-- none
+- `-profile` or `--profile` override `profileName` from `toolkit-config.yaml`.
