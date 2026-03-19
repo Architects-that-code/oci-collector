@@ -79,3 +79,34 @@ func TestGetconfigInvalidYAML(t *testing.T) {
 		t.Fatal("expected yaml parse error")
 	}
 }
+
+func TestGetconfigAppliesProfileOverride(t *testing.T) {
+	dir := t.TempDir()
+	origWD, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("getwd error: %v", err)
+	}
+	defer func() { _ = os.Chdir(origWD) }()
+
+	if err := os.Chdir(dir); err != nil {
+		t.Fatalf("chdir error: %v", err)
+	}
+
+	content := []byte("configPath: ~/.oci/config\nprofileName: FROM_FILE\nuseinstanceprincipal: false\n")
+	if err := os.WriteFile("toolkit-config.yaml", content, 0644); err != nil {
+		t.Fatalf("write config error: %v", err)
+	}
+
+	SetProfileOverride("FROM_FLAG")
+	t.Cleanup(func() {
+		SetProfileOverride("")
+	})
+
+	cfg, err := Getconfig()
+	if err != nil {
+		t.Fatalf("Getconfig error: %v", err)
+	}
+	if cfg.ProfileName != "FROM_FLAG" {
+		t.Fatalf("expected profile override to be applied, got %q", cfg.ProfileName)
+	}
+}

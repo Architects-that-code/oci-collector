@@ -156,6 +156,13 @@ func TestRootHelpDoesNotShowToggleFlag(t *testing.T) {
 	}
 }
 
+func TestRootHelpShowsProfileOverrideFlag(t *testing.T) {
+	out := executeRoot(t, "--help")
+	if !strings.Contains(out, "--profile") {
+		t.Fatalf("expected root help to include --profile flag, got: %q", out)
+	}
+}
+
 func TestCapacityHelpDoesNotShowRemovedAdFdFlags(t *testing.T) {
 	out := executeRoot(t, "capacity", "--help")
 	if strings.Contains(out, "--ad") || strings.Contains(out, "--fd") {
