@@ -38,7 +38,7 @@ Flags:
 - `-f, --format` output format (metrics default `json`; run supports `json`, `csv`, or `fleet-json` when specified).
 - `-o, --out` optional output file path.
 
-`fleet-json` writes sample-compatible fleet export JSON and maintains local run history at `.DATA/compute_fleet_state.json` for status-change and reboot-history fields.
+`fleet-json` writes sample-compatible fleet export JSON and maintains local run history at `.DATA/compute_fleet_state.json` for status-change and reboot-history fields. (this is the same format used by the https://github.com/Architects-that-code/oci-tenancy-explorer project so you could generate the fleet export file with `oci-collector compute -r --fleet-json -o fleet_data.json` and then import it into that tool for analysis or visualization).
 
 ### `capacity`
 Capacity checks by OCPU, memory, and shape/chipset family.

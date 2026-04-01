@@ -37,3 +37,4 @@ When command behavior changes:
 
 - Be direct and technical.
 - Report what was changed, what was verified, and what remains unverified.
+- Use bullet points for clarity and brevity.
