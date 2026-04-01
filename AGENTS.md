@@ -26,6 +26,7 @@ When command behavior changes:
 2. Update `docs/ARCHITECTURE.md` when data flow/components change.
 3. Update `docs/PROJECT_ANALYSIS.md` if risk profile or roadmap priorities change.
 4. Ensure root `ReadMe.md` links stay valid.
+5. Always include the Disclaimer (Sample Code) at the bottom of the ReadMe.
 
 ## Coding Guidance
 
