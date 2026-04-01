@@ -1,11 +1,14 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/oracle/oci-go-sdk/v65/common"
+	"github.com/oracle/oci-go-sdk/v65/identity"
 	"github.com/spf13/cobra"
 
 	"oci-collector/compute"
@@ -38,7 +41,8 @@ var computeCmd = &cobra.Command{
 		if err != nil {
 			util.FatalIfError(err)
 		}
-		regions, compartments, _, _ := config.CommonSetup(client, tenancyID)
+		regions, compartments, _, homeRegion := config.CommonSetup(client, tenancyID)
+		tenancyName := tenancyDisplayName(client, tenancyID, homeRegion)
 
 		if enableMetrics {
 			err := compute.EnableMetrics(provider, regions, compartments)
@@ -124,7 +128,17 @@ var computeCmd = &cobra.Command{
 					runFormat = "json"
 				}
 			}
-			if err := compute.RunCompute(provider, regions, tenancyID, compartments, runFormat, runOut, verbose, progress, instances); err != nil {
+			runMetadata := compute.RunMetadata{
+				AuthType:         "config",
+				Profile:          cfg.ProfileName,
+				CustomerStrategy: "tenancy",
+				TenancyName:      tenancyName,
+				SnapshotPath:     ".DATA/compute_fleet_state.json",
+			}
+			if cfg.UseInstancePrincipal {
+				runMetadata.AuthType = "instance-principal"
+			}
+			if err := compute.RunCompute(provider, regions, tenancyID, compartments, runFormat, runOut, verbose, progress, instances, runMetadata); err != nil {
 				util.FatalIfError(err)
 			}
 		}
@@ -144,6 +158,20 @@ func init() {
 	computeCmd.Flags().Bool("metrics-discover", false, "probe Monitoring to find the namespace/dimension that returns datapoints per instance")
 	computeCmd.Flags().String("discover-window", "1h", "lookback duration for discovery (e.g., 1h, 24h, 7d)")
 	computeCmd.Flags().String("discover-instance", "", "optional instance OCID to limit discovery")
-	computeCmd.Flags().StringP("format", "f", "json", "output format: for metrics (default json), for run specify json or csv; omit for text output")
+	computeCmd.Flags().StringP("format", "f", "json", "output format: for metrics (default json), for run specify json, csv, or fleet-json; omit for text output")
 	computeCmd.Flags().StringP("out", "o", "", "optional file path to write output (metrics or run)")
+}
+
+func tenancyDisplayName(client identity.IdentityClient, tenancyID string, homeRegion string) string {
+	if homeRegion != "" {
+		client.SetRegion(homeRegion)
+	}
+	resp, err := client.GetTenancy(context.Background(), identity.GetTenancyRequest{TenancyId: common.String(tenancyID)})
+	if err != nil {
+		return tenancyID
+	}
+	if resp.Tenancy.Name != nil && *resp.Tenancy.Name != "" {
+		return *resp.Tenancy.Name
+	}
+	return tenancyID
 }

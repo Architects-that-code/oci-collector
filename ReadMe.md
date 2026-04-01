@@ -7,7 +7,7 @@ This project is a convenience layer on top of OCI APIs and SDKs. It is not inten
 
 ## What You Can Do
 
-- Inventory running compute instances and optionally export JSON/CSV.
+- Inventory running compute instances and optionally export JSON/CSV or sample-compatible fleet JSON (`-f fleet-json`).
 - Collect compute utilization metrics and run metric namespace discovery.
 - Inspect service limits by region.
 - Enumerate IAM users, groups, and policies.
@@ -62,6 +62,7 @@ For full command and flag reference, see [docs/COMMANDS.md](docs/COMMANDS.md).
 
 - Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - Commands and flags: [docs/COMMANDS.md](docs/COMMANDS.md)
+- Fleet JSON contract: [docs/FLEET_JSON.md](docs/FLEET_JSON.md)
 - Development workflow: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
 - Project analysis and roadmap: [docs/PROJECT_ANALYSIS.md](docs/PROJECT_ANALYSIS.md)
 - Compute diversity script docs: [scripts/analyze_compute_diversity.md](scripts/analyze_compute_diversity.md)

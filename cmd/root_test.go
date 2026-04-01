@@ -176,3 +176,10 @@ func TestComputeHelpDoesNotShowMetricsTypesFlag(t *testing.T) {
 		t.Fatalf("did not expect --metrics-types in compute help, got: %q", out)
 	}
 }
+
+func TestComputeHelpShowsFleetJSONFormat(t *testing.T) {
+	out := executeRoot(t, "compute", "--help")
+	if !strings.Contains(out, "fleet-json") {
+		t.Fatalf("expected compute help to include fleet-json format, got: %q", out)
+	}
+}
