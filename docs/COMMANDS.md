@@ -35,8 +35,10 @@ Flags:
 - `--metrics-discover` probe monitoring namespace/dimension combinations.
 - `--discover-window` lookback duration for discovery (default `1h`).
 - `--discover-instance` optional instance OCID filter for discovery.
-- `-f, --format` output format (metrics default `json`; run supports `json`/`csv` when specified).
+- `-f, --format` output format (metrics default `json`; run supports `json`, `csv`, or `fleet-json` when specified).
 - `-o, --out` optional output file path.
+
+`fleet-json` writes sample-compatible fleet export JSON and maintains local run history at `.DATA/compute_fleet_state.json` for status-change and reboot-history fields.
 
 ### `capacity`
 Capacity checks by OCPU, memory, and shape/chipset family.

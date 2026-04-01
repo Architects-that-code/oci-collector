@@ -40,7 +40,15 @@ type InstanceRow struct {
 	AgentPlugins   []AgentPluginState `json:"agentPlugins,omitempty"`
 }
 
-func RunCompute(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, format string, output string, verbose bool, showProgress bool, inventory []InstanceInventory) error {
+type RunMetadata struct {
+	AuthType         string
+	Profile          string
+	CustomerStrategy string
+	TenancyName      string
+	SnapshotPath     string
+}
+
+func RunCompute(provider common.ConfigurationProvider, regions []identity.RegionSubscription, tenancyID string, compartments []identity.Compartment, format string, output string, verbose bool, showProgress bool, inventory []InstanceInventory, metadata RunMetadata) error {
 	//client, err := core.NewComputeClientWithConfigurationProvider(provider)
 	//helpers.FatalIfError(err)
 	_ = tenancyID
@@ -87,6 +95,23 @@ func RunCompute(provider common.ConfigurationProvider, regions []identity.Region
 			fmt.Printf("instances written to %s\n", output)
 		} else {
 			fmt.Print(data)
+		}
+	case "fleet-json":
+		payload, err := BuildFleetPayload(provider, regions, tenancyID, inventory, metadata)
+		if err != nil {
+			return err
+		}
+		b, err := json.MarshalIndent(payload, "", "  ")
+		if err != nil {
+			return err
+		}
+		if output != "" {
+			if err := os.WriteFile(output, b, 0644); err != nil {
+				return err
+			}
+			fmt.Printf("instances written to %s\n", output)
+		} else {
+			fmt.Println(string(b))
 		}
 	default:
 		fmt.Println("ACTIVE instance summary by region/compartment")
