@@ -25,8 +25,8 @@ go build -o oci-collector .
 2. Create `toolkit-config.yaml` from `sample-toolkit-config.yaml`.
 
 3. Set one auth mode:
-- Config file mode: `configPath`, `profileName`, `useinstanceprincipal: false`
-- Instance Principal mode: `useinstanceprincipal: true`
+   - Config file mode: `configPath`, `profileName`, `useinstanceprincipal: false`
+   - Instance Principal mode: `useinstanceprincipal: true`
 
 4. Run a smoke check:
 
